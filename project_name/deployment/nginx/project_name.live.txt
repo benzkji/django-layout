@@ -1,0 +1,26 @@
+
+upstream {{project_name}}_live_server {
+    server unix:/home/{{project_name}}/sites/{{project_name}}-live.sock;
+}
+
+server {
+    listen 127.0.0.1:62321;
+    server_name {{project_name}}.com www.{{project_name}}.ch {{project_name}}.live.bnzk.ch;
+
+    location / {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+        if (!-f $request_filename) {
+            proxy_pass      http://{{project_name}}_live_server ;
+            break;
+        }
+    }
+
+    location /static/ {
+        alias   /home/{{project_name}}/sites/{{project_name}}-live/public/static/;
+    }
+    location /media/ {
+        alias   /home/{{project_name}}/sites/{{project_name}}-live/public/media/;
+    }
+}
