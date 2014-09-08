@@ -3,14 +3,15 @@ from fabric.api import task, env, run, local, roles, cd, execute, hide, puts,\
 import posixpath
 import re
 
-env.project_name = '{{ project_name }}'
-env.repository = 'git@github.com:lincolnloop/{{ project_name }}.git'
+env.forward_agent = True
+env.project_name = '{{project_name}}'
+env.repository = 'git@bitbucket.org:bnzk/{project_name}.git'.format(**env)
 env.local_branch = 'master'
 env.remote_ref = 'origin/master'
-env.requirements_file = 'requirements.pip'
-env.restart_command = 'supervisorctl restart {project_name}'.format(**env)
-env.restart_sudo = True
-
+# these will be checked for changes
+env.requirements_files = ['requirements/deploy.pip.txt', 'requirements/basics.pip.txt', ]
+# this is used with pip install -r
+env.requirements_file = env.requirements_files[0]
 
 #==============================================================================
 # Tasks which set up deployment environments
@@ -21,35 +22,38 @@ def live():
     """
     Use the live deployment environment.
     """
-    server = '{{ project_name }}.com'
+    env.env_prefix = 'live'
+    server = '{project_name}@s10.wservices.ch'.format(**env)
     env.roledefs = {
         'web': [server],
         'db': [server],
     }
-    env.system_users = {server: 'www-data'}
-    env.virtualenv_dir = '/srv/www/{project_name}'.format(**env)
-    env.project_dir = '{virtualenv_dir}/src/{project_name}'.format(**env)
-    env.project_conf = '{project_name}.settings.local'.format(**env)
-
+    env.main_user = '{project_name}'.format(**env)
+    generic_env_settings()
 
 @task
-def dev():
+def stage():
     """
-    Use the development deployment environment.
+    Use the sandbox deployment environment on xy.bnzk.ch.
     """
-    server = '{{ project_name }}.dev.lincolnloop.com'
+    env.env_prefix = 'stage'
+    server = '{project_name}@s19.wservices.ch'.format(**env)
     env.roledefs = {
         'web': [server],
         'db': [server],
     }
-    env.system_users = {server: 'www-data'}
-    env.virtualenv_dir = '/srv/www/{project_name}'.format(**env)
-    env.project_dir = '{virtualenv_dir}/src/{project_name}'.format(**env)
-    env.project_conf = '{project_name}.conf.local'.format(**env)
+    env.main_user = 'parkhotel'
+    generic_env_settings()
 
+def generic_env_settings():
+    env.system_users = {"server": env.main_user} # not used yet!
+    env.project_dir = '/home/{main_user}/sites/{project_name}-{env_prefix}'.format(**env)
+    env.virtualenv_dir = '{project_dir}/virtualenv'.format(**env)
+    env.project_conf = '{project_name}.settings._{env_prefix}'.format(**env)
+    env.restart_command = '~/init/{project_name}.{env_prefix}.sh restart && ~/init/nginx restart'.format(**env)
 
 # Set the default environment.
-dev()
+stage()
 
 
 #==============================================================================
@@ -58,46 +62,56 @@ dev()
 
 @task
 @roles('web', 'db')
-def bootstrap(action=''):
+def create_virtualenv():
     """
     Bootstrap the environment.
     """
     with hide('running', 'stdout'):
         exists = run('if [ -d "{virtualenv_dir}" ]; then echo 1; fi'\
             .format(**env))
-    if exists and not action == 'force':
-        puts('Assuming {host} has already been bootstrapped since '
-            '{virtualenv_dir} exists.'.format(**env))
+    if exists:
+        puts('Assuming virtualenv {virtualenv_dir} has already been created '
+             'since this directory exists. You\' need to manually delete this '
+             'folder, if you really need to'.format(**env))
         return
-    sudo('virtualenv {virtualenv_dir}'.format(**env))
-    if not exists:
-        sudo('mkdir -p {0}'.format(posixpath.dirname(env.virtualenv_dir)))
-        sudo('git clone {repository} {project_dir}'.format(**env))
-    sudo('{virtualenv_dir}/bin/pip install -e {project_dir}'.format(**env))
-    with cd(env.virtualenv_dir):
-        sudo('chown -R {user} .'.format(**env))
-        fix_permissions()
+    else:
+        # dont feel good with that!
+        # run('rm -rf {virtualenv_dir}'.format(**env))
+        pass
+    run('virtualenv {virtualenv_dir} --no-site-packages'.format(**env))
     requirements()
-    puts('Bootstrapped {host} - database creation needs to be done manually.'\
+    puts('Created virtualenv at {virtualenv_dir}.'\
         .format(**env))
-
 
 @task
 @roles('web', 'db')
-def push():
+def clone_repos(action=''):
     """
-    Push branch to the repository.
+    clone the repository.
     """
-    remote, dest_branch = env.remote_ref.split('/', 1)
-    local('git push {remote} {local_branch}:{dest_branch}'.format(
-        remote=remote, dest_branch=dest_branch, **env))
-
+    with hide('running', 'stdout'):
+        exists = run('if [ -d "{project_dir}" ]; then echo 1; fi'\
+            .format(**env))
+    if exists and not action == 'force':
+        puts('Assuming {repository} has already been cloned since '
+            '{project_dir} exists.'.format(**env))
+        return
+    run('git clone {repository} {project_dir}'.format(**env))
+    puts('cloned {repository} to {project_dir}.'\
+        .format(**env))
 
 @task
-def deploy(verbosity='normal'):
+@roles('web', 'db')
+def bootstrap(action=''):
+    clone_repos(action)
+    create_virtualenv(action)
+    puts('Bootstrapped {host} - database creation needs to be done manually.'\
+        .format(**env))
+
+@task
+def deploy(verbosity='noisy'):
     """
     Full server deploy.
-
     Updates the repository (server-side), synchronizes the database, collects
     static files and then restarts the web service.
     """
@@ -137,14 +151,16 @@ def update(action='check'):
         if not changed_files and action != 'force':
             # No changes, we can exit now.
             return
+        reqs_changed = False
         if action == 'check':
-            reqs_changed = env.requirements_file in changed_files
-        else:
-            reqs_changed = False
+            for file in env.requirements_files:
+                if file in changed_files:
+                    reqs_changed = True
+                    break
         run('git merge {remote_ref}'.format(**env))
         run('find -name "*.pyc" -delete')
         run('git clean -df')
-        fix_permissions()
+        #fix_permissions()
     if action == 'force' or reqs_changed:
         # Not using execute() because we don't want to run multiple times for
         # each role (since this task gets run per role).
@@ -158,9 +174,6 @@ def collectstatic():
     Collect static files from apps and other locations in a single location.
     """
     dj('collectstatic --link --noinput')
-    with cd('{virtualenv_dir}/var/static'.format(**env)):
-        fix_permissions()
-
 
 @task
 @roles('db')
@@ -169,20 +182,27 @@ def syncdb(sync=True, migrate=True):
     Synchronize the database.
     """
     dj('syncdb --migrate --noinput')
+    # needed when using django-modeltranslation
+    # dj('sync_translation_fields')
 
+@task
+@roles('db')
+def createsuperuser():
+    """
+    Create super user.
+    """
+    dj('createsuperuser')
 
 @task
 @roles('web')
 def restart():
     """
-    Restart the web service.
+    Copy gunicorn & nginx config, restart them.
     """
-    if env.restart_sudo:
-        cmd = sudo
-    else:
-        cmd = run
-    cmd(env.restart_command)
-
+    run('cp {project_dir}/gunicorn/{project_name}.{env_prefix}.sh $HOME/init/.'.format(**env))
+    run('cp {project_dir}/nginx/{project_name}.{env_prefix}.txt $HOME/nginx/conf/sites/.'.format(**env))
+    run('chmod u+x $HOME/init/{project_name}.{env_prefix}.sh'.format(**env))
+    run(env.restart_command)
 
 @task
 @roles('web', 'db')
@@ -190,7 +210,7 @@ def requirements():
     """
     Update the requirements.
     """
-    run('{virtualenv_dir}/bin/pip install -r {project_dir}/requirements.txt'\
+    run('{virtualenv_dir}/bin/pip install -r {project_dir}/{requirements_file}'\
         .format(**env))
     with cd('{virtualenv_dir}/src'.format(**env)):
         with hide('running', 'stdout', 'stderr'):
@@ -213,27 +233,33 @@ def requirements():
 # Helper functions
 #==============================================================================
 
+def virtualenv(command):
+    """
+    Run a command in the virtualenv. This prefixes the command with the source
+    command.
+    Usage:
+        virtualenv('pip install django')
+    """
+    source = 'source {virtualenv_dir}/bin/activate && '.format(**env)
+    run(source + command)
+
+
 def dj(command):
     """
     Run a Django manage.py command on the server.
     """
-    run('{virtualenv_dir}/bin/manage.py {dj_command} '
-        '--settings {project_conf}'.format(dj_command=command, **env))
+    virtualenv('{project_dir}/manage.py {dj_command} '
+               '--settings {project_conf}'.format(dj_command=command, **env))
+    #run('{virtualenv_dir}/bin/manage.py {dj_command} '
+    #    '--settings {project_conf}'.format(dj_command=command, **env))
 
 
 def fix_permissions(path='.'):
     """
-    Fix the file permissions.
+    Fix the file permissions. what a hack.
     """
-    if ' ' in path:
-        full_path = '{path} (in {cwd})'.format(path=path, cwd=env.cwd)
-    else:
-        full_path = posixpath.normpath(posixpath.join(env.cwd, path))
-    puts('Fixing {0} permissions'.format(full_path))
-    with hide('running'):
-        system_user = env.system_users.get(env.host)
-        if system_user:
-            run('chmod -R g=rX,o= -- {0}'.format(path))
-            run('chgrp -R {0} -- {1}'.format(system_user, path))
-        else:
-            run('chmod -R go= -- {0}'.format(path))
+    puts("no need for fixing permissions yet!")
+    return
+
+
+

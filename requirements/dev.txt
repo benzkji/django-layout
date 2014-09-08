@@ -1,0 +1,4 @@
+-r basics.pip.txt
+
+fabric
+flake8
