@@ -6,7 +6,7 @@ Django Layout
 
 ``django-layout`` provides sane defaults for new Django projects based on `established best practices <http://lincolnloop.com/django-best-practices/>`__. To use ``django-layout`` run the following command::
 
-     django-admin.py startproject --template=https://github.com/lincolnloop/django-layout/zipball/master --extension=py,rst,gitignore,example project_name
+     django-admin.py startproject --template=https://github.com/benzkji/django-layout/zipball/master --extension=py,rst,sh,txt,gitignore,example project_name
 
 .. note:: The text following this comment block will become the README.rst of the new project.
 
@@ -20,7 +20,7 @@ Django Layout
 Quickstart
 ----------
 
-To bootstrap the project on your machine:
+To bootstrap the project on your machine::
 
     cd {{ project_name }}
     mkvirtualenv --no-site-packages {{ project_name }}
@@ -29,7 +29,7 @@ To bootstrap the project on your machine:
     pip install -r requirements/dev.txt
     manage.py syncdb --migrate
 
-To bootstrap/deploy:
+To bootstrap/deploy on remote server::
 
     git init
     git add .
