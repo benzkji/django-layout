@@ -6,7 +6,7 @@ MEDIA_ROOT = os.path.join(PROJECT_PATH, "public", "media")
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': "{{project_name}}_stage",                      # Or path to database file if using sqlite3.
+        'NAME': "{{project_name}}_{{project_name}}_stage",                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         'USER': '{{project_name}}',
         'PASSWORD': 'aaaaaaa',

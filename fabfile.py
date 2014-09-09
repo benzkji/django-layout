@@ -155,7 +155,8 @@ def update(action='check'):
                     break
         run('git merge {remote_ref}'.format(**env))
         run('find -name "*.pyc" -delete')
-        run('git clean -df')
+        #run('git clean -df')
+        run('git clean -df {project_name} docs requirements public/static deployment'.format(**env))
         #fix_permissions()
     if action == 'force' or reqs_changed:
         # Not using execute() because we don't want to run multiple times for
@@ -195,8 +196,8 @@ def restart():
     """
     Copy gunicorn & nginx config, restart them.
     """
-    run('cp {project_dir}/gunicorn/{project_name}.{env_prefix}.sh $HOME/init/.'.format(**env))
-    run('cp {project_dir}/nginx/{project_name}.{env_prefix}.txt $HOME/nginx/conf/sites/.'.format(**env))
+    run('cp {project_dir}/deployment/gunicorn/{project_name}.{env_prefix}.sh $HOME/init/.'.format(**env))
+    run('cp {project_dir}/deployment/nginx/{project_name}.{env_prefix}.txt $HOME/nginx/conf/sites/.'.format(**env))
     run('chmod u+x $HOME/init/{project_name}.{env_prefix}.sh'.format(**env))
     run(env.restart_command)
 

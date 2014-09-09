@@ -9,18 +9,20 @@
 ### END INIT INFO
 
 
-NAME="{{project_name}}-live"
-PROJECT_DIR="$HOME/sites/$NAME"
-SETTINGS="project.settings._live_deploy"
-THE_ENV="$PROJECT_DIR/virtualenv/$NAME"
+NAME="{{project_name}}"
+PROJECT_ENV="live"
+PROJECT_DIR="$HOME/sites/$NAME-$PROJECT_ENV"
+SETTINGS="$NAME.settings._$PROJECT_ENV_deploy"
+THE_ENV="$PROJECT_DIR/virtualenv"
+# beware, choose the right version here! (2.7 for most mordern servers)
 PYTHONPATH="$THE_ENV/lib/python2.7/site-packages:$PROJECT_DIR"
 
-PIDFILE="$PROJECT_DIR/../$NAME.pid"
-SOCKET="$PROJECT_DIR/../$NAME.sock"
+PIDFILE="$PROJECT_DIR/../$NAME-$PROJECT_ENV.pid"
+SOCKET="$PROJECT_DIR/../$NAME-$PROJECT_ENV.sock"
 DAEMON="$THE_ENV/bin/gunicorn"
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 WORKERS=2
-OPTS="-D -b unix:///$SOCKET --worker-class gevent --workers $WORKERS --pid $PIDFILE --settings {{project_name}}.settings._live_deploy {{project_name}}.wsgi_live --preload"
+OPTS="-D -b unix:///$SOCKET --worker-class gevent --workers $WORKERS --pid $PIDFILE --settings $SETTINGS $NAME.wsgi_$PROJECT_ENV --preload"
 
 
 
