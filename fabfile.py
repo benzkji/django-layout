@@ -9,7 +9,7 @@ env.repository = 'git@bitbucket.org:bnzk/{project_name}.git'.format(**env)
 env.local_branch = 'master'
 env.remote_ref = 'origin/master'
 # these will be checked for changes
-env.requirements_files = ['requirements/deploy.pip.txt', 'requirements/basics.pip.txt', ]
+env.requirements_files = ['requirements/deploy.txt', 'requirements/basics.txt', ]
 # this is used with pip install -r
 env.requirements_file = env.requirements_files[0]
 
@@ -42,7 +42,7 @@ def stage():
         'web': [server],
         'db': [server],
     }
-    env.main_user = 'parkhotel'
+    env.main_user = '{project_name}'
     generic_env_settings()
 
 def generic_env_settings():
@@ -74,10 +74,6 @@ def create_virtualenv():
              'since this directory exists. You\' need to manually delete this '
              'folder, if you really need to'.format(**env))
         return
-    else:
-        # dont feel good with that!
-        # run('rm -rf {virtualenv_dir}'.format(**env))
-        pass
     run('virtualenv {virtualenv_dir} --no-site-packages'.format(**env))
     requirements()
     puts('Created virtualenv at {virtualenv_dir}.'\
@@ -85,7 +81,7 @@ def create_virtualenv():
 
 @task
 @roles('web', 'db')
-def clone_repos(action=''):
+def clone_repos():
     """
     clone the repository.
     """
@@ -102,9 +98,9 @@ def clone_repos(action=''):
 
 @task
 @roles('web', 'db')
-def bootstrap(action=''):
-    clone_repos(action)
-    create_virtualenv(action)
+def bootstrap():
+    clone_repos()
+    create_virtualenv()
     puts('Bootstrapped {host} - database creation needs to be done manually.'\
         .format(**env))
 
@@ -212,21 +208,22 @@ def requirements():
     """
     run('{virtualenv_dir}/bin/pip install -r {project_dir}/{requirements_file}'\
         .format(**env))
-    with cd('{virtualenv_dir}/src'.format(**env)):
-        with hide('running', 'stdout', 'stderr'):
-            dirs = []
-            for path in run('ls -db1 -- */').splitlines():
-                full_path = posixpath.normpath(posixpath.join(env.cwd, path))
-                if full_path != env.project_dir:
-                    dirs.append(path)
-        if dirs:
-            fix_permissions(' '.join(dirs))
-    with cd(env.virtualenv_dir):
-        with hide('running', 'stdout'):
-            match = re.search(r'\d+\.\d+', run('bin/python --version'))
-        if match:
-            with cd('lib/python{0}/site-packages'.format(match.group())):
-                fix_permissions()
+    # TODO: check if this is really necessary!? keep it clean...
+    #with cd('{virtualenv_dir}/src'.format(**env)):
+    #    with hide('running', 'stdout', 'stderr'):
+    #        dirs = []
+    #        for path in run('ls -db1 -- */').splitlines():
+    #            full_path = posixpath.normpath(posixpath.join(env.cwd, path))
+    #            if full_path != env.project_dir:
+    #                dirs.append(path)
+    #    if dirs:
+    #        fix_permissions(' '.join(dirs))
+    #with cd(env.virtualenv_dir):
+    #    with hide('running', 'stdout'):
+    #        match = re.search(r'\d+\.\d+', run('bin/python --version'))
+    #    if match:
+    #        with cd('lib/python{0}/site-packages'.format(match.group())):
+    #            fix_permissions()
 
 
 #==============================================================================

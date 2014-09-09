@@ -4,3 +4,5 @@
 {{ project_name }}/settings/local/*
 docs/_build
 .idea/
+public/media/
+public/static/

@@ -20,14 +20,26 @@ Django Layout
 Quickstart
 ----------
 
-To bootstrap the project::
+### To bootstrap the project on your machine:
 
     cd {{ project_name }}
     mkvirtualenv --no-site-packages {{ project_name }}
-    virtualenv virtualenv {{ project_name }}
-    source virtualenv/{{ project_name }}/bin/activate
+    # without the venv-wrapper: virtualenv virtualenv {{ project_name }}
+    # ditto: source virtualenv/{{ project_name }}/bin/activate
     pip install -r requirements/dev.txt
     manage.py syncdb --migrate
+
+### To bootstrap/deploy:
+
+    git init
+    git add .
+    git commit -a -m'initial'
+    git add remote origin git@bitbucket.org:bnzk/{{project_name}}
+    git push --set-upstream origin master
+
+    fab bootstrap
+    # after bootstrap, must manualy create db for now
+    fab deploy
 
 Documentation
 -------------
