@@ -1,6 +1,6 @@
 
 upstream {{project_name}}_stage_server {
-    server unix:/home/{{project_name}}/sites/{{project_name}}-stage.sock;
+    server unix:/home/{{name}}/sites/{{project_name}}-stage.sock;
 }
 
 server {

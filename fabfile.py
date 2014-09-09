@@ -88,7 +88,7 @@ def clone_repos():
     with hide('running', 'stdout'):
         exists = run('if [ -d "{project_dir}" ]; then echo 1; fi'\
             .format(**env))
-    if exists and not action == 'force':
+    if exists:
         puts('Assuming {repository} has already been cloned since '
             '{project_dir} exists.'.format(**env))
         return
@@ -101,7 +101,7 @@ def clone_repos():
 def bootstrap():
     clone_repos()
     create_virtualenv()
-    puts('Bootstrapped {host} - database creation needs to be done manually.'\
+    puts('Bootstrapped {project_name} on {host} - database creation needs to be done manually.'\
         .format(**env))
 
 @task
