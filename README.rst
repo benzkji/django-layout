@@ -20,7 +20,7 @@ Django Layout
 Quickstart
 ----------
 
-### To bootstrap the project on your machine:
+To bootstrap the project on your machine:
 
     cd {{ project_name }}
     mkvirtualenv --no-site-packages {{ project_name }}
@@ -29,7 +29,7 @@ Quickstart
     pip install -r requirements/dev.txt
     manage.py syncdb --migrate
 
-### To bootstrap/deploy:
+To bootstrap/deploy:
 
     git init
     git add .
