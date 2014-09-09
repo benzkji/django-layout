@@ -22,12 +22,11 @@ Quickstart
 
 To bootstrap the project::
 
-    virtualenv {{ project_name }}
-    source {{ project_name }}/bin/activate
-    cd path/to/{{ project_name }}/repository
-    pip install -r requirements.pip
-    pip install -e .
-    cp {{ project_name }}/settings/local.py.example {{ project_name }}/settings/local.py
+    cd {{ project_name }}
+    mkvirtualenv --no-site-packages {{ project_name }}
+    virtualenv virtualenv {{ project_name }}
+    source virtualenv/{{ project_name }}/bin/activate
+    pip install -r requirements/dev.txt
     manage.py syncdb --migrate
 
 Documentation

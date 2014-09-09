@@ -55,7 +55,7 @@ USE_L10N = True
 USE_TZ = True
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'need_to_change_ezyy&_8#ts9$)x6y(%bk3c84)v#6+nmk(lt(j2j2ap60-dl7by'
+SECRET_KEY = '{{ secret_key }}'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (

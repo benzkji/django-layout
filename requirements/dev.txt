@@ -1,4 +1,4 @@
--r basics.pip.txt
+-r basics.txt
 
 fabric
 flake8
