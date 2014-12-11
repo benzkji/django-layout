@@ -4,9 +4,9 @@ import os
 import django.conf.global_settings as DEFAULT_SETTINGS
 
 PROJECT_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)),
-                            '../../..//')
+                            '../../../')
 
-# fake
+# the fake
 ugettext = lambda s: s
 
 ADMINS = (
@@ -77,19 +77,22 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.doc.XViewMiddleware',
 
-    'cms.middleware.page.CurrentPageMiddleware',
-    'cms.middleware.user.CurrentUserMiddleware',
-    'cms.middleware.toolbar.ToolbarMiddleware',
-    'cms.middleware.language.LanguageCookieMiddleware',
+    # django cms specific
+    # 'cms.middleware.page.CurrentPageMiddleware',
+    # 'cms.middleware.user.CurrentUserMiddleware',
+    # 'cms.middleware.toolbar.ToolbarMiddleware',
+    # 'cms.middleware.language.LanguageCookieMiddleware',
 
-    'painless_redirects.middleware.ManualRedirectMiddleware',
-    'painless_redirects.middleware.ForceSiteDomainRedirectMiddleware',
+    # should switch to "robust redirects"
+    # 'painless_redirects.middleware.ManualRedirectMiddleware',
+    # 'painless_redirects.middleware.ForceSiteDomainRedirectMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = DEFAULT_SETTINGS.TEMPLATE_CONTEXT_PROCESSORS + (
     'django.core.context_processors.request',
-    'cms.context_processors.cms_settings',
-    'sekizai.context_processors.sekizai',
+    # again, cms
+    # 'cms.context_processors.cms_settings',
+    # 'sekizai.context_processors.sekizai',
 )
 #print TEMPLATE_CONTEXT_PROCESSORS
 
