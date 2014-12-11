@@ -16,6 +16,7 @@ MANAGERS = ADMINS
 DEFAULT_FROM_EMAIL = '{{project_name}}@bnzk.ch'
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
