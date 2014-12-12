@@ -3,9 +3,10 @@
 *.egg-info
 docs/_build
 .idea/
-public/media/
-public/static/
-
+public
+.sass-cache/
+node_modules
+dev_database.db
 
 # github default python gitignore. FTW.
 
