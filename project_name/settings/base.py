@@ -4,7 +4,7 @@ import os
 import django.conf.global_settings as DEFAULT_SETTINGS
 
 PROJECT_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)),
-                            '../../../')
+                            '../../')
 
 # the fake
 ugettext = lambda s: s
