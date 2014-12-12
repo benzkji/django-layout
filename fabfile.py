@@ -1,5 +1,7 @@
 from fabric.api import task, env, run, local, roles, cd, execute, hide, puts,\
     sudo
+from fabric.contrib import django as fab_django
+
 import posixpath
 import re
 
@@ -50,10 +52,12 @@ def generic_env_settings():
     env.project_dir = '/home/{main_user}/sites/{project_name}-{env_prefix}'.format(**env)
     env.virtualenv_dir = '{project_dir}/virtualenv'.format(**env)
     env.project_conf = '{project_name}.settings._{env_prefix}'.format(**env)
+    fab_django.settings_module(env['project_conf'])
     env.restart_command = '~/init/{project_name}.{env_prefix}.sh restart && ~/init/nginx restart'.format(**env)
 
 # Set the default environment.
 stage()
+
 
 
 #==============================================================================
@@ -98,9 +102,23 @@ def clone_repos():
 
 @task
 @roles('web', 'db')
+def bootstrap_database():
+    # this will fail straight if the database already exists.
+    from fab_django.conf import settings
+    run("echo \"CREATE DATABASE {dbname} CHARACTER SET utf8 COLLATE utf8_general_ci;"
+        "\" | mysql -u {dbuser} --password={dbpassword}".format(
+            dbuser=settings.DATABASE_USER,
+            dbpassword=settings.DATABASE_PASSWORD,
+            dbname=settings.DATABASE_NAME
+        )
+    )
+
+@task
+@roles('web', 'db')
 def bootstrap():
     clone_repos()
     create_virtualenv()
+    bootstrap_database()
     puts('Bootstrapped {project_name} on {host} - database creation needs to be done manually.'\
         .format(**env))
 

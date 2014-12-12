@@ -10,7 +10,6 @@ django-admin-sortable2>=0.3.0
 Pillow>=2.3.1
 easy-thumbnails>=1.5
 
-
 # own alpha stuff
 -e git+git@github.com:benzkji/django-folderless.git@master#egg=django_folderless-master
 -e git+git@github.com:benzkji/django-painless-redirects.git@master#egg=django_painless_redirects-master
