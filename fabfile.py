@@ -51,9 +51,14 @@ def generic_env_settings():
     env.system_users = {"server": env.main_user} # not used yet!
     env.project_dir = '/home/{main_user}/sites/{project_name}-{env_prefix}'.format(**env)
     env.virtualenv_dir = '{project_dir}/virtualenv'.format(**env)
-    env.project_conf = '{project_name}.settings._{env_prefix}'.format(**env)
-    fab_django.settings_module(env['project_conf'])
     env.restart_command = '~/init/{project_name}.{env_prefix}.sh restart && ~/init/nginx restart'.format(**env)
+    env.project_conf = '{project_name}.settings._{env_prefix}'.format(**env)
+    # set django settings on env, with fab django helper
+    fab_django.settings_module(env['project_conf'])
+    from django.conf import settings
+    # access them, 'cause they are lazy load (I guess?! doesnt work otherwise!)
+    settings.DATABASES
+    env.settings = settings
 
 # Set the default environment.
 stage()
@@ -102,14 +107,13 @@ def clone_repos():
 
 @task
 @roles('web', 'db')
-def bootstrap_database():
+def create_database():
     # this will fail straight if the database already exists.
-    from fab_django.conf import settings
-    run("echo \"CREATE DATABASE {dbname} CHARACTER SET utf8 COLLATE utf8_general_ci;"
+    run("echo \"CREATE DATABASE {dbname} CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
         "\" | mysql -u {dbuser} --password={dbpassword}".format(
-            dbuser=settings.DATABASE_USER,
-            dbpassword=settings.DATABASE_PASSWORD,
-            dbname=settings.DATABASE_NAME
+            dbuser=env.settings.DATABASES["default"]["USER"],
+            dbpassword=env.settings.DATABASES["default"]["PASSWORD"],
+            dbname=env.settings.DATABASES["default"]["NAME"],
         )
     )
 
@@ -173,8 +177,8 @@ def update(action='check'):
                     break
         run('git merge {remote_ref}'.format(**env))
         run('find -name "*.pyc" -delete')
-        #run('git clean -df')
-        run('git clean -df {project_name} docs requirements public/static deployment'.format(**env))
+        run('git clean -df')
+        # run('git clean -df {project_name} docs requirements public/static deployment'.format(**env))
         #fix_permissions()
     if action == 'force' or reqs_changed:
         # Not using execute() because we don't want to run multiple times for
