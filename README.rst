@@ -6,7 +6,7 @@ Django Layout
 
 ``django-layout`` provides sane defaults for new Django projects based on http://www.revsys.com/blog/2014/nov/21/recommended-django-project-layout/ (more and more) and (initial version) `established best practices <http://lincolnloop.com/django-best-practices/>`__. To use ``django-layout`` run the following command::
 http://www.revsys.com/blog/2014/nov/21/recommended-django-project-layout/
-     django-admin.py startproject --template=https://github.com/benzkji/django-layout/zipball/master --extension=py,rst,sh,txt,gitignore,example project_name
+     django-admin.py startproject --template=https://github.com/benzkji/django-layout/zipball/master --extension=py,rst,sh,txt,gitignore,ruby-version,example project_name
 
 .. note:: The text following this comment block will become the README.rst of the new project.
 
