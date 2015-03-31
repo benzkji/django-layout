@@ -1,3 +1,6 @@
+from __init__ import *
+
+
 import os
 from base import PROJECT_PATH
 
