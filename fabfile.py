@@ -121,10 +121,32 @@ def create_database():
 @roles('web', 'db')
 def bootstrap():
     clone_repos()
+    create_nginx_folders()
     create_virtualenv()
-    bootstrap_database()
+    create_database()
     puts('Bootstrapped {project_name} on {host} - database creation needs to be done manually.'\
         .format(**env))
+
+
+@task
+@roles('web', 'db')
+def create_nginx_folders():
+    """
+    do it.
+    """
+    with hide('running', 'stdout'):
+        exists = run('if [ -d "~/nginx" ]; then echo 1; fi')
+    if exists:
+        puts('nginx dir already exists. manual action needed, if really...')
+        return
+    run('mkdir ~/nginx')
+    run('mkdir ~/nginx/conf')
+    run('mkdir ~/nginx/conf/sites')
+    run('mkdir ~/nginx/temp')
+    run('mkdir ~/nginx/logs')
+    puts('created ~/nginx & co.'\
+        .format(**env))
+
 
 @task
 def deploy(verbosity='noisy'):

@@ -17,6 +17,9 @@ server {
         }
     }
 
+    error_log logs/{{project_name}}-stage-error.log;
+    access_log logs/{{project_name}}-stage-access.log;
+
     location /static/ {
         alias   /home/{{project_name}}/sites/{{project_name}}-stage/public/static/;
     }
