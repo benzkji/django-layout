@@ -5,8 +5,9 @@ docs/_build
 .idea/
 public
 .sass-cache/
-node_modules
+node_modules/
 dev_database.db
+virtualenv/
 
 # github default python gitignore. FTW.
 

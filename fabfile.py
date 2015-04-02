@@ -44,7 +44,7 @@ def stage():
         'web': [server],
         'db': [server],
     }
-    env.main_user = '{project_name}'
+    env.main_user = '{project_name}'.format(**env)
     generic_env_settings()
 
 def generic_env_settings():
