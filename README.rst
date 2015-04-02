@@ -12,7 +12,7 @@ Things to adapt right after:
 
 - check db settings
 - check fabfile deployment settings
-- chmod u+x manage.py
+- chmod u+x manage.py run-local.sh
 
 When making changes, make sure at least to check the following:
 
