@@ -8,7 +8,14 @@ Django Layout
 http://www.revsys.com/blog/2014/nov/21/recommended-django-project-layout/
      django-admin.py startproject --template=https://github.com/benzkji/django-layout/zipball/master --extension=py,rst,sh,txt,gitignore,ruby-version,example project_name
 
+Things to adapt right after:
+
+- check db settings
+- check fabfile deployment settings
+- chmod u+x manage.py
+
 When making changes, make sure at least to check the following:
+
 - startproject with above command line
 - check that `fab bootstrap` and `fab deploy` still work
 - check gunicorn/nginx configs and scripts still work
