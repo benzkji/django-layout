@@ -10,11 +10,13 @@ http://www.revsys.com/blog/2014/nov/21/recommended-django-project-layout/
 
 Things to adapt right after:
 
+- chmod u+x manage.py run-local.sh
 - check db settings
 - check fabfile deployment settings
-- chmod u+x manage.py run-local.sh
+- check nginx site config: server_listen port
+- if your project name is not equal to your system user, like /home/project_name/... does not work, further adapt nginx site config
 
-When making changes, make sure at least to check the following:
+When making changes to this repository, make sure at least to check the following:
 
 - startproject with above command line
 - `manage.py check`, `manage.py migrate`, `./run-local.sh` and open the /admin
