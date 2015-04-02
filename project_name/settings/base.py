@@ -76,7 +76,7 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'django.middleware.locale.LocaleMiddleware',
-    'django.middleware.doc.XViewMiddleware',
+    # what is this in django 1.8? 'django.middleware.doc.XViewMiddleware',
 
     # django cms specific
     # 'cms.middleware.page.CurrentPageMiddleware',

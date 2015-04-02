@@ -166,7 +166,7 @@ def deploy(verbosity='noisy'):
         puts('Collecting static files...')
         execute(collectstatic)
         puts('Synchronizing database...')
-        execute(syncdb)
+        execute(migrate)
         puts('Restarting web server...')
         execute(restart)
 
@@ -223,7 +223,7 @@ def migrate(sync=True, migrate=True):
     """
     Synchronize the database.
     """
-    dj('syncdb migrate --noinput')
+    dj('migrate --noinput')
     # needed when using django-modeltranslation
     # dj('sync_translation_fields')
 

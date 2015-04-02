@@ -17,8 +17,9 @@ Things to adapt right after:
 When making changes, make sure at least to check the following:
 
 - startproject with above command line
-- check that `fab bootstrap` and `fab deploy` still work
-- check gunicorn/nginx configs and scripts still work
+- `manage.py check`, `manage.py migrate`, `./run-local.sh` and open the /admin
+- `fab bootstrap` and `fab deploy` still work
+- gunicorn/nginx configs and scripts still work
 
 .. note:: The text following this comment block will become the README.rst of the new project.
 
