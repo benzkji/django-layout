@@ -242,8 +242,8 @@ def restart():
     Copy gunicorn & nginx config, restart them.
     """
     # project
-    run('cp {project_dir}/deployment/gunicorn/{project_name}.{env_prefix}.sh $HOME/init/.'.format(**env))
-    run('cp {project_dir}/deployment/nginx/{project_name}.{env_prefix}.txt $HOME/nginx/conf/sites/.'.format(**env))
+    run('cp {project_dir}/deployment/{project_name}/gunicorn/{project_name}.{env_prefix}.sh $HOME/init/.'.format(**env))
+    run('cp {project_dir}/deployment/{project_name}/nginx/{project_name}.{env_prefix}.txt $HOME/nginx/conf/sites/.'.format(**env))
     run('chmod u+x $HOME/init/{project_name}.{env_prefix}.sh'.format(**env))
     # MULTISITE: duplicate the above as necessary
 
