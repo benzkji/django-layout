@@ -11,7 +11,7 @@ http://www.revsys.com/blog/2014/nov/21/recommended-django-project-layout/
 When making changes, make sure at least to check the following:
 - startproject with above command line
 - check that `fab bootstrap` and `fab deploy` still work
-- some more to find out...
+- check gunicorn/nginx configs and scripts still work
 
 .. note:: The text following this comment block will become the README.rst of the new project.
 

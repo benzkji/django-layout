@@ -51,6 +51,7 @@ def generic_env_settings():
     env.system_users = {"server": env.main_user} # not used yet!
     env.project_dir = '/home/{main_user}/sites/{project_name}-{env_prefix}'.format(**env)
     env.virtualenv_dir = '{project_dir}/virtualenv'.format(**env)
+    # MULTISITE: add more restarts as needed
     env.restart_command = '~/init/{project_name}.{env_prefix}.sh restart && ~/init/nginx restart'.format(**env)
     env.project_conf = '{project_name}.settings._{env_prefix}'.format(**env)
     # set django settings on env, with fab django helper
@@ -218,11 +219,11 @@ def collectstatic():
 
 @task
 @roles('db')
-def syncdb(sync=True, migrate=True):
+def migrate(sync=True, migrate=True):
     """
     Synchronize the database.
     """
-    dj('syncdb --migrate --noinput')
+    dj('syncdb migrate --noinput')
     # needed when using django-modeltranslation
     # dj('sync_translation_fields')
 
@@ -240,9 +241,17 @@ def restart():
     """
     Copy gunicorn & nginx config, restart them.
     """
+    # project
     run('cp {project_dir}/deployment/gunicorn/{project_name}.{env_prefix}.sh $HOME/init/.'.format(**env))
     run('cp {project_dir}/deployment/nginx/{project_name}.{env_prefix}.txt $HOME/nginx/conf/sites/.'.format(**env))
     run('chmod u+x $HOME/init/{project_name}.{env_prefix}.sh'.format(**env))
+    # MULTISITE: duplicate the above as necessary
+
+    # nginx main, may be optional!
+    # run('cp {project_dir}/{project_name}/deployment/nginx/nginx.conf $HOME/nginx/conf/.'.format(**env))
+    # run('cp {project_dir}/{project_name}/deployment/nginx/nginx.sh $HOME/init/.'.format(**env))
+    # run('chmod u+x $HOME/init/nginx.sh')
+
     run(env.restart_command)
 
 @task
@@ -253,23 +262,6 @@ def requirements():
     """
     run('{virtualenv_dir}/bin/pip install -r {project_dir}/{requirements_file}'\
         .format(**env))
-    # TODO: check if this is really necessary!? keep it clean...
-    #with cd('{virtualenv_dir}/src'.format(**env)):
-    #    with hide('running', 'stdout', 'stderr'):
-    #        dirs = []
-    #        for path in run('ls -db1 -- */').splitlines():
-    #            full_path = posixpath.normpath(posixpath.join(env.cwd, path))
-    #            if full_path != env.project_dir:
-    #                dirs.append(path)
-    #    if dirs:
-    #        fix_permissions(' '.join(dirs))
-    #with cd(env.virtualenv_dir):
-    #    with hide('running', 'stdout'):
-    #        match = re.search(r'\d+\.\d+', run('bin/python --version'))
-    #    if match:
-    #        with cd('lib/python{0}/site-packages'.format(match.group())):
-    #            fix_permissions()
-
 
 #==============================================================================
 # Helper functions

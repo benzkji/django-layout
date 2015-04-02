@@ -12,7 +12,7 @@
 NAME="{{project_name}}"
 PROJECT_ENV="live"
 PROJECT_DIR="$HOME/sites/$NAME-$PROJECT_ENV"
-SETTINGS="$NAME.settings._$PROJECT_ENV_deploy"
+SETTINGS="$NAME.settings._${PROJECT_ENV}_deploy"
 THE_ENV="$PROJECT_DIR/virtualenv"
 # beware, choose the right version here! (2.7 for most mordern servers)
 PYTHONPATH="$THE_ENV/lib/python2.7/site-packages:$PROJECT_DIR"
