@@ -1,1 +1,1 @@
-./manage.py runserver 8888 --settings={{project_name}}.settings._dev
+./manage.py runserver 8888
