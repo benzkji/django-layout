@@ -15,6 +15,7 @@ env.requirements_files = ['requirements/deploy.txt', 'requirements/basics.txt', 
 # this is used with pip install -r
 env.requirements_file = env.requirements_files[0]
 
+
 #==============================================================================
 # Tasks which set up deployment environments
 #==============================================================================
@@ -25,12 +26,12 @@ def live():
     Use the live deployment environment.
     """
     env.env_prefix = 'live'
-    server = '{project_name}@s10.wservices.ch'.format(**env)
+    env.main_user = '{project_name}'.format(**env)
+    server = '{main_user}@s20.wservices.ch'.format(**env)
     env.roledefs = {
         'web': [server],
         'db': [server],
     }
-    env.main_user = '{project_name}'.format(**env)
     generic_env_settings()
 
 @task
@@ -39,13 +40,14 @@ def stage():
     Use the sandbox deployment environment on xy.bnzk.ch.
     """
     env.env_prefix = 'stage'
-    server = '{project_name}@s19.wservices.ch'.format(**env)
+    env.main_user = '{project_name}'.format(**env)
+    server = '{main_user}@s20.wservices.ch'.format(**env)
     env.roledefs = {
         'web': [server],
         'db': [server],
     }
-    env.main_user = '{project_name}'.format(**env)
     generic_env_settings()
+
 
 def generic_env_settings():
     env.system_users = {"server": env.main_user} # not used yet!
@@ -63,7 +65,6 @@ def generic_env_settings():
 
 # Set the default environment.
 stage()
-
 
 
 #==============================================================================
