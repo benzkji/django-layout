@@ -123,7 +123,7 @@ def create_database():
 @roles('web', 'db')
 def bootstrap():
     clone_repos()
-    create_nginx_folders()
+    # create_nginx_folders()  # only on request, so we dont overwrite existing settings.
     create_virtualenv()
     create_database()
     puts('Bootstrapped {project_name} on {host} - database creation needs to be done manually.'\
@@ -243,8 +243,8 @@ def restart():
     Copy gunicorn & nginx config, restart them.
     """
     # project
-    run('cp {project_dir}/deployment/{project_name}/gunicorn/{project_name}.{env_prefix}.sh $HOME/init/.'.format(**env))
-    run('cp {project_dir}/deployment/{project_name}/nginx/{project_name}.{env_prefix}.txt $HOME/nginx/conf/sites/.'.format(**env))
+    run('cp {project_dir}/{project_name}/deployment/gunicorn/{project_name}.{env_prefix}.sh $HOME/init/.'.format(**env))
+    run('cp {project_dir}/{project_name}/deployment/nginx/{project_name}.{env_prefix}.txt $HOME/nginx/conf/sites/.'.format(**env))
     run('chmod u+x $HOME/init/{project_name}.{env_prefix}.sh'.format(**env))
     # MULTISITE: duplicate the above as necessary
 
@@ -278,7 +278,8 @@ def virtualenv(command):
     source = 'source {virtualenv_dir}/bin/activate && '.format(**env)
     run(source + command)
 
-
+@task
+@roles('web')
 def dj(command):
     """
     Run a Django manage.py command on the server.
@@ -295,6 +296,3 @@ def fix_permissions(path='.'):
     """
     puts("no need for fixing permissions yet!")
     return
-
-
-

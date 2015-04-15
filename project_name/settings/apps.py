@@ -14,6 +14,7 @@ INSTALLED_APPS = (
     'compressor',
 
     # Uncomment the next line to enable the admin:
+    'djangocms-admin-style',
     'django.contrib.admin',
 
 )
