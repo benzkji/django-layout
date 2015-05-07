@@ -34,14 +34,14 @@ module.exports = function(grunt) {
       },
       default: {
         files: {
-          '{{project_name}}/static/{{project_name}}/svg/icons.svg': ['{{project_name}}/static/{{project_name}}/svg-source/*.svg']
+          '{{project_name}}/static/{{project_name}}/svg/icons.svg': ['{{project_name}}/static/{{project_name}}/svg_source/*.svg']
         }
       }
     },
     watch: {
       svg: {
         //files: ['static/cooalaapp/icons/svg/*'],
-        files: ['{{project_name}}/static/{{project_name}}/svg-source/*.svg'],
+        files: ['{{project_name}}/static/{{project_name}}/svg_source/*.svg'],
         tasks: ['svgstore'],
         options: {
           spawn: true
