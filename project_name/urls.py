@@ -4,8 +4,10 @@ from django.conf import settings
 
 from django.contrib import admin
 
+# pre django 1.7
 admin.autodiscover()
 
+# maybe use i18npatterns?!
 urlpatterns = patterns('',
    # (r'', include('{{ project_name }}.apps.')),
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),

@@ -2,22 +2,32 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-//    jshint: {
-//      js_file: ['Gruntfile.js',
-//                '{{project_name}}/static/{{project_name}}/js/*.js'
-//             ],
-//      options: {
-//        // options here to override JSHint defaults
-//        globals: {
-//          jQuery: true,
-//          console: true,
-//          module: true,
-//          document: true
-//        }
-//      }
-//    },
+    jshint: {
+      js_file: ['Gruntfile.js',
+                '{{project_name}}/static/{{project_name}}/js/*.js'
+             ],
+      options: {
+        // options here to override JSHint defaults
+        globals: {
+          jQuery: true,
+          console: true,
+          module: true,
+          document: true
+        }
+      }
+    },
     compass: {                              // Task
       dist: {                            // Target
+      }
+    },
+    webfont: {
+      icons: {
+        src: '{{project_name}}/static/{{project_name}}/iconfont-source/*.svg',
+        dest: '{{project_name}}/static/{{project_name}}/iconfont',
+        options: {
+          font: "icons",
+          hashes: true
+        }
       }
     },
     svgstore: {
@@ -39,6 +49,14 @@ module.exports = function(grunt) {
       }
     },
     watch: {
+      webfont: {
+        //files: ['static/cooalaapp/icons/svg/*'],
+        files: ['{{project_name}}/static/{{project_name}}/iconfont-source/*.svg'],
+        tasks: ['webfont'],
+        options: {
+          spawn: true
+        }
+      },
       svg: {
         //files: ['static/cooalaapp/icons/svg/*'],
         files: ['{{project_name}}/static/{{project_name}}/svg_source/*.svg'],
@@ -53,21 +71,22 @@ module.exports = function(grunt) {
         options: {
           spawn: true
         }
+      },
+      js: {
+        files: ['{{project_name}}/static/{{project_name}}/js/**'],
+        tasks: ['jshint'],
+        options: {
+          spawn: true
+        }
       }
-//      js: {
-//        files: ['src/ferienpass/theme/theme/static/js/**'],
-//        tasks: ['jshint'],
-//        options: {
-//          spawn: true
-//        }
-//      }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-watch');
-  //grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-compass');
   grunt.loadNpmTasks('grunt-svgstore');
+  grunt.loadNpmTasks('grunt-webfont');
 
   //grunt.loadNpmTasks('grunt-contrib-concat');
   //grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -75,7 +94,6 @@ module.exports = function(grunt) {
 
   //grunt.registerTask('test', ['jshint']);
   //grunt.registerTask('default', ['compass', 'svgstore', 'jshint']);
-  grunt.registerTask('default', ['compass', 'svgstore'
-  ]);
+  grunt.registerTask('default', ['compass', 'svgstore', 'webfont', 'jshint'  ]);
 
 };

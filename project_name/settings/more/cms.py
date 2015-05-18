@@ -3,8 +3,7 @@ from base import ugettext
 
 CMS_TEMPLATES = (
     ('{{project_name}}/standard.html', ugettext('Standard')),
-    ('{{project_name}}/gastro.html', ugettext('Gastro')),
-    ('{{project_name}}/home.html', ugettext('Startseite')),
+    ('{{project_name}}/home.html', ugettext('Homepage')),
 )
 
 CMS_CACHE_DURATIONS = {
