@@ -50,6 +50,6 @@ CMS_LANGUAGES = {
     ],
 }
 
-#CMS_PLUGIN_PROCESSORS = (
+# CMS_PLUGIN_PROCESSORS = (
 #    '{{project_name}}.plugin_processors.default_div',
-#)
+# )

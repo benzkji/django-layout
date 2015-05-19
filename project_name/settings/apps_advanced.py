@@ -30,7 +30,7 @@ INSTALLED_APPS = (
 
     'djangocms_text_ckeditor',
     'djangocms_link',
-    #'djangocms_accordion',
+    # 'djangocms_accordion',
 
     'south',
     'cms',

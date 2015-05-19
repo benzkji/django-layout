@@ -2,3 +2,5 @@
 
 fabric
 flake8
+mock
+mixer

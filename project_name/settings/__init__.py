@@ -1,6 +1,12 @@
-from base import *
-from assets import *
-from apps import *
+from split_settings.tools import optional, include
 
-# _dev imported for convenience, so ./manage.py doesnt need --settings=...
-from _dev import *
+include(
+    'base.py',
+    'assets.py',
+    'hosts.py',
+    'cms.py',
+    'apps.py',
+    '_dev.py',
+    optional('local.py'),
+    scope=globals()
+)

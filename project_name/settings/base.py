@@ -62,7 +62,7 @@ SECRET_KEY = '{{ secret_key }}'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    # 'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -95,7 +95,7 @@ TEMPLATE_CONTEXT_PROCESSORS = DEFAULT_SETTINGS.TEMPLATE_CONTEXT_PROCESSORS + (
     # 'cms.context_processors.cms_settings',
     # 'sekizai.context_processors.sekizai',
 )
-#print TEMPLATE_CONTEXT_PROCESSORS
+# print TEMPLATE_CONTEXT_PROCESSORS
 
 ROOT_URLCONF = '{{project_name}}.urls'
 

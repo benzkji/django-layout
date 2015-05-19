@@ -1,9 +1,6 @@
-from fabric.api import task, env, run, local, roles, cd, execute, hide, puts,\
-    sudo
+from fabric.api import task, env, run, roles, cd, execute, hide, puts
 from fabric.contrib import django as fab_django
 
-import posixpath
-import re
 
 env.forward_agent = True
 env.project_name = '{{project_name}}'
@@ -16,9 +13,9 @@ env.requirements_files = ['requirements/deploy.txt', 'requirements/basics.txt', 
 env.requirements_file = env.requirements_files[0]
 
 
-#==============================================================================
+# ==============================================================================
 # Tasks which set up deployment environments
-#==============================================================================
+# ==============================================================================
 
 @task
 def live():
@@ -33,6 +30,7 @@ def live():
         'db': [server],
     }
     generic_env_settings()
+
 
 @task
 def stage():
@@ -50,11 +48,12 @@ def stage():
 
 
 def generic_env_settings():
-    env.system_users = {"server": env.main_user} # not used yet!
+    env.system_users = {"server": env.main_user}  # not used yet!
     env.project_dir = '/home/{main_user}/sites/{project_name}-{env_prefix}'.format(**env)
     env.virtualenv_dir = '{project_dir}/virtualenv'.format(**env)
     # MULTISITE: add more restarts as needed
-    env.restart_command = '~/init/{project_name}.{env_prefix}.sh restart && ~/init/nginx restart'.format(**env)
+    env.restart_command = '~/init/{project_name}.{env_prefix}.sh restart && ~/init/nginx restart'\
+        .format(**env)
     env.project_conf = '{project_name}.settings._{env_prefix}'.format(**env)
     # set django settings on env, with fab django helper
     fab_django.settings_module(env['project_conf'])
@@ -67,9 +66,9 @@ def generic_env_settings():
 stage()
 
 
-#==============================================================================
+# ==============================================================================
 # Actual tasks
-#==============================================================================
+# ==============================================================================
 
 @task
 @roles('web', 'db')
@@ -78,8 +77,7 @@ def create_virtualenv():
     Bootstrap the environment.
     """
     with hide('running', 'stdout'):
-        exists = run('if [ -d "{virtualenv_dir}" ]; then echo 1; fi'\
-            .format(**env))
+        exists = run('if [ -d "{virtualenv_dir}" ]; then echo 1; fi'.format(**env))
     if exists:
         puts('Assuming virtualenv {virtualenv_dir} has already been created '
              'since this directory exists. You\' need to manually delete this '
@@ -87,8 +85,8 @@ def create_virtualenv():
         return
     run('virtualenv {virtualenv_dir} --no-site-packages'.format(**env))
     requirements()
-    puts('Created virtualenv at {virtualenv_dir}.'\
-        .format(**env))
+    puts('Created virtualenv at {virtualenv_dir}.'.format(**env))
+
 
 @task
 @roles('web', 'db')
@@ -97,15 +95,14 @@ def clone_repos():
     clone the repository.
     """
     with hide('running', 'stdout'):
-        exists = run('if [ -d "{project_dir}" ]; then echo 1; fi'\
-            .format(**env))
+        exists = run('if [ -d "{project_dir}" ]; then echo 1; fi'.format(**env))
     if exists:
         puts('Assuming {repository} has already been cloned since '
-            '{project_dir} exists.'.format(**env))
+             '{project_dir} exists.'.format(**env))
         return
     run('git clone {repository} {project_dir}'.format(**env))
-    puts('cloned {repository} to {project_dir}.'\
-        .format(**env))
+    puts('cloned {repository} to {project_dir}.'.format(**env))
+
 
 @task
 @roles('web', 'db')
@@ -116,8 +113,9 @@ def create_database():
             dbuser=env.settings.DATABASES["default"]["USER"],
             dbpassword=env.settings.DATABASES["default"]["PASSWORD"],
             dbname=env.settings.DATABASES["default"]["NAME"],
+            )
         )
-    )
+
 
 @task
 @roles('web', 'db')
@@ -126,8 +124,7 @@ def bootstrap():
     # create_nginx_folders()  # only on request, so we dont overwrite existing settings.
     create_virtualenv()
     create_database()
-    puts('Bootstrapped {project_name} on {host} - database creation needs to be done manually.'\
-        .format(**env))
+    puts('Bootstrapped {project_name} on {host} (cloned repos, created venv and db).'.format(**env))
 
 
 @task
@@ -146,8 +143,7 @@ def create_nginx_folders():
     run('mkdir ~/nginx/conf/sites')
     run('mkdir ~/nginx/temp')
     run('mkdir ~/nginx/logs')
-    puts('created ~/nginx & co.'\
-        .format(**env))
+    puts('created ~/nginx & co.'.format(**env))
 
 
 @task
@@ -186,10 +182,10 @@ def update(action='check'):
     with cd(env.project_dir):
         remote, dest_branch = env.remote_ref.split('/', 1)
         run('git fetch {remote}'.format(remote=remote,
-            dest_branch=dest_branch, **env))
+                                        dest_branch=dest_branch, **env))
         with hide('running', 'stdout'):
             changed_files = run('git diff-index --cached --name-only '
-                '{remote_ref}'.format(**env)).splitlines()
+                                '{remote_ref}'.format(**env)).splitlines()
         if not changed_files and action != 'force':
             # No changes, we can exit now.
             return
@@ -202,8 +198,8 @@ def update(action='check'):
         run('git merge {remote_ref}'.format(**env))
         run('find -name "*.pyc" -delete')
         run('git clean -df')
-        # run('git clean -df {project_name} docs requirements public/static deployment'.format(**env))
-        #fix_permissions()
+        # run('git clean -df {project_name} docs requirements public/static '.format(**env))
+        # fix_permissions()
     if action == 'force' or reqs_changed:
         # Not using execute() because we don't want to run multiple times for
         # each role (since this task gets run per role).
@@ -218,6 +214,7 @@ def collectstatic():
     """
     dj('collectstatic --link --noinput')
 
+
 @task
 @roles('db')
 def migrate(sync=True, migrate=True):
@@ -228,6 +225,7 @@ def migrate(sync=True, migrate=True):
     # needed when using django-modeltranslation
     # dj('sync_translation_fields')
 
+
 @task
 @roles('db')
 def createsuperuser():
@@ -236,6 +234,7 @@ def createsuperuser():
     """
     dj('createsuperuser')
 
+
 @task
 @roles('web')
 def restart():
@@ -243,17 +242,25 @@ def restart():
     Copy gunicorn & nginx config, restart them.
     """
     # project
-    run('cp {project_dir}/{project_name}/deployment/gunicorn/{project_name}.{env_prefix}.sh $HOME/init/.'.format(**env))
-    run('cp {project_dir}/{project_name}/deployment/nginx/{project_name}.{env_prefix}.txt $HOME/nginx/conf/sites/.'.format(**env))
+    run(
+        'cp {project_dir}/{project_name}/deployment/gunicorn/{project_name}.{env_prefix}.sh'
+        '$HOME/init/.'.format(**env)
+    )
+    run(
+        'cp {project_dir}/{project_name}/deployment/nginx/{project_name}.{env_prefix}.txt'
+        '$HOME/nginx/conf/sites/.'.format(**env)
+    )
     run('chmod u+x $HOME/init/{project_name}.{env_prefix}.sh'.format(**env))
     # MULTISITE: duplicate the above as necessary
 
     # nginx main, may be optional!
-    # run('cp {project_dir}/{project_name}/deployment/nginx/nginx.conf $HOME/nginx/conf/.'.format(**env))
+    # run('cp {project_dir}/{project_name}/deployment/nginx/nginx.conf'
+    # ' $HOME/nginx/conf/.'.format(**env))
     # run('cp {project_dir}/{project_name}/deployment/nginx/nginx.sh $HOME/init/.'.format(**env))
     # run('chmod u+x $HOME/init/nginx.sh')
 
     run(env.restart_command)
+
 
 @task
 @roles('web', 'db')
@@ -261,12 +268,12 @@ def requirements():
     """
     Update the requirements.
     """
-    run('{virtualenv_dir}/bin/pip install -r {project_dir}/{requirements_file}'\
-        .format(**env))
+    run('{virtualenv_dir}/bin/pip install -r {project_dir}/{requirements_file}'.format(**env))
 
-#==============================================================================
+
+# ==============================================================================
 # Helper functions
-#==============================================================================
+# ==============================================================================
 
 def virtualenv(command):
     """
@@ -278,6 +285,7 @@ def virtualenv(command):
     source = 'source {virtualenv_dir}/bin/activate && '.format(**env)
     run(source + command)
 
+
 @task
 @roles('web')
 def dj(command):
@@ -286,7 +294,7 @@ def dj(command):
     """
     virtualenv('{project_dir}/manage.py {dj_command} '
                '--settings {project_conf}'.format(dj_command=command, **env))
-    #run('{virtualenv_dir}/bin/manage.py {dj_command} '
+    # run('{virtualenv_dir}/bin/manage.py {dj_command} '
     #    '--settings {project_conf}'.format(dj_command=command, **env))
 
 
