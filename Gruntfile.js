@@ -44,7 +44,7 @@ module.exports = function(grunt) {
         files: ['{{project_name}}/static/{{project_name}}/sass/**'],
         tasks: ['compass'],
         options: {
-          spawn: true
+          spawn: false
         }
       },
       webfont: {
@@ -52,21 +52,21 @@ module.exports = function(grunt) {
         files: ['{{project_name}}/static/{{project_name}}/iconfont-source/*.svg'],
         tasks: ['webfont'],
         options: {
-          spawn: true
+          spawn: false
         }
       },
       jshint: {
         files: ['{{project_name}}/static/{{project_name}}/js/**'],
         tasks: ['jshint'],
         options: {
-          spawn: true
+          spawn: false
         }
       },
       flake8: {
         files: ['**.py'],
         tasks: ['flake8'],
         options: {
-          spawn: true
+          spawn: false
         }
       }
     }

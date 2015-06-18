@@ -13,10 +13,10 @@ CKEDITOR_SETTINGS = {
         ['cmsplugins', '-', 'ShowBlocks'],
         ['Bold', 'RemoveFormat', ],
         # ['Format'],
-        ['BulletedList', '-', 'Outdent', 'Indent'],
+        ['BulletedList', 'NumberedList' '-', 'Outdent', 'Indent'],
         ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', ],
         ['ShowBlocks', 'Source'],
     ],
-    'format_tags': 'h2;p',
+    'format_tags': 'h1;h2;h3;p',
     'skin': 'moono',
 }
