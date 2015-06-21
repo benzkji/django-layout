@@ -9,7 +9,7 @@ admin.autodiscover()
 
 # maybe use i18npatterns?!
 urlpatterns = patterns(
-    '',
+    '',  # dont remove it, it's the prefix!
     # (r'', include('{{ project_name }}.apps.')),
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     (r'^admin/', include(admin.site.urls)),
