@@ -4,7 +4,9 @@
 Django Layout
 ===============
 
-``django-layout`` provides sane defaults for new Django projects based on http://www.revsys.com/blog/2014/nov/21/recommended-django-project-layout/ (more and more) and (initial version) `established best practices <http://lincolnloop.com/django-best-practices/>`__. To use ``django-layout`` run the following command::
+``django-layout`` provides sane defaults for new Django projects based on http://www.revsys.com/blog/2014/nov/21/recommended-django-project-layout/ (more and more) and (initial version) `established best practices <http://lincolnloop.com/django-best-practices/>`__.
+
+To use ``django-layout`` run the following command::
 
      django-admin.py startproject --template=https://github.com/benzkji/django-layout/zipball/master --extension=py,rb,rst,sh,txt,js,json,gitignore,ruby-version,example,bowerrc your_project_name
 
