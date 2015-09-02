@@ -22,8 +22,10 @@ server {
 
     location /static/ {
         alias   /home/{{project_name}}/sites/{{project_name}}-live/public/static/;
+        expires 3M;
     }
     location /media/ {
         alias   /home/{{project_name}}/sites/{{project_name}}-live/public/media/;
+        expires 3M;
     }
 }
