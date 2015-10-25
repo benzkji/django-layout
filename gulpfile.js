@@ -12,10 +12,10 @@ var static_path = './{{ project_name }}/static/{{ project_name }}/';
 
 
 gulp.task('sass', function () {
-    gulp.src(wti_static + 'sass/screen.sass')
+    gulp.src(static_path + 'sass/screen.sass')
         .pipe(sass().on('error', sass.logError))
         .pipe(autoprefixer("last 2 versions"))
-        .pipe(gulp.dest(wti_static + 'css/'))
+        .pipe(gulp.dest(static_path + 'css/'))
         .pipe(livereload());
 });
 
@@ -39,21 +39,13 @@ gulp.task('pip-compile', shell.task(
     )
 );
 
-gulp.task('livereload', function (evt) {
-    livereload.changed({
-        body: {
-            files: [evt.path]
-        }
-    });
-});
-
 gulp.task('default', ['sass', 'jshint', 'flake8']);
 
 gulp.task('watch', function () {
     livereload.listen();
-    gulp.watch('**/*.html', ['livereload']);
+    gulp.watch(['./**/*.html', './**/*.py']).on('change', livereload.changed);
     gulp.watch(static_path + '**/*.sass', ['sass']);
     gulp.watch(['gulpfile.js', static_path + 'js/**.js'], ['jshint']);
-    gulp.watch('./**/*.py', ['flake8', 'livereload']);
+    gulp.watch('./**/*.py', ['flake8']);
     gulp.watch('./requirements/*.in', ['pip-compile']);
 });
