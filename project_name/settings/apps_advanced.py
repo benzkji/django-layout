@@ -9,7 +9,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 
-    'parkhotel',
+    '{{ project_name }}',
 
     # first, as we need to re-register the admin
     'forms_builder.forms',
@@ -32,11 +32,10 @@ INSTALLED_APPS = (
     'djangocms_link',
     # 'djangocms_accordion',
 
-    'south',
     'cms',
     'menus',
     'classytags',
-    'mptt',
+    'treebeard',
     'sekizai',
     'djangocms_admin_style',
     'compressor',

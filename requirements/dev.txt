@@ -1,6 +1,0 @@
--r basics.txt
-
-fabric
-flake8
-mock
-mixer

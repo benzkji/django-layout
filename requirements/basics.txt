@@ -1,9 +1,0 @@
-
-django>=1.7,<1.8
-django-split-settings>=0.1.2
-django-compressor>=1.4
-djangocms-admin-style
-cssmin
-# south==1.0
-# django-cms
-# Pillow>=2

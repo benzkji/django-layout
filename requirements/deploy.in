@@ -1,4 +1,4 @@
--r basics.txt
+-r basics.in
 
 mysql-python==1.2.5
 gunicorn==18.0

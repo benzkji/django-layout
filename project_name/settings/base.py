@@ -1,7 +1,8 @@
 # coding: utf-8
 
 import os
-import django.conf.global_settings as DEFAULT_SETTINGS
+# just in case - know the defaults ;-)
+# import django.conf.global_settings as DEFAULT_SETTINGS
 
 PROJECT_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                             '../../')
@@ -58,13 +59,6 @@ USE_TZ = True
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '{{ secret_key }}'
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-    # 'django.template.loaders.eggs.Loader',
-)
-
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -89,13 +83,32 @@ MIDDLEWARE_CLASSES = (
     # 'painless_redirects.middleware.ForceSiteDomainRedirectMiddleware',
 )
 
-TEMPLATE_CONTEXT_PROCESSORS = DEFAULT_SETTINGS.TEMPLATE_CONTEXT_PROCESSORS + (
-    'django.core.context_processors.request',
-    # again, cms
-    # 'cms.context_processors.cms_settings',
-    # 'sekizai.context_processors.sekizai',
-)
-# print TEMPLATE_CONTEXT_PROCESSORS
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            # insert your TEMPLATE_DIRS here
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+                'django.core.context_processors.i18n',
+                'django.core.context_processors.request',
+                'django.core.context_processors.media',
+                'django.core.context_processors.static',
+                'sekizai.context_processors.sekizai',
+                'cms.context_processors.cms_settings',
+            ],
+            'loaders': [
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
+                # 'django.template.loaders.eggs.Loader',
+            ]
+        },
+    },
+]
 
 ROOT_URLCONF = '{{project_name}}.urls'
 
