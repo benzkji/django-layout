@@ -52,7 +52,7 @@ def generic_env_settings():
     env.project_dir = '/home/{main_user}/sites/{project_name}-{env_prefix}'.format(**env)
     env.virtualenv_dir = '{project_dir}/virtualenv'.format(**env)
     # MULTISITE: add more restarts as needed
-    env.restart_command = '~/init/{project_name}.{env_prefix}.sh restart && ~/init/nginx restart'\
+    env.restart_command = '~/init/{project_name}.{env_prefix}.sh restart && ~/init/nginx.sh restart'\
         .format(**env)
     env.project_conf = '{project_name}.settings._{env_prefix}'.format(**env)
     # set django settings on env, with fab django helper
@@ -244,20 +244,20 @@ def restart():
     # project
     run(
         'cp {project_dir}/{project_name}/deployment/gunicorn/{project_name}.{env_prefix}.sh'
-        '$HOME/init/.'.format(**env)
+        ' $HOME/init/.'.format(**env)
     )
     run(
         'cp {project_dir}/{project_name}/deployment/nginx/{project_name}.{env_prefix}.txt'
-        '$HOME/nginx/conf/sites/.'.format(**env)
+        ' $HOME/nginx/conf/sites/.'.format(**env)
     )
     run('chmod u+x $HOME/init/{project_name}.{env_prefix}.sh'.format(**env))
     # MULTISITE: duplicate the above as necessary
 
     # nginx main, may be optional!
-    # run('cp {project_dir}/{project_name}/deployment/nginx/nginx.conf'
-    # ' $HOME/nginx/conf/.'.format(**env))
-    # run('cp {project_dir}/{project_name}/deployment/nginx/nginx.sh $HOME/init/.'.format(**env))
-    # run('chmod u+x $HOME/init/nginx.sh')
+    run('cp {project_dir}/{project_name}/deployment/nginx/nginx.conf'
+        ' $HOME/nginx/conf/.'.format(**env))
+    run('cp {project_dir}/{project_name}/deployment/nginx/nginx.sh $HOME/init/.'.format(**env))
+    run('chmod u+x $HOME/init/nginx.sh')
 
     run(env.restart_command)
 
@@ -268,7 +268,7 @@ def requirements():
     """
     Update the requirements.
     """
-    run('{virtualenv_dir}/bin/pip install -r {project_dir}/{requirements_file}'.format(**env))
+    virtualenv('pip-sync {project_dir}/{requirements_file}'.format(**env))
 
 
 # ==============================================================================
