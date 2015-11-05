@@ -56,8 +56,8 @@ To bootstrap/deploy on remote server::
     git push --set-upstream origin master
 
     fab bootstrap
-    # after bootstrap, must manualy create db for now
-    fab deploy
+
+have a look at fabfile.py
 
 Documentation
 -------------

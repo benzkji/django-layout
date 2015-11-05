@@ -1,6 +1,5 @@
 # common for all deployment settings
-from base import TEMPLATE_LOADERS
-
+# from base import TEMPLATE_LOADERS
 
 DEBUG = False
 TEMPLATE_DEBUG = False

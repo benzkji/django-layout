@@ -60,7 +60,9 @@ gulp.task('pip-compile', shell.task(
         [
             'pip-compile requirements/dev.in',
             'pip-compile requirements/deploy.in',
-            'pip-sync requirements/dev.txt',
+            // let it get a bit older, until it really works
+            // 'pip-sync requirements/dev.txt',
+            'pip install -r requirements/dev.txt',
         ]
     )
 );

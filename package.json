@@ -3,6 +3,8 @@
     "es6-promise": "^3.0.2",
     "jshint": "^2.8.0",
     "gulp": "^3.9.0",
+    "gulp-consolidate": "^0.1.2",
+    "gulp-iconfont": "^5.0.0",
     "gulp-autoprefixer": "^3.1.0",
     "gulp-sass": "^2.0.4",
     "gulp-jshint": "^1.11.2",

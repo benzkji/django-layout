@@ -113,8 +113,7 @@ def create_database():
             dbuser=env.settings.DATABASES["default"]["USER"],
             dbpassword=env.settings.DATABASES["default"]["PASSWORD"],
             dbname=env.settings.DATABASES["default"]["NAME"],
-            )
-        )
+        ))
 
 
 @task
@@ -253,11 +252,11 @@ def restart():
     run('chmod u+x $HOME/init/{project_name}.{env_prefix}.sh'.format(**env))
     # MULTISITE: duplicate the above as necessary
 
-    # nginx main, may be optional!
-    run('cp {project_dir}/{project_name}/deployment/nginx/nginx.conf'
-        ' $HOME/nginx/conf/.'.format(**env))
-    run('cp {project_dir}/{project_name}/deployment/nginx/nginx.sh $HOME/init/.'.format(**env))
-    run('chmod u+x $HOME/init/nginx.sh')
+    # nginx main, beware may be optional!
+    # run('cp {project_dir}/{project_name}/deployment/nginx/nginx.conf'
+    #     ' $HOME/nginx/conf/.'.format(**env))
+    # run('cp {project_dir}/{project_name}/deployment/nginx/nginx.sh $HOME/init/.'.format(**env))
+    # run('chmod u+x $HOME/init/nginx.sh')
 
     run(env.restart_command)
 
