@@ -2,7 +2,6 @@ import os
 from base import PROJECT_PATH
 
 DEBUG = True
-TEMPLATE_DEBUG = True
 THUMBNAIL_DEBUG = True
 FOLDERLESS_DEBUG = True
 

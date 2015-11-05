@@ -1,5 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="">
+{% load compress cms_tags %}
+
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -15,7 +17,7 @@
 
         {% compress css inline %}
             <link rel="stylesheet" href="{{ STATIC_URL }}{{project_name}}/components/normalize.css/normalize.css">
-            <link rel="stylesheet" href="{{ STATIC_URL }}{{project_name}}/css/base.css">
+            <link rel="stylesheet" href="{{ STATIC_URL }}{{project_name}}/css/screen.css">
         {% endcompress %}
         {% comment %}if need...<script src="{{ STATIC_URL }}{{project_name}}/components/modernizr/modernizr.js"></script>{% endcomment %}
 

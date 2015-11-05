@@ -267,7 +267,10 @@ def requirements():
     """
     Update the requirements.
     """
-    virtualenv('pip-sync {project_dir}/{requirements_file}'.format(**env))
+    # let it get some more older
+    # virtualenv('pip-sync {project_dir}/{requirements_file}'.format(**env))
+    virtualenv('pip install -r {project_dir}/{requirements_file}'.format(**env))
+
 
 
 # ==============================================================================
