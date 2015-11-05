@@ -7,13 +7,17 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        {% comment %}if has..<link rel="apple-touch-icon" href="apple-touch-icon.png">{% endcomment %}
+        {% comment %}if has...<link rel="apple-touch-icon" href="apple-touch-icon.png">{% endcomment %}
 
-        {% compress css %}
+        <script type="text/javascript">
+            document.querySelector('html').className += ' js';
+        </script>
+
+        {% compress css inline %}
             <link rel="stylesheet" href="{{ STATIC_URL }}{{project_name}}/components/normalize.css/normalize.css">
             <link rel="stylesheet" href="{{ STATIC_URL }}{{project_name}}/css/base.css">
         {% endcompress %}
-        <script src="{{ STATIC_URL }}{{project_name}}/components/modernizr/modernizr.js"></script>
+        {% comment %}if need...<script src="{{ STATIC_URL }}{{project_name}}/components/modernizr/modernizr.js"></script>{% endcomment %}
 
     </head>
     <body>
