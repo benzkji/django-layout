@@ -23,7 +23,7 @@ __pycache__/
 env/
 build/
 develop-eggs/
-dist/
+# dist/ many bower packages have this directory!
 downloads/
 eggs/
 # lib/
