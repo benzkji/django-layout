@@ -10,7 +10,7 @@ var gulp = require('gulp'),
 
 // fix Promise() error from whiche package again?
 require('es6-promise').polyfill();
-var static_path = './{{ project_name }}/static/{{ project_name }}/';
+var static_path = '{{ project_name }}/static/{{ project_name }}/';
 
 gulp.task('sass', function () {
     gulp.src(static_path + 'sass/screen.sass')
@@ -24,7 +24,9 @@ gulp.task('icons', function () {
     return gulp.src([static_path + 'iconfont/svg/*.svg'])
         .pipe(iconfont({
                 fontName: 'icons', // required
-                appendUnicode: true, // recommended option
+                normalize: true, // recommended option
+                appendUnicode: false,
+                fontHeight: 1000,
                 formats: ['ttf', 'eot', 'woff'], // default, 'woff2' and 'svg' are available
                 timestamp: runTimestamp // recommended to get consistent builds when watching files
             }
@@ -32,7 +34,7 @@ gulp.task('icons', function () {
     ).on('glyphs', function(glyphs, options) {
         // CSS templating, e.g.
         console.log(glyphs, options);
-        gulp.src(static_path + 'iconfont/sass/_iconfont.scss')
+        gulp.src(static_path + 'iconfont/scss/_iconfont.scss')
             .pipe(consolidate('lodash', {
                 glyphs: glyphs,
                 fontName: 'icons',
@@ -71,11 +73,11 @@ gulp.task('default', ['sass', 'pip-compile', 'jshint', 'flake8']);
 
 gulp.task('watch', function () {
     livereload.listen();
-    gulp.watch(['./**/*.html', './**/*.py', './**/*.css']).on('change', livereload.changed);
+    gulp.watch(['**/*.html', '**/*.py', '**/*.css']).on('change', livereload.changed);
     gulp.watch(static_path + 'sass/*.sass', ['sass']);
     gulp.watch(static_path + 'iconfont/svg/*.svg', ['iconfont']);
     gulp.watch(['gulpfile.js', static_path + 'js/**.js'], ['jshint']);
-    gulp.watch('./**/*.py', ['flake8']);
-    gulp.watch('./requirements/*.in', ['pip-compile']);
+    gulp.watch('**/*.py', ['flake8']);
+    gulp.watch('requirements/*.in', ['pip-compile']);
 });
 
