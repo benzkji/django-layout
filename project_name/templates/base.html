@@ -4,8 +4,14 @@
 
     <head>
         <meta charset="utf-8">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>{% block head_title %}{% endblock %}</title>
+        {# <meta http-equiv="x-ua-compatible" content="ie=edge">#}
+        {% page_attribute "page_title" as cms_page_title %}
+        {% page_attribute "title" as cms_title %}
+        <title>{% spaceless %}{% block title_tag %}
+            {% page_attribute "page_title" %}
+            {% if cms_page_title == cms_title %} | Whatever Default here{% endif %}
+        {% endblock %}
+        {% endspaceless %}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
