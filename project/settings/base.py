@@ -111,7 +111,7 @@ TEMPLATES = [
     },
 ]
 
-ROOT_URLCONF = '{{project_name}}.urls'
+ROOT_URLCONF = 'project.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = '{{project_name}}.wsgi.application'

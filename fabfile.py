@@ -289,7 +289,6 @@ def requirements():
     virtualenv('pip install -r {project_dir}/{requirements_file}'.format(**env))
 
 
-
 # ==============================================================================
 # Helper functions
 # ==============================================================================

@@ -4,8 +4,6 @@ from django.conf import settings
 
 from django.contrib import admin
 
-# pre django 1.7
-admin.autodiscover()
 
 # maybe use i18npatterns?!
 urlpatterns = patterns(
