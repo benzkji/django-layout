@@ -10,7 +10,7 @@ var gulp = require('gulp'),
 
 // fix Promise() error from whiche package again?
 require('es6-promise').polyfill();
-var static_path = '{{ project_name }}/static/{{ project_name }}/';
+var static_path = 'apps/{{ project_name }}/static/{{ project_name }}/';
 
 gulp.task('sass', function () {
     gulp.src(static_path + 'sass/screen.sass')
