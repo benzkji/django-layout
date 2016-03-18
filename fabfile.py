@@ -6,6 +6,7 @@ env.forward_agent = True
 env.project_name = '{{project_name}}'
 env.repository = 'git@bitbucket.org:bnzk/{project_name}.git'.format(**env)
 env.local_branch = 'master'
+env.sites = ('{{ project_name }}', )
 env.remote_ref = 'origin/master'
 # these will be checked for changes
 env.requirements_files = ['requirements/deploy.txt', 'requirements/basics.txt', ]
@@ -51,9 +52,9 @@ def generic_env_settings():
     env.system_users = {"server": env.main_user}  # not used yet!
     env.project_dir = '/home/{main_user}/sites/{project_name}-{env_prefix}'.format(**env)
     env.virtualenv_dir = '{project_dir}/virtualenv'.format(**env)
-    # MULTISITE: add more restarts as needed
-    env.restart_command = '~/init/{project_name}.{env_prefix}.sh restart && ~/init/nginx.sh restart'\
-        .format(**env)
+    env.gunicorn_restart_command = '~/init/{site_name}.{env_prefix}.sh restart'
+    env.nginx_restart_command = '~/init/nginx.sh restart'
+    env.uwsgi_restart_command = 'touch $HOME/uwsgi.d/{site_name}.{env_prefix}.ini'.format(**env)
     env.project_conf = '{project_name}.settings._{env_prefix}'.format(**env)
     # set django settings on env, with fab django helper
     fab_django.settings_module(env['project_conf'])
@@ -240,25 +241,40 @@ def restart():
     """
     Copy gunicorn & nginx config, restart them.
     """
-    # project
-    run(
-        'cp {project_dir}/{project_name}/deployment/gunicorn/{project_name}.{env_prefix}.sh'
-        ' $HOME/init/.'.format(**env)
-    )
-    run(
-        'cp {project_dir}/{project_name}/deployment/nginx/{project_name}.{env_prefix}.txt'
-        ' $HOME/nginx/conf/sites/.'.format(**env)
-    )
-    run('chmod u+x $HOME/init/{project_name}.{env_prefix}.sh'.format(**env))
-    # MULTISITE: duplicate the above as necessary
 
-    # nginx main, beware may be optional!
-    # run('cp {project_dir}/{project_name}/deployment/nginx/nginx.conf'
-    #     ' $HOME/nginx/conf/.'.format(**env))
-    # run('cp {project_dir}/{project_name}/deployment/nginx/nginx.sh $HOME/init/.'.format(**env))
-    # run('chmod u+x $HOME/init/nginx.sh')
+    copy_restart_gunicorn()
+    copy_restart_nginx()
 
-    run(env.restart_command)
+
+def copy_restart_gunicorn():
+    for site_name in env.sites:
+        run(
+            'cp {project_dir}/{project_name}/deployment/gunicorn/{site_name}.{env_prefix}.sh'
+            ' $HOME/init/.'.format(site_name=site_name, **env)
+        )
+        run(
+            'cp {project_dir}/{project_name}/deployment/nginx/{site_name}.{env_prefix}.txt'
+            ' $HOME/nginx/conf/sites/.'.format(site_name=site_name, **env)
+        )
+        run('chmod u+x $HOME/init/{site_name}.{env_prefix}.sh'.format(site_name=site_name, **env))
+        run(env.gunicorn_restart_command.format(site_name=site_name, **env))
+
+def copy_restart_nginx():
+    # nginx main, may be optional!
+    run('cp {project_dir}/{project_name}/deployment/nginx/nginx.conf'
+        ' $HOME/nginx/conf/.'.format(**env))
+    run('cp {project_dir}/{project_name}/deployment/nginx/nginx.sh $HOME/init/.'.format(**env))
+    run('chmod u+x $HOME/init/nginx.sh')
+    run(env.nginx_restart_command)
+
+
+def copy_restart_uwsgi():
+    for site_name in env.sites:
+        run(
+            'cp {project_dir}/{project_name}/deployment/uwsgi/{site_name}.{env_prefix}.ini'
+            ' $HOME/nginx/conf/sites/.'.format(site_name=site_name, **env)
+        )
+        run(env.uwsgi_restart_command.format(site_name=site_name, **env))
 
 
 @task
