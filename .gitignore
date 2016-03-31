@@ -3,11 +3,13 @@
 *.egg-info
 docs/_build
 .idea/
-public
+public/
 .sass-cache/
 node_modules/
-dev_database.db
 virtualenv/
+
+database*.db
+dump*.sql
 
 # github default python gitignore. FTW.
 
