@@ -251,29 +251,30 @@ def restart():
     """
     Copy gunicorn & nginx config, restart them.
     """
-
     copy_restart_gunicorn()
     copy_restart_nginx()
+    # copy_restart_uwsgi()
 
 
 def copy_restart_gunicorn():
     for site_name in env.sites:
         run(
-            'cp {project_dir}/{project_name}/deployment/gunicorn/{site_name}.{env_prefix}.sh'
+            'cp {project_dir}/deployment/gunicorn/{site_name}.{env_prefix}.sh'
             ' $HOME/init/.'.format(site_name=site_name, **env)
         )
         run(
-            'cp {project_dir}/{project_name}/deployment/nginx/{site_name}.{env_prefix}.txt'
+            'cp {project_dir}/deployment/nginx/{site_name}.{env_prefix}.txt'
             ' $HOME/nginx/conf/sites/.'.format(site_name=site_name, **env)
         )
         run('chmod u+x $HOME/init/{site_name}.{env_prefix}.sh'.format(site_name=site_name, **env))
         run(env.gunicorn_restart_command.format(site_name=site_name, **env))
 
+
 def copy_restart_nginx():
     # nginx main, may be optional!
-    run('cp {project_dir}/{project_name}/deployment/nginx/nginx.conf'
+    run('cp {project_dir}/deployment/nginx/nginx.conf'
         ' $HOME/nginx/conf/.'.format(**env))
-    run('cp {project_dir}/{project_name}/deployment/nginx/nginx.sh $HOME/init/.'.format(**env))
+    run('cp {project_dir}/deployment/nginx/nginx.sh $HOME/init/.'.format(**env))
     run('chmod u+x $HOME/init/nginx.sh')
     run(env.nginx_restart_command)
 
@@ -281,7 +282,7 @@ def copy_restart_nginx():
 def copy_restart_uwsgi():
     for site_name in env.sites:
         run(
-            'cp {project_dir}/{project_name}/deployment/uwsgi/{site_name}.{env_prefix}.ini'
+            'cp {project_dir}/deployment/uwsgi/{site_name}.{env_prefix}.ini'
             ' $HOME/nginx/conf/sites/.'.format(site_name=site_name, **env)
         )
         run(env.uwsgi_restart_command.format(site_name=site_name, **env))
