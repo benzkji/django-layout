@@ -1,5 +1,13 @@
+import os
+import sys
+
 from fabric.api import task, env, run, roles, cd, execute, hide, puts
-from fabric.contrib import django as fab_django
+from fabric.operations import get
+from fabric.contrib import django
+
+
+# hm. https://github.com/fabric/fabric/issues/256
+sys.path.insert(0, sys.path[0])
 
 
 env.forward_agent = True
@@ -56,12 +64,7 @@ def generic_env_settings():
     env.nginx_restart_command = '~/init/nginx.sh restart'
     env.uwsgi_restart_command = 'touch $HOME/uwsgi.d/{site_name}.{env_prefix}.ini'.format(**env)
     env.project_conf = '{project_name}.settings._{env_prefix}'.format(**env)
-    # set django settings on env, with fab django helper
-    fab_django.settings_module(env['project_conf'])
-    from django.conf import settings
-    # access them, 'cause they are lazy load (I guess?! doesnt work otherwise!)
-    settings.DATABASES
-    env.settings = settings
+
 
 # Set the default environment.
 stage()
@@ -109,11 +112,13 @@ def clone_repos():
 @roles('web', 'db')
 def create_database():
     # this will fail straight if the database already exists.
+    settings = get_settings()
+    db_settings = settings.DATABASES
     run("echo \"CREATE DATABASE {dbname} CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
         "\" | mysql -u {dbuser} --password={dbpassword}".format(
-            dbuser=env.settings.DATABASES["default"]["USER"],
-            dbpassword=env.settings.DATABASES["default"]["PASSWORD"],
-            dbname=env.settings.DATABASES["default"]["NAME"],
+            dbuser=db_settings["default"]["USER"],
+            dbpassword=db_settings["default"]["PASSWORD"],
+            dbname=db_settings["default"]["NAME"],
         ))
 
 
@@ -170,7 +175,7 @@ def deploy(verbosity='noisy'):
 
 @task
 @roles('web', 'db')
-def update(action='check'):
+def update(action='check', tag=None):
     """
     Update the repository (server-side).
 
@@ -195,7 +200,12 @@ def update(action='check'):
                 if file in changed_files:
                     reqs_changed = True
                     break
-        run('git merge {remote_ref}'.format(**env))
+        # before. run('git merge {remote_ref}'.format(**env))
+        if tag:
+            run('git checkout tags/{tag}'.format(tag=tag, **env))
+        else:
+            run('git checkout {dest_branch}'.format(dest_branch=dest_branch, **env))
+            run('git pull'.format(dest_branch=dest_branch, **env))
         run('find -name "*.pyc" -delete')
         run('git clean -df')
         # run('git clean -df {project_name} docs requirements public/static '.format(**env))
@@ -287,6 +297,44 @@ def requirements():
     # virtualenv('pip-sync {project_dir}/{requirements_file}'.format(**env))
     virtualenv('pip install -r {project_dir}/{requirements_file}'.format(**env))
 
+
+@task
+@roles('db')
+def get_db():
+    """
+    dump db on server, import to local mysql
+    """
+    settings = get_settings()
+    db_settings = settings.DATABASES
+    dump_name = 'dump_%s.sql' % env.env_prefix
+    dump_file = os.path.join(env.project_dir, dump_name)
+    local_dump_file = './%s' % dump_name
+    run('mysqldump --user={user} --password={password} {database} > {file}'.format(
+        user= db_settings["default"]["USER"],
+        password=db_settings["default"]["PASSWORD"],
+        database=db_settings["default"]["NAME"],
+        file=dump_file,
+    ))
+    get(remote_path=dump_file, local_path=local_dump_file)
+    run('rm %s' % dump_file)
+    local('mysql -u root %s < %s' % (env.project_name, local_dump_file))
+
+
+@task
+@roles('web')
+def get_media():
+    """
+    get media files. path by convention, adapt if needed.
+    """
+    get(os.path.join(env.project_dir, 'public', 'media'), 'public/media')
+
+
+def get_settings():
+    # do this here. django settings cannot be imported more than once...probably.
+    # still dont really get the mess here.
+    django.settings_module(env.project_conf)
+    from django.conf import settings
+    return settings
 
 
 # ==============================================================================
