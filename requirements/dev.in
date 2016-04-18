@@ -2,5 +2,6 @@
 
 fabric
 flake8
+flake8-respect-noqa
 # mock
 # mixer

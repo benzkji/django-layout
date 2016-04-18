@@ -4,8 +4,8 @@
 
 django==1.8.5
 django-split-settings==0.1.2
-django-compressor==1.5
-cssmin==0.2.0
+django-compressor==2.0
+# cssmin==0.2.0
 # south==1.0
 # django-cms
 # Pillow>=2
