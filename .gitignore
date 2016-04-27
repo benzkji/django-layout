@@ -8,7 +8,7 @@ public/
 node_modules/
 virtualenv/
 
-database*.db
+*database*.db
 dump*.sql
 
 # github default python gitignore. FTW.
