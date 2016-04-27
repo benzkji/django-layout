@@ -4,8 +4,10 @@ include(
     'base.py',
     'assets.py',
     'hosts.py',
-    'cms.py',
     'apps.py',
+    # 'cms.py',
+    # 'placeholders.py',
+    # 'ckeditor.py',
     '_dev.py',
     optional('local.py'),
     scope=globals()
