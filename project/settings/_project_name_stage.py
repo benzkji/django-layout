@@ -10,8 +10,6 @@ include(
     scope=globals()
 )
 
-MEDIA_ROOT = os.path.join(PROJECT_PATH, "public", "media")
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3'.
