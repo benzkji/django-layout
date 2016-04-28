@@ -63,7 +63,7 @@ def generic_env_settings():
     env.gunicorn_restart_command = '~/init/{site_name}.{env_prefix}.sh restart'
     env.nginx_restart_command = '~/init/nginx.sh restart'
     env.uwsgi_restart_command = 'touch $HOME/uwsgi.d/{site_name}.{env_prefix}.ini'
-    env.project_conf = '{project_name}.settings._{env_prefix}'.format(**env)
+    env.project_conf = 'project.settings._{project_name}_{env_prefix}'.format(**env)
 
 
 # Set the default environment.
