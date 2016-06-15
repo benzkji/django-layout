@@ -1,4 +1,10 @@
 
+# redirects
+server {
+  server_name {{project_name}}.com {{project_name}}.live.bnzk.ch;
+  rewrite ^/(.*) http://www.wti.org permanent;
+}
+
 upstream {{project_name}}_live_server {
     server unix:/home/{{project_name}}/sites/{{project_name}}-live.sock;
 }
