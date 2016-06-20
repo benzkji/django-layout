@@ -21,12 +21,14 @@ THE_ENV="$PROJECT_DIR/virtualenv"
 # beware, choose the right version here! (2.7 for most mordern servers)
 PYTHONPATH="$THE_ENV/lib/python2.7/site-packages:$PROJECT_DIR"
 
+# "--preload" - does prohibit kill -HUP!
+PRELOAD=""
 PIDFILE="$PROJECT_DIR/../$SITE-$PROJECT_ENV.pid"
 SOCKET="$PROJECT_DIR/../$SITE-$PROJECT_ENV.sock"
 DAEMON="$THE_ENV/bin/gunicorn"
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 WORKERS=2
-OPTS="-D -b unix:///$SOCKET --worker-class gevent --workers $WORKERS --pid $PIDFILE --settings $SETTINGS $WSGI --preload"
+OPTS="-D -b unix:///$SOCKET --worker-class gevent --workers $WORKERS --pid $PIDFILE --settings $SETTINGS $WSGI $PRELOAD"
 
 
 start()
