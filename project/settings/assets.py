@@ -44,3 +44,9 @@ COMPRESS_CSS_FILTERS = [
     'compressor.filters.css_default.CssAbsoluteFilter',  # default
     'compressor.filters.cssmin.CSSMinFilter',  # pip install cssmin
 ]
+
+THUMBNAIL_OPTIMIZE_COMMAND = {
+    'png': '/usr/bin/optipng {filename}',
+    'gif': '/usr/bin/optipng {filename}',
+    'jpeg': '/usr/bin/jpegoptim {filename}'
+}
