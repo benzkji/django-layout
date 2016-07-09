@@ -12,7 +12,7 @@ To use ``django-layout`` run the following command::
 
 Things to adapt right after:
 
-- chmod u+x manage.py run-local.sh
+- ``chmod u+x manage.py run-local.sh``
 - check db settings
 - check fabfile deployment settings
 - check nginx site config: server_listen port
