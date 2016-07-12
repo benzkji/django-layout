@@ -74,12 +74,11 @@ MIDDLEWARE_CLASSES = (
     # what is this in django 1.8? 'django.middleware.doc.XViewMiddleware',
 
     # django cms specific
-    # 'cms.middleware.page.CurrentPageMiddleware',
-    # 'cms.middleware.user.CurrentUserMiddleware',
-    # 'cms.middleware.toolbar.ToolbarMiddleware',
-    # 'cms.middleware.language.LanguageCookieMiddleware',
+    'cms.middleware.page.CurrentPageMiddleware',
+    'cms.middleware.user.CurrentUserMiddleware',
+    'cms.middleware.toolbar.ToolbarMiddleware',
+    'cms.middleware.language.LanguageCookieMiddleware',
 
-    # should switch to "robust redirects"
     # 'painless_redirects.middleware.ManualRedirectMiddleware',
     # 'painless_redirects.middleware.ForceSiteDomainRedirectMiddleware',
 )
@@ -99,8 +98,8 @@ TEMPLATES = [
                 'django.core.context_processors.request',
                 'django.core.context_processors.media',
                 'django.core.context_processors.static',
-                # 'sekizai.context_processors.sekizai',
-                # 'cms.context_processors.cms_settings',
+                'sekizai.context_processors.sekizai',
+                'cms.context_processors.cms_settings',
             ],
             'loaders': [
                 'django.template.loaders.filesystem.Loader',

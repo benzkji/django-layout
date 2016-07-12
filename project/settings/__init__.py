@@ -5,9 +5,9 @@ include(
     'assets.py',
     'hosts.py',
     'apps.py',
-    # 'cms.py',
-    # 'placeholders.py',
-    # 'ckeditor.py',
+    'cms.py',
+    'placeholders.py',
+    'ckeditor.py',
     '_dev.py',
     optional('local.py'),
     scope=globals()

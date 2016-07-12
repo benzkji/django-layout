@@ -10,11 +10,18 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
 
     '{{ project_name }}',
-    # 'south',
+
     'compressor',
+    'modeltranslation',
+
+    'cms',
+    'menus',
+    'classytags',
+    'treebeard',
+    'sekizai',
+    'djangocms_admin_style',
 
     # Uncomment the next line to enable the admin:
-    'djangocms_admin_style',
     'django.contrib.admin',
 
 )

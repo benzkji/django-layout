@@ -40,10 +40,10 @@ STATICFILES_FINDERS = (
     # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
-COMPRESS_CSS_FILTERS = [
-    'compressor.filters.css_default.CssAbsoluteFilter',  # default
-    'compressor.filters.cssmin.CSSMinFilter',  # pip install cssmin
-]
+# COMPRESS_CSS_FILTERS = [
+#    'compressor.filters.css_default.CssAbsoluteFilter',  # default
+#    'compressor.filters.cssmin.CSSMinFilter',  # pip install cssmin
+# ]
 
 THUMBNAIL_OPTIMIZE_COMMAND = {
     'png': '/usr/bin/optipng {filename}',
