@@ -1,9 +1,9 @@
 {
   "name": "{{project_name}}",
   "dependencies": {
-    "normalize.css": "~4.0.0",
-    "jquery": "~2.2.3",
-    "jqueryui": "~1.11.4",
-    "susy": "~2.2.12"
+    "normalize.css": "^4.0.0",
+    "jquery": "^2.2.3",
+    "jqueryui": "^1.11.4",
+    "susy": "2.2.12"
   }
 }
