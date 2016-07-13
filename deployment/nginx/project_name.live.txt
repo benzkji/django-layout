@@ -12,7 +12,11 @@ upstream {{project_name}}_live_server {
 
 server {
     listen 127.0.0.1:62321;
-    server_name {{project_name}}.com www.{{project_name}}.ch {{project_name}}.live.bnzk.ch;
+    server_name
+        {{project_name}}.com
+        www.{{project_name}}.ch
+        {{project_name}}.live.bnzk.ch
+        ;
 
     location / {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
