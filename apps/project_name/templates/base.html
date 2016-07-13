@@ -1,6 +1,6 @@
 <!doctype html>
 <html class="no-js" lang="{{ LANGUAGE_CODE }}">
-{% load compress cms_tags sekizai_tags %}
+{% load compress cms_tags menu_tags sekizai_tags %}
 
     <head>
         <meta charset="utf-8">
@@ -34,8 +34,17 @@
         {% cms_toolbar %}
 
         <div id="container">
+
+            <header>
+                <a class="logo"><img src="{{ STATIC_URL }}yours/img/logo.png" alt="Yours"></a>
+                <nav class="nav nav_main">
+                    {% show_menu 0 2 2 2 %}
+                </nav>
+            </header>
+
             {% block content %}
             {% endblock %}
+
         </div>
 
         {% compress js %}
