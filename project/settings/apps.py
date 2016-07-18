@@ -14,6 +14,9 @@ INSTALLED_APPS = (
     'compressor',
     'modeltranslation',
 
+    'filter',
+    'easy_thumbnails',
+
     'cms',
     'menus',
     'classytags',
