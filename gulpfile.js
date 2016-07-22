@@ -1,11 +1,17 @@
 var gulp = require('gulp'),
     sass = require('gulp-sass'),
-    iconfont = require('gulp-iconfont'),
     consolidate = require('gulp-consolidate'),
     autoprefixer = require('gulp-autoprefixer'),
     shell = require('gulp-shell'),
     jshint= require('gulp-jshint'),
     livereload = require('gulp-livereload'),
+
+    // iconfont = require('gulp-iconfont'),
+
+    // svgstore = require('gulp-svgstore'),
+    // svgmin = require('gulp-svgmin'),
+    // path = require('path'),
+
     dummy = 'last';
 
 // fix Promise() error from whiche package again?
@@ -17,6 +23,25 @@ gulp.task('sass', function () {
         .pipe(sass().on('error', sass.logError))
         .pipe(autoprefixer("last 2 versions"))
         .pipe(gulp.dest(static_path + 'css/'))
+});
+
+// todo: remove FILL!
+gulp.task('svgstore', function () {
+    return gulp
+        .src(static_path + 'svgstore/*.svg')
+        .pipe(svgmin(function (file) {
+            var prefix = path.basename(file.relative, path.extname(file.relative));
+            return {
+                plugins: [{
+                    cleanupIDs: {
+                        prefix: prefix + '-',
+                        minify: true
+                    }
+                }]
+            }
+        }))
+        .pipe(svgstore({'inlineSvg': true}))
+        .pipe(gulp.dest(static_path + '../../templates/{{ project_name }}/svgstore/'));
 });
 
 gulp.task('icons', function () {
@@ -75,7 +100,6 @@ gulp.task('watch', function () {
     livereload.listen();
     gulp.watch(['**/*.html', '**/*.py', '**/*.css']).on('change', livereload.changed);
     gulp.watch(static_path + 'sass/*.sass', ['sass']);
-    gulp.watch(static_path + 'iconfont/svg/*.svg', ['iconfont']);
     gulp.watch(['gulpfile.js', static_path + 'js/**.js'], ['jshint']);
     gulp.watch('**/*.py', ['flake8']);
     gulp.watch('requirements/*.in', ['pip-compile']);
