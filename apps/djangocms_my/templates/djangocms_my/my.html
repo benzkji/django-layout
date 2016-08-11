@@ -1,5 +1,11 @@
 {% load cms_tags %}
-aaa
-<div class="colums">
+{% load thumbnail %}
 
+<div class="plugin plugin_my">
+    <h1>{{ instance.title }}</h1>
+    {{ instance.body|safe }}
+    {% if instance.image %}
+        {% thumbnail instance.image 100x100 crop=0 upscale=1 as resized %}
+        <img src="{{ resized.url }}" alt="{{ instance.title }}">
+    {% endif %}
 </div>
