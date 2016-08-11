@@ -29,6 +29,14 @@ gulp.task('sass', function () {
 gulp.task('svgstore', function () {
     return gulp
         .src(static_path + 'svgstore/*.svg')
+        .pipe(cheerio({
+            run: function ($) {
+                //console.log($.xml());
+                $('[fill]').removeAttr('fill');
+                $('[style]').removeAttr('style');
+            },
+            parserOptions: { xmlMode: true }
+        }))
         .pipe(svgmin(function (file) {
             var prefix = path.basename(file.relative, path.extname(file.relative));
             return {
