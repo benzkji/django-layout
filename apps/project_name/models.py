@@ -7,6 +7,13 @@ from django.db import models
 from filer.fields.file import FilerFileField
 
 
+class PublishedBase(models.Model):
+    published = models.BooleanField(default=False)
+
+    class Meta:
+        abstract = True
+
+
 class ModifiedBase(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now=True)
