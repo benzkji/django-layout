@@ -5,5 +5,5 @@ from .views import MyListView, MyDetailView
 
 urlpatterns = [
     url(r'^$', MyListView.as_view(), name='my_list'),
-    url(r'^detail/(?P<id>\d+)/(?P<slug>[\w-]+)/$', MyDetailView.as_view(), name='my_detail'),
+    url(r'^detail/(?P<pk>\d+)/(?P<slug>[\w-]+)/$', MyDetailView.as_view(), name='my_detail'),
 ]

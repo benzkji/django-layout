@@ -1,10 +1,9 @@
 from django.contrib import admin
 
-
 from .models import My
 
 
 class MyAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('title', 'published', )
 
 admin.site.register(My, MyAdmin)

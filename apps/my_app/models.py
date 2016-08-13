@@ -14,5 +14,14 @@ class My(models.Model):
 
     objects = PublishedManager()
 
+    class Meta:
+        ordering = ('-date', )
+
+    def get_slug(self):
+        return slugify(self.title)
+
+    def get_absolute_url(self):
+        return reverse('my_detail', args=(self.id, self.get_slug()))
+
     def __str__(self):
         return u'%s' % (self.title, )
