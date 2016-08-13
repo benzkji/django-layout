@@ -14,6 +14,7 @@
         {% endcomment %}
         <div class="my_list">
             {% for object in object_list %}
+                <h2><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></h2>
                 <a href="{{ object.get_absolute_url }}" class="my_thumb">
                     {% thumbnail object.preview_image 400x400 crop=1 as resized %}
                     <img src="{{ resized.url }}" alt="{{ instance.title }}">
