@@ -8,7 +8,7 @@ from .models import My
 
 class MyPlugin(CMSPluginBase):
     model = My
-    name = _(u'MyPlugin')
+    name = _(u'My')
     render_template = "djangocms_my/my.html"
     text_enabled = False
 

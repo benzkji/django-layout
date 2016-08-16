@@ -1,5 +1,5 @@
 {
-  "name": "{{project_name}}",
+  "name": "losingermarazzi",
   "dependencies": {
     "normalize.css": "^4.0.0",
     "jquery": "^2.2.3",
