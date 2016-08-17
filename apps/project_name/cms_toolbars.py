@@ -1,3 +1,7 @@
+# coding: utf-8
+
+from __future__ import unicode_literals
+
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from cms.toolbar_pool import toolbar_pool
@@ -11,7 +15,11 @@ class CustomToolbar(CMSToolbar):
 
     def populate(self):
         admin_menu = self.toolbar.get_or_create_menu(ADMIN_MENU_IDENTIFIER)
-        position = admin_menu.find_first(Break, identifier=ADMINISTRATION_BREAK)
+
+        break_position = admin_menu.find_first(Break, identifier=ADMINISTRATION_BREAK)
+        url = reverse('admin:password_change')
+        admin_menu.add_sideframe_item(_("Passwort ändern"), url=url, position=break_position + 1)
+
         url = reverse('admin:filer_folder_changelist')
         admin_menu.add_sideframe_item(_('Files'), url=url, position=1)
 
