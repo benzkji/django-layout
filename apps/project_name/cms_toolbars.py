@@ -33,9 +33,9 @@ class CustomToolbar(CMSToolbar):
         # blog_menu.add_sideframe_item('Tags', url=url)
 
 
-toolbar_pool.unregister(PlaceholderToolbar)
-
-@toolbar_pool.register
-class PlaceholderToolbarNoWizard(PlaceholderToolbar):
-    def add_wizard_button(self):
-        pass
+# toolbar_pool.unregister(PlaceholderToolbar)
+#
+# @toolbar_pool.register
+# class PlaceholderToolbarNoWizard(PlaceholderToolbar):
+#     def add_wizard_button(self):
+#         pass
