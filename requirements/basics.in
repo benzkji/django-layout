@@ -6,16 +6,17 @@ django==1.8.13
 django-split-settings==0.1.2
 django-compressor==2.0
 django-modeltranslation==0.11
-# django-formfieldstash==0.0.1
+django-formfieldstash==0.0.2
 
+-e 'git+git@github.com:benzkji/django-ckeditor-link.git@8978040a976421444ac09f9427428696e78c0bc9#egg=django-ckeditor-link'
 # -e 'git+git@github.com:benzkji/django-mailprotector.git@8261b155f5d626d5949dbd9324e86a81e009797e#egg=django-mailprotector'
 # -e 'git+git@github.com:rouxcode/django-admin-sort.git@f510c80d4fefb87e87f7627f00070f4d909088ec#egg=django_admin_sort'
 
-django-filer==1.2.4
+django-filer==1.2.5
 Pillow==3.2.0
 
-django-cms==3.3.1
-djangocms-admin-style==1.2.3
+django-cms==3.4.1
+djangocms-admin-style==1.2.6
 
 djangocms-text-ckeditor==3.0.1
 djangocms-column==1.6.0

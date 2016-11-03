@@ -20,7 +20,11 @@ var static_path = 'apps/{{ project_name }}/static/{{ project_name }}/';
 
 gulp.task('sass', function () {
     gulp.src(static_path + 'sass/screen.sass')
-        .pipe(sass().on('error', sass.logError))
+        .pipe(sass({
+                sourceComments: 'map',
+                sourceMap: 'sass',
+                outputStyle: 'nested'
+            }).on('error', sass.logError))
         .pipe(autoprefixer("last 2 versions"))
         .pipe(gulp.dest(static_path + 'css/'))
 });
@@ -106,7 +110,7 @@ gulp.task('default', ['sass', 'pip-compile', 'jshint', 'flake8']);
 
 gulp.task('watch', function () {
     livereload.listen();
-    gulp.watch(['**/*.html', '**/*.py', '**/*.css']).on('change', livereload.changed);
+    gulp.watch(['**/*.html', '**/*.py', static_path + 'css/*']).on('change', livereload.changed);
     gulp.watch(static_path + 'sass/*.sass', ['sass']);
     gulp.watch(['gulpfile.js', static_path + 'js/**.js'], ['jshint']);
     gulp.watch('**/*.py', ['flake8']);

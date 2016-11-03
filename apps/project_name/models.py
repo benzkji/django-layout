@@ -30,7 +30,7 @@ LINK_TYPE_CHOICES = (
     ('external', _("External URL")),
     ('free', _("Free")),
 )
-LINK_FIELDS = ('link_text', 'link_type', 'page', 'file', 'mailto', 'external', 'free', )
+LINK_FIELDS = ('link_text', ('link_type', 'target', ), 'page', 'file', 'mailto', 'external', 'free', )
 
 
 # add target?
@@ -105,3 +105,8 @@ class LinkBase(models.Model):
                 or type == 'page' and not self.page.site.id == settings.SITE_ID:
             return "_blank"
         return ""
+
+
+class Link(LinkBase):
+    class Meta:
+        managed = False
