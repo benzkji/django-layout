@@ -15,6 +15,9 @@ env.project_name = '{{project_name}}'
 env.repository = 'git@bitbucket.org:bnzk/{project_name}.git'.format(**env)
 env.local_branch = 'master'
 env.sites = ('{{ project_name }}', )
+env.needs_main_nginx_files = True
+env.is_nginx_gunicorn = True
+env.is_uwsgi = False
 env.remote_ref = 'origin/master'
 # these will be checked for changes
 env.requirements_files = ['requirements/deploy.txt', 'requirements/basics.txt', ]
@@ -138,17 +141,20 @@ def create_nginx_folders():
     """
     do it.
     """
-    with hide('running', 'stdout'):
-        exists = run('if [ -d "~/nginx" ]; then echo 1; fi')
-    if exists:
-        puts('nginx dir already exists. manual action needed, if really...')
-        return
-    run('mkdir ~/nginx')
-    run('mkdir ~/nginx/conf')
-    run('mkdir ~/nginx/conf/sites')
-    run('mkdir ~/nginx/temp')
-    run('mkdir ~/nginx/logs')
-    puts('created ~/nginx & co.'.format(**env))
+    if env.needs_main_nginx_files:
+        with hide('running', 'stdout'):
+            exists = run('if [ -d "~/nginx" ]; then echo 1; fi')
+        if exists:
+            puts('nginx dir already exists. manual action needed, if really...')
+            return
+        run('mkdir ~/nginx')
+        run('mkdir ~/nginx/conf')
+        run('mkdir ~/nginx/conf/sites')
+        run('mkdir ~/nginx/temp')
+        run('mkdir ~/nginx/logs')
+        puts('created ~/nginx & co.'.format(**env))
+    else:
+        puts('no files created, check "needs_main_nginx_files" in env.')
 
 
 @task
@@ -251,9 +257,11 @@ def restart():
     """
     Copy gunicorn & nginx config, restart them.
     """
-    copy_restart_gunicorn()
-    copy_restart_nginx()
-    # copy_restart_uwsgi()
+    if env.is_nginx_gunicorn:
+        copy_restart_gunicorn()
+        copy_restart_nginx()
+    if env.is_uwsgi:
+        copy_restart_uwsgi()
 
 
 def copy_restart_gunicorn():
@@ -262,22 +270,24 @@ def copy_restart_gunicorn():
             'cp {project_dir}/deployment/gunicorn/{site_name}.{env_prefix}.sh'
             ' $HOME/init/.'.format(site_name=site_name, **env)
         )
-        run(
-            'cp {project_dir}/deployment/nginx/{site_name}.{env_prefix}.txt'
-            ' $HOME/nginx/conf/sites/.'.format(site_name=site_name, **env)
-        )
         run('chmod u+x $HOME/init/{site_name}.{env_prefix}.sh'.format(site_name=site_name, **env))
         run(env.gunicorn_restart_command.format(site_name=site_name, **env))
 
 
 def copy_restart_nginx():
+    for site_name in env.sites:
+        run(
+            'cp {project_dir}/deployment/nginx/{site_name}.{env_prefix}.txt'
+            ' $HOME/nginx/conf/sites/.'.format(site_name=site_name, **env)
+        )
     # nginx main, may be optional!
-    run('cp {project_dir}/deployment/nginx/nginx.conf'
-        ' $HOME/nginx/conf/.'.format(**env))
-    run('cp {project_dir}/deployment/nginx/logrotate.conf'
-        ' $HOME/nginx/conf/.'.format(**env))
-    run('cp {project_dir}/deployment/nginx/nginx.sh $HOME/init/.'.format(**env))
-    run('chmod u+x $HOME/init/nginx.sh')
+    if env.needs_main_nginx_files:
+        run('cp {project_dir}/deployment/nginx/nginx.conf'
+            ' $HOME/nginx/conf/.'.format(**env))
+        run('cp {project_dir}/deployment/nginx/logrotate.conf'
+            ' $HOME/nginx/conf/.'.format(**env))
+        run('cp {project_dir}/deployment/nginx/nginx.sh $HOME/init/.'.format(**env))
+        run('chmod u+x $HOME/init/nginx.sh')
     run(env.nginx_restart_command)
 
 

@@ -10,9 +10,21 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
 
     '{{ project_name }}',
+    # 'djangocms_pluginbase.section',
+    # 'djangocms_pluginbase.slider',
+    # 'djangocms_pluginbase.gallery',
+    #
+    # 'djangocms_pluginbase.text',
+    # 'djangocms_pluginbase.textimage',
+    # 'djangocms_pluginbase.image',
+    #
+    # 'djangocms_pluginbase.teaser',
+    # 'djangocms_pluginbase.iframe',
+    # 'djangocms_pluginbase.video',
 
     'compressor',
     'modeltranslation',
+    'formfieldstash',
 
     'filer',
     'easy_thumbnails',
@@ -24,7 +36,6 @@ INSTALLED_APPS = (
     'sekizai',
     'djangocms_admin_style',
 
-    'djangocms_text_ckeditor',
 
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',

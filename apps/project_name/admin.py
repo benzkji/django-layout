@@ -15,4 +15,8 @@ class LinkAdmin(FormFieldStashMixin, DjangoLinkAdmin):
         (None, {'fields': NO_TEXT_LINK_FIELDS}),
     )
 
+    # fix for page widget error! use with cms 3.3.1
+    class Media:
+        js = ('cms/js/dist/bundle.admin.base.min.js',)
+
 admin.site.register(Link, LinkAdmin)

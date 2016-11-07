@@ -22,6 +22,14 @@ class ModifiedBase(models.Model):
         abstract = True
 
 
+LINK_TARGET_CHOICES = (
+    ('', _("Automatisch")),
+    ('_blank', _("Gleiches Fenster")),
+    ('_top', _("Neues Fenster")),
+    # ('_overlay', _("Overlay")),
+)
+
+
 LINK_TYPE_CHOICES = (
     ('', _("Keiner")),
     ('page', _("Seite")),
@@ -30,7 +38,9 @@ LINK_TYPE_CHOICES = (
     ('external', _("External URL")),
     ('free', _("Free")),
 )
-LINK_FIELDS = ('link_text', ('link_type', 'target', ), 'page', 'file', 'mailto', 'external', 'free', )
+
+
+LINK_FIELDS = ('link_text', ('link_type', 'link_target', ), 'page', 'file', 'mailto', 'external', 'free', )
 
 
 # add target?
@@ -39,6 +49,8 @@ class LinkBase(models.Model):
                                  blank=True, default='')
     link_type = models.CharField(verbose_name=_('Link'), max_length=20, choices=LINK_TYPE_CHOICES,
                                  blank=True, default='')
+    link_target = models.CharField(verbose_name=_('Target'), max_length=20, choices=LINK_TARGET_CHOICES,
+                                     blank=True, default='')
     page = PageField(null=True, blank=True)
     file = FilerFileField(null=True, blank=True, related_name='link')
     mailto = models.EmailField(null=True, blank=True)
