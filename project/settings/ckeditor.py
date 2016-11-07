@@ -12,7 +12,8 @@ CKEDITOR_SETTINGS = {
         ['Undo', 'Redo'],
         ['cmsplugins', ],
         ['Bold', 'RemoveFormat', ],
-        # ['Format'],
+        ['Format'],
+        # ['H1', 'H2', 'H3', ], only works with standard CK!
         ['BulletedList', 'NumberedList' '-', 'Outdent', 'Indent'],
         ['Cut', 'Copy', 'PasteText', ],
         ['cleanup', ],
