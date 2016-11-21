@@ -1,8 +1,8 @@
-import os
+@import os
 import sys
 
 from fabric.api import task, env, run, roles, cd, execute, hide, puts
-from fabric.operations import get
+from fabric.operations import get, local
 from fabric.contrib import django
 
 
