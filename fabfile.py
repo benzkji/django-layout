@@ -339,7 +339,7 @@ def get_media():
     """
     get media files. path by convention, adapt if needed.
     """
-    get(os.path.join(env.project_dir, 'public', 'media'), 'public/media')
+    get(os.path.join(env.project_dir, 'public', 'media'), 'public')
 
 
 def get_settings():
