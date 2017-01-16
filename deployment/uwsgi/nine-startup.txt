@@ -1,4 +1,7 @@
 
+# db
+sudo nine-manage-databases database create nmd_domain_com
+
 # prepare for emporer and vasals
 mkdir uwsgi.d
 
