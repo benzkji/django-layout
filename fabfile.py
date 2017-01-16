@@ -340,6 +340,8 @@ def get_media():
     get media files. path by convention, adapt if needed.
     """
     get(os.path.join(env.project_dir, 'public', 'media'), 'public')
+    # TODO: change to rsync!
+    # rsync -aqr {main_user}@
 
 
 def get_settings():
