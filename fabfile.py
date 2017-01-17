@@ -3,6 +3,7 @@ import sys
 
 from fabric.api import task, env, run, roles, cd, execute, hide, puts
 from fabric.operations import get, local
+from fabric.contrib.project import rsync_project
 from fabric.contrib import django
 
 
@@ -339,9 +340,13 @@ def get_media():
     """
     get media files. path by convention, adapt if needed.
     """
-    get(os.path.join(env.project_dir, 'public', 'media'), 'public')
-    # TODO: change to rsync!
-    # rsync -aqr {main_user}@
+    # trivial version
+    # get(os.path.join(env.project_dir, 'public', 'media'), 'public/media')
+    remote_dir = os.path.join(env.project_dir, 'public', 'media')
+    local_dir = os.path.join('public')
+    extra_opts = ""
+    # extra_opts = "--dry-run"
+    rsync_project(remote_dir=remote_dir, local_dir=local_dir, upload=False, delete=True, extra_opts=extra_opts )
 
 
 def get_settings():
