@@ -332,6 +332,7 @@ def get_db():
     get(remote_path=dump_file, local_path=local_dump_file)
     run('rm %s' % dump_file)
     local('mysql -u root %s < %s' % (env.project_name, local_dump_file))
+    local('rm %s' % local_dump_file)
 
 
 @task
