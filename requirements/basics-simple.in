@@ -1,0 +1,11 @@
+
+# pip-compile requirements/deploy.in
+# pip-sync requirements/deploy.txt
+
+mysql-python==1.2.5
+# postgres-whatever==9000
+
+django==1.10
+django-split-settings==0.2.4
+django-compressor==2.1.1
+# Pillow==3.2.0
