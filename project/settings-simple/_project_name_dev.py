@@ -2,13 +2,12 @@ import os
 from base import PROJECT_PATH
 
 DEBUG = True
-THUMBNAIL_DEBUG = True
-FOLDERLESS_DEBUG = True
-
-# set this to True to test live behaviour
-COMPRESS_ENABLED = False
+# THUMBNAIL_DEBUG = True
+# COMPRESS_ENABLED = False
 # more live behavious, if you pleas..
 # from deploy import *
+
+ALLOWED_HOSTS = []
 
 DATABASES = {
     'default': {

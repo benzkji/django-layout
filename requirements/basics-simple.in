@@ -3,9 +3,10 @@
 # pip-sync requirements/deploy.txt
 
 mysql-python==1.2.5
-# postgres-whatever==9000
+# psycopg2==2.7.1
 
-django==1.10
+django==1.10.6
 django-split-settings==0.2.4
 django-compressor==2.1.1
 # Pillow==3.2.0
+# easy-thumbnails==2.3

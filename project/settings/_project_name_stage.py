@@ -10,6 +10,10 @@ include(
     scope=globals()
 )
 
+ALLOWED_HOSTS = (
+    '.bnzk.ch',
+)
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3'.
