@@ -30,6 +30,7 @@ gulp.task('sass', function () {
 });
 
 // todo: remove FILL!
+// last used: losinger
 gulp.task('svgstore', function () {
     return gulp
         .src(static_path + 'svgstore/*.svg')
@@ -56,7 +57,8 @@ gulp.task('svgstore', function () {
         .pipe(gulp.dest(static_path + '../../templates/{{ project_name }}/svgstore/'));
 });
 
-gulp.task('icons', function () {
+// last used: bos
+gulp.task('iconfont', function () {
     var runTimestamp = Math.round(Date.now()/1000);
     return gulp.src([static_path + 'iconfont/svg/*.svg'])
         .pipe(iconfont({
@@ -106,14 +108,16 @@ gulp.task('pip-compile', shell.task(
     )
 );
 
-gulp.task('default', ['sass', 'pip-compile', 'jshint', 'flake8']);
+gulp.task('default', ['sass', 'iconfont', 'svgstore', 'pip-compile', 'jshint', 'flake8']);
 
 gulp.task('watch', function () {
     livereload.listen();
     gulp.watch(['**/*.html', '**/*.py', static_path + 'css/*']).on('change', livereload.changed);
     gulp.watch(static_path + 'sass/*.sass', ['sass']);
+    // gulp.watch(static_path + 'iconfont/svg/*.svg', ['iconfont']);
+    // gulp.watch(static_path + 'svgstore/*.svg', ['svgstore']);
+    gulp.watch('requirements/*.in', ['pip-compile']);
     gulp.watch(['gulpfile.js', static_path + 'js/**.js'], ['jshint']);
     gulp.watch('**/*.py', ['flake8']);
-    gulp.watch('requirements/*.in', ['pip-compile']);
 });
 
