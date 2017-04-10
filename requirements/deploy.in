@@ -1,5 +1,4 @@
 -r basics.in
 
-mysql-python==1.2.5
 gunicorn==18.0
 gevent==1.0.2

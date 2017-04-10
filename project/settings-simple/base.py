@@ -4,8 +4,7 @@ import os, sys
 # just in case - know the defaults ;-)
 # import django.conf.global_settings as DEFAULT_SETTINGS
 
-PROJECT_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)),
-                            '../../')
+PROJECT_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..', '..')
 sys.path.append(os.path.join(PROJECT_PATH, 'apps/'))
 
 # the fake
@@ -65,16 +64,7 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'django.middleware.locale.LocaleMiddleware',
-    # what is this in django 1.8? 'django.middleware.doc.XViewMiddleware',
 
-    # django cms specific
-    'cms.middleware.page.CurrentPageMiddleware',
-    'cms.middleware.user.CurrentUserMiddleware',
-    'cms.middleware.toolbar.ToolbarMiddleware',
-    'cms.middleware.language.LanguageCookieMiddleware',
-
-    # 'painless_redirects.middleware.ManualRedirectMiddleware',
-    # 'painless_redirects.middleware.ForceSiteDomainRedirectMiddleware',
 )
 
 TEMPLATES = [
@@ -93,8 +83,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.template.context_processors.media',
                 'django.template.context_processors.static',
-                'sekizai.context_processors.sekizai',
-                'cms.context_processors.cms_settings',
             ],
             'loaders': [
                 'django.template.loaders.filesystem.Loader',

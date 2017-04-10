@@ -2,7 +2,7 @@
 import sys
 
 from fabric.api import task, env, run, roles, cd, execute, hide, puts
-from fabric.operations import get, local
+from fabric.operations import get, local, put
 from fabric.contrib.project import rsync_project
 from fabric.contrib import django
 
@@ -336,6 +336,32 @@ def get_db():
 
 
 @task
+@roles('db')
+def put_db():
+    """
+    dump local db, import on server database (must exist)
+    """
+    settings = get_settings()
+    db_settings = settings.DATABASES
+    dump_name = 'dump_for_%s.sql' % env.env_prefix
+    local_dump_file = './%s' % dump_name
+    local('mysqldump --user=root {database} > {file}'.format(
+        database=env.project_name,
+        file=local_dump_file,
+    ))
+    remote_dump_file = os.path.join(env.project_dir, dump_name)
+    put(remote_path=remote_dump_file, local_path=local_dump_file)
+    local('rm %s' % local_dump_file)
+    run('mysql --user={user} --password={password} {database} < {file}'.format(
+        user=db_settings["default"]["USER"],
+        password=db_settings["default"]["PASSWORD"],
+        database=db_settings["default"]["NAME"],
+        file=remote_dump_file,
+    ))
+    run('rm %s' % remote_dump_file)
+
+
+@task
 @roles('web')
 def get_media():
     """
@@ -348,6 +374,21 @@ def get_media():
     extra_opts = ""
     # extra_opts = "--dry-run"
     rsync_project(remote_dir=remote_dir, local_dir=local_dir, upload=False, delete=True, extra_opts=extra_opts )
+
+
+@task
+@roles('web')
+def put_media():
+    """
+    put media files. path by convention, adapt if needed.
+    """
+    # trivial version
+    # get(os.path.join(env.project_dir, 'public', 'media'), 'public/media')
+    remote_dir = os.path.join(env.project_dir, 'public')
+    local_dir = os.path.join('public', 'media')
+    extra_opts = ""
+    # extra_opts = "--dry-run"
+    rsync_project(remote_dir=remote_dir, local_dir=local_dir, upload=True, delete=True, extra_opts=extra_opts )
 
 
 def get_settings():
