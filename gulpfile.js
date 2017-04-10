@@ -18,7 +18,7 @@ var gulp = require('gulp'),
 require('es6-promise').polyfill();
 var static_path = 'apps/{{ project_name }}/static/{{ project_name }}/';
 
-gulp.task('sass', function () {
+gulp.task('sass', ['iconfont', 'svgstore'], function () {
     gulp.src(static_path + 'sass/screen.sass')
         .pipe(sass({
                 sourceComments: 'map',
