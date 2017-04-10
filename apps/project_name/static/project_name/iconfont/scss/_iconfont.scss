@@ -21,7 +21,7 @@
   -webkit-font-smoothing: antialiased;
 }
 
-.icon:before {
+.icon::before {
   @extend %icon-base-styles
 }
 
@@ -30,7 +30,7 @@ $icons: (
 );;
 
 @each $name, $icon in $icons {
-  .<%= className %>-#{$name}:before {
+  .<%= className %>-#{$name}::before {
     @extend %icon-base-styles;
     content: $icon;
   }
