@@ -1,3 +1,6 @@
+import datetime
+
+
 @import os
 import sys
 
@@ -314,25 +317,27 @@ def requirements():
 
 @task
 @roles('db')
-def get_db():
+def get_db(dump_only=False):
     """
-    dump db on server, import to local mysql
+    dump db on server, import to local mysql (must exist)
     """
     settings = get_settings()
     db_settings = settings.DATABASES
-    dump_name = 'dump_%s.sql' % env.env_prefix
-    dump_file = os.path.join(env.project_dir, dump_name)
+    date = datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
+    dump_name = 'dump_%s_%s-%s.sql' % (env.project_name, env.env_prefix, date)
+    remote_dump_file = os.path.join(env.project_dir, dump_name)
     local_dump_file = './%s' % dump_name
     run('mysqldump --user={user} --password={password} {database} > {file}'.format(
         user= db_settings["default"]["USER"],
         password=db_settings["default"]["PASSWORD"],
         database=db_settings["default"]["NAME"],
-        file=dump_file,
+        file=remote_dump_file,
     ))
-    get(remote_path=dump_file, local_path=local_dump_file)
-    run('rm %s' % dump_file)
-    local('mysql -u root %s < %s' % (env.project_name, local_dump_file))
-    local('rm %s' % local_dump_file)
+    get(remote_path=remote_dump_file, local_path=local_dump_file)
+    run('rm %s' % remote_dump_file)
+    if dump_only == False:
+        local('mysql -u root %s < %s' % (env.project_name, local_dump_file))
+        local('rm %s' % local_dump_file)
 
 
 @task
