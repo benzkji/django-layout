@@ -342,16 +342,18 @@ def get_db(dump_only=False):
 
 @task
 @roles('db')
-def put_db():
+def put_db(local_db_name=None):
     """
     dump local db, import on server database (must exist)
     """
     settings = get_settings()
     db_settings = settings.DATABASES
+    if not local_db_name:
+        local_db_name = env.project_name
     dump_name = 'dump_for_%s.sql' % env.env_prefix
     local_dump_file = './%s' % dump_name
     local('mysqldump --user=root {database} > {file}'.format(
-        database=env.project_name,
+        database=local_db_name,
         file=local_dump_file,
     ))
     remote_dump_file = os.path.join(env.project_dir, dump_name)
