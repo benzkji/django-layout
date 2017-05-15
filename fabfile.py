@@ -328,14 +328,14 @@ def get_db(dump_only=False):
     remote_dump_file = os.path.join(env.project_dir, dump_name)
     local_dump_file = './%s' % dump_name
     run('mysqldump --user={user} --password={password} {database} > {file}'.format(
-        user= db_settings["default"]["USER"],
+        user=db_settings["default"]["USER"],
         password=db_settings["default"]["PASSWORD"],
         database=db_settings["default"]["NAME"],
         file=remote_dump_file,
     ))
     get(remote_path=remote_dump_file, local_path=local_dump_file)
     run('rm %s' % remote_dump_file)
-    if dump_only == False:
+    if not dump_only:
         local('mysql -u root %s < %s' % (env.project_name, local_dump_file))
         local('rm %s' % local_dump_file)
 
@@ -380,7 +380,13 @@ def get_media():
     local_dir = os.path.join('public')
     extra_opts = ""
     # extra_opts = "--dry-run"
-    rsync_project(remote_dir=remote_dir, local_dir=local_dir, upload=False, delete=True, extra_opts=extra_opts )
+    rsync_project(
+        remote_dir=remote_dir,
+        local_dir=local_dir,
+        upload=False,
+        delete=True,
+        extra_opts=extra_opts,
+    )
 
 
 @task
@@ -395,7 +401,13 @@ def put_media():
     local_dir = os.path.join('public', 'media')
     extra_opts = ""
     # extra_opts = "--dry-run"
-    rsync_project(remote_dir=remote_dir, local_dir=local_dir, upload=True, delete=True, extra_opts=extra_opts )
+    rsync_project(
+        remote_dir=remote_dir,
+        local_dir=local_dir,
+        upload=True,
+        delete=True,
+        extra_opts=extra_opts,
+    )
 
 
 def get_settings():
