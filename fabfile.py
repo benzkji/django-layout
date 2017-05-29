@@ -363,8 +363,6 @@ def put_db(local_db_name=False):
         get_db_mysql(local_db_name)
 
 
-@task
-@roles('db')
 def get_db_mysql(dump_only=False):
     """
     dump db on server, import to local mysql (must exist)
@@ -388,8 +386,6 @@ def get_db_mysql(dump_only=False):
         local('rm %s' % local_dump_file)
 
 
-@task
-@roles('db')
 def put_db_mysql(local_db_name=None):
     """
     dump local db, import on server database (must exist)
@@ -416,8 +412,6 @@ def put_db_mysql(local_db_name=None):
     run('rm %s' % remote_dump_file)
 
 
-@task
-@roles('db')
 def get_db_postgresql(dump_only=False):
     """
     dump db on server, import to local mysql (must exist)
