@@ -5,6 +5,7 @@ import datetime
 import sys
 
 from fabric.api import task, env, run, roles, cd, execute, hide, puts
+from fabric.contrib.console import confirm
 from fabric.operations import get, local, put
 from fabric.contrib.project import rsync_project
 from fabric.contrib import django
@@ -19,6 +20,7 @@ env.project_name = '{{project_name}}'
 env.repository = 'git@bitbucket.org:bnzk/{project_name}.git'.format(**env)
 env.local_branch = 'master'
 env.sites = ('{{ project_name }}', )
+env.is_postgresql = True  #vFalse for mysql! only used for put/get_db
 env.needs_main_nginx_files = True
 env.is_nginx_gunicorn = True
 env.is_uwsgi = False
@@ -41,6 +43,7 @@ def live():
     env.env_prefix = 'live'
     env.main_user = '{project_name}'.format(**env)
     server = '{main_user}@s20.wservices.ch'.format(**env)
+    env.deploy_crontab = True
     env.roledefs = {
         'web': [server],
         'db': [server],
@@ -56,6 +59,7 @@ def stage():
     env.env_prefix = 'stage'
     env.main_user = '{project_name}'.format(**env)
     server = '{main_user}@s20.wservices.ch'.format(**env)
+    env.deploy_crontab = False
     env.roledefs = {
         'web': [server],
         'db': [server],
@@ -64,6 +68,8 @@ def stage():
 
 
 def generic_env_settings():
+    if not getattr(env, 'deploy_crontab', None):
+        env.deploy_crontab = False
     env.system_users = {"server": env.main_user}  # not used yet!
     env.project_dir = '/home/{main_user}/sites/{project_name}-{env_prefix}'.format(**env)
     env.virtualenv_dir = '{project_dir}/virtualenv'.format(**env)
@@ -228,6 +234,19 @@ def update(action='check', tag=None):
 
 @task
 @roles('web')
+def crontab():
+    """
+    install crontab
+    """
+    if env.deploy_crontab:
+        with cd(env.project_dir):
+            run('crontab deployment/crontab.txt')
+    else:
+        puts('not deploying crontab to %s!' % env.env_prefix)
+
+
+@task
+@roles('web')
 def collectstatic():
     """
     Collect static files from apps and other locations in a single location.
@@ -318,6 +337,35 @@ def requirements():
 @task
 @roles('db')
 def get_db(dump_only=False):
+    if env.is_postgresql:
+        get_db_postgresql(dump_only)
+    else:
+        get_db_mysql(dump_only)
+
+
+@task
+@roles('db')
+def put_db(local_db_name=False):
+    yes_no1 = confirm(
+        "This will erase your remote DB! Continue?",
+        default=False,
+    )
+    if not yes_no1:
+        return
+    yes_no2 = confirm("Are you sure?", default=False)
+    if not yes_no2:
+        return
+
+    # go for it!
+    if env.is_postgresql:
+        get_db_postgresql(local_db_name)
+    else:
+        get_db_mysql(local_db_name)
+
+
+@task
+@roles('db')
+def get_db_mysql(dump_only=False):
     """
     dump db on server, import to local mysql (must exist)
     """
@@ -342,7 +390,7 @@ def get_db(dump_only=False):
 
 @task
 @roles('db')
-def put_db(local_db_name=None):
+def put_db_mysql(local_db_name=None):
     """
     dump local db, import on server database (must exist)
     """
@@ -363,6 +411,58 @@ def put_db(local_db_name=None):
         user=db_settings["default"]["USER"],
         password=db_settings["default"]["PASSWORD"],
         database=db_settings["default"]["NAME"],
+        file=remote_dump_file,
+    ))
+    run('rm %s' % remote_dump_file)
+
+
+@task
+@roles('db')
+def get_db_postgresql(dump_only=False):
+    """
+    dump db on server, import to local mysql (must exist)
+    """
+    settings = get_settings()
+    db_settings = settings.DATABASES
+    date = datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
+    dump_name = 'dump_%s_%s-%s.sql' % (env.project_name, env.env_prefix, date)
+    remote_dump_file = os.path.join(env.project_dir, dump_name)
+    local_dump_file = './%s' % dump_name
+    run('pg_dump -cO {database} > {file}'.format(
+        database=db_settings["default"]["NAME"],
+        file=remote_dump_file,
+    ))
+    get(remote_path=remote_dump_file, local_path=local_dump_file)
+    run('rm %s' % remote_dump_file)
+    if not dump_only:
+        # local('dropdb %s_dev' % env.project_name)
+        # local('createdb %s_dev' % env.project_name)
+        local('psql %s < %s' % (env.project_name, local_dump_file))
+        local('rm %s' % local_dump_file)
+
+
+def put_db_postgresql(local_db_name=None):
+    """
+    dump local db, import on server database (must exist)
+    """
+    settings = get_settings()
+    db_settings = settings.DATABASES
+    if not local_db_name:
+        local_db_name = env.project_name
+    dump_name = 'dump_for_%s.sql' % env.env_prefix
+    local_dump_file = './%s' % dump_name
+    local('pg_dump -cO {database} > {file}'.format(
+        database=local_db_name,
+        file=local_dump_file,
+    ))
+    remote_dump_file = os.path.join(env.project_dir, dump_name)
+    put(remote_path=remote_dump_file, local_path=local_dump_file)
+    local('rm %s' % local_dump_file)
+    remote_db_name = db_settings["default"]["NAME"]
+    # run('dropdb %s' % remote_db_name)
+    # run('createdb %s' % remote_db_name)
+    run('psql  {database} < {file}'.format(
+        database=remote_db_name,
         file=remote_dump_file,
     ))
     run('rm %s' % remote_dump_file)
@@ -395,8 +495,17 @@ def put_media():
     """
     put media files. path by convention, adapt if needed.
     """
-    # trivial version
-    # get(os.path.join(env.project_dir, 'public', 'media'), 'public/media')
+    yes_no1 = confirm(
+        "Will overwrite your remote media files! Continue?",
+        default=False,
+    )
+    if not yes_no1:
+        return
+    yes_no2 = confirm("Are you sure?", default=False)
+    if not yes_no2:
+        return
+
+    # go for it!
     remote_dir = os.path.join(env.project_dir, 'public')
     local_dir = os.path.join('public', 'media')
     extra_opts = ""
