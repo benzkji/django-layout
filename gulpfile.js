@@ -18,6 +18,7 @@ var gulp = require('gulp'),
 require('es6-promise').polyfill();
 var static_path = 'apps/{{ project_name }}/static/{{ project_name }}/';
 
+
 gulp.task('sass', ['iconfont', 'svgstore'], function () {
     gulp.src(static_path + 'sass/screen.sass')
         .pipe(sass({
@@ -29,7 +30,7 @@ gulp.task('sass', ['iconfont', 'svgstore'], function () {
         .pipe(gulp.dest(static_path + 'css/'))
 });
 
-// todo: remove FILL!
+
 // last used: losinger
 gulp.task('svgstore', function () {
     return gulp
@@ -56,6 +57,7 @@ gulp.task('svgstore', function () {
         .pipe(svgstore({'inlineSvg': true}))
         .pipe(gulp.dest(static_path + '../../templates/{{ project_name }}/svgstore/'));
 });
+
 
 // last used: bos
 gulp.task('iconfont', function () {
@@ -86,16 +88,19 @@ gulp.task('iconfont', function () {
     .pipe(gulp.dest(static_path + 'iconfont/font/'));
 });
 
+
 gulp.task('jshint', function () {
     gulp.src(['gulpfile.js', static_path + 'js/**.js'])
         .pipe(jshint())
         .pipe(livereload());
 });
 
+
 gulp.task('flake8', shell.task(
         ['flake8 --ignore=errors']
     )
 );
+
 
 gulp.task('pip-compile', shell.task(
         [
@@ -107,6 +112,7 @@ gulp.task('pip-compile', shell.task(
         ]
     )
 );
+
 
 gulp.task('default', ['sass', 'iconfont', 'svgstore', 'pip-compile', 'jshint', 'flake8']);
 
@@ -120,4 +126,3 @@ gulp.task('watch', function () {
     gulp.watch(['gulpfile.js', static_path + 'js/**.js'], ['jshint']);
     gulp.watch('**/*.py', ['flake8']);
 });
-
