@@ -162,6 +162,7 @@ def create_nginx_folders():
         run('mkdir ~/nginx/conf/sites')
         run('mkdir ~/nginx/temp')
         run('mkdir ~/nginx/logs')
+        run('mkdir ~/nginx/logs/archive')
         puts('created ~/nginx & co.'.format(**env))
     else:
         puts('no files created, check "needs_main_nginx_files" in env.')
@@ -305,6 +306,8 @@ def copy_restart_nginx():
         )
     # nginx main, may be optional!
     if env.needs_main_nginx_files:
+        run('cp {project_dir}/deployment/nginx/logrotate.conf'
+            ' $HOME/nginx/conf/.'.format(**env))
         run('cp {project_dir}/deployment/nginx/nginx.conf'
             ' $HOME/nginx/conf/.'.format(**env))
         run('cp {project_dir}/deployment/nginx/logrotate.conf'
