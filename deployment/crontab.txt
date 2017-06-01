@@ -32,7 +32,7 @@
 0 4 * * * /usr/sbin/logrotate -s $HOME/nginx/logrotate.status $HOME/nginx/conf/logrotate.conf
 
 # clearsessions
-10 4 * * * cd /home/{{ project_name }}/{{ project_name }}-live/ && virtualenv/bin/python manage.py clearsessions --settings=project.settings._{{ project_name }}_live
+10 4 * * * cd $HOME/sites/{{ project_name }}-live/ && virtualenv/bin/python manage.py clearsessions --settings=project.settings._{{ project_name }}_live
 
 # haystack index
-30 4 * * * cd /home/{{ project_name }}/{{ project_name }}-live/ && virtualenv/bin/python manage.py update_index --remove --settings=project.settings._{{ project_name }}_live
+30 4 * * * cd $HOME/sites/{{ project_name }}-live/ && virtualenv/bin/python manage.py update_index --remove --settings=project.settings._{{ project_name }}_live
