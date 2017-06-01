@@ -188,6 +188,8 @@ def deploy(verbosity='noisy'):
         execute(migrate)
         puts('Restarting web server...')
         execute(restart)
+        puts('Installing crontab...')
+        execute(crontab)
 
 
 @task
