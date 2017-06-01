@@ -312,8 +312,6 @@ def copy_restart_nginx():
             ' $HOME/nginx/conf/.'.format(**env))
         run('cp {project_dir}/deployment/nginx/nginx.conf'
             ' $HOME/nginx/conf/.'.format(**env))
-        run('cp {project_dir}/deployment/nginx/logrotate.conf'
-            ' $HOME/nginx/conf/.'.format(**env))
         run('cp {project_dir}/deployment/nginx/nginx.sh $HOME/init/.'.format(**env))
         run('chmod u+x $HOME/init/nginx.sh')
     run(env.nginx_restart_command)
