@@ -376,7 +376,13 @@ def get_db_mysql(dump_only=False):
     dump_name = 'dump_%s_%s-%s.sql' % (env.project_name, env.env_prefix, date)
     remote_dump_file = os.path.join(env.project_dir, dump_name)
     local_dump_file = './%s' % dump_name
-    run('mysqldump --user={user} --password={password} {database} > {file}'.format(
+    run('mysqldump '
+        # for pg conversion!
+        # ' --compatible=postgresql'
+        # ' --default-character-set=utf8'
+        ' --user={user}'
+        ' --password={password}'
+        ' {database} > {file}'.format(
         user=db_settings["default"]["USER"],
         password=db_settings["default"]["PASSWORD"],
         database=db_settings["default"]["NAME"],
