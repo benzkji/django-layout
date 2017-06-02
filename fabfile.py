@@ -361,9 +361,9 @@ def put_db(local_db_name=False):
 
     # go for it!
     if env.is_postgresql:
-        get_db_postgresql(local_db_name)
+        put_db_postgresql(local_db_name)
     else:
-        get_db_mysql(local_db_name)
+        put_db_mysql(local_db_name)
 
 
 def get_db_mysql(dump_only=False):
