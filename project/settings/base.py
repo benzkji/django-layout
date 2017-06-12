@@ -1,6 +1,8 @@
 # coding: utf-8
 
 import os, sys
+
+import raven
 # just in case - know the defaults ;-)
 # import django.conf.global_settings as DEFAULT_SETTINGS
 
@@ -27,6 +29,13 @@ ALLOWED_HOSTS = [
     '.bnzk.ch',
     'localhost:8888',
 ]
+
+RAVEN_CONFIG = {
+    'dsn': 'https://xxxxxxx:xxxxx@sentry.io/xxxx',
+    # If you are using git, you can also automatically configure the
+    # release based on the git info.
+    'release': raven.fetch_git_sha(PROJECT_PATH),
+}
 
 INTERNAL_IPS = (
     '127.0.0.1',
