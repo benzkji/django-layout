@@ -1,7 +1,5 @@
 import datetime
-
-
-@import os
+import os
 import sys
 
 from fabric.api import task, env, run, roles, cd, execute, hide, puts
@@ -20,7 +18,7 @@ env.project_name = '{{project_name}}'
 env.repository = 'git@bitbucket.org:bnzk/{project_name}.git'.format(**env)
 env.local_branch = 'master'
 env.sites = ('{{ project_name }}', )
-env.is_postgresql = True  #vFalse for mysql! only used for put/get_db
+env.is_postgresql = True  # False for mysql! only used for put/get_db
 env.needs_main_nginx_files = True
 env.is_nginx_gunicorn = True
 env.is_uwsgi = False

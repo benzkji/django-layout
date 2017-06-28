@@ -31,6 +31,10 @@ server {
     error_log logs/{{project_name}}-live-error.log;
     access_log logs/{{project_name}}-live-access.log;
 
+    error_page 500 502 503 504 /nginx/50x.html;
+    location /nginx/ {
+        root    /home/nuithonie/sites/nuithonie-stage/public/static/;
+    }
     location /static/ {
         alias   /home/{{project_name}}/sites/{{project_name}}-live/public/static/;
         expires 3M;
