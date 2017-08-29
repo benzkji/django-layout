@@ -100,7 +100,7 @@ def create_nginx_folders():
         run('mkdir ~/nginx/logs/archive')
         puts('created ~/nginx & co.'.format(**env))
     else:
-        puts('no files created, check "needs_main_nginx_files" in env.')
+        puts('no nginx files created, check "needs_main_nginx_files" in env.')
 
 
 @task

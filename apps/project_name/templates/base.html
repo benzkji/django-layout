@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="" lang="{{ LANGUAGE_CODE }}">
+<html class="no-js" lang="{{ LANGUAGE_CODE }}">
 {% load compress cms_tags menu_tags sekizai_tags %}
 
     <head>
@@ -19,6 +19,16 @@
 
         <script type="text/javascript">
             document.querySelector('html').className += ' js';
+            {# https://www.quora.com/How-do-I-disable-the-hover-CSS-rule-for-iPhone-and-iPad-touch-device-browsers/answer/John-Miller-386 #}
+            document.addEventListener('touchstart', function addtouchclass(e){ // first time user touches the screen
+                document.documentElement.classList.add('is_touch'); // add "can-touch" class to document root using classList API
+                document.removeEventListener('touchstart', addtouchclass, false); // de-register touchstart event
+            }, false);
+            {% if request.toolbar.edit_mode %}
+                var cms_edit_mode = true;
+            {% else %}
+                var cms_edit_mode = false;
+            {% endif %}
         </script>
 
         {% compress css inline %}
@@ -28,7 +38,7 @@
         {% comment %}if need...<script src="{{ STATIC_URL }}{{ project_name }}/components/modernizr/modernizr.js"></script>{% endcomment %}
 
     </head>
-    <body>
+    <body class="{% block body_class %}{% endblock %}">
 
         {% render_block "css" %}
         {% cms_toolbar %}
