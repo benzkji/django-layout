@@ -2,10 +2,8 @@
 from fabric.api import task, env
 
 
-env.forward_agent = True
 env.project_name = '{{project_name}}'
 env.repository = 'git@bitbucket.org:bnzk/{project_name}.git'.format(**env)
-env.local_branch = 'master'
 env.sites = ('{{ project_name }}', )
 env.is_postgresql = True  # False for mysql! only used for put/get_db
 env.needs_main_nginx_files = True
@@ -13,7 +11,7 @@ env.is_nginx_gunicorn = True
 env.is_uwsgi = False
 env.remote_ref = 'origin/master'
 # these will be checked for changes
-env.requirements_files = ['requirements/deploy.txt', 'requirements/basics.txt', ]
+env.requirements_files = ['requirements/deploy.txt', ]
 # this is used with pip install -r
 env.requirements_file = env.requirements_files[0]
 
@@ -57,7 +55,6 @@ def stage():
 def generic_env_settings():
     if not getattr(env, 'deploy_crontab', None):
         env.deploy_crontab = False
-    env.system_users = {"server": env.main_user}  # not used yet!
     env.project_dir = '/home/{main_user}/sites/{project_name}-{env_prefix}'.format(**env)
     env.virtualenv_dir = '{project_dir}/virtualenv'.format(**env)
     env.gunicorn_restart_command = '~/init/{site_name}.{env_prefix}.sh restart'

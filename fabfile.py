@@ -8,19 +8,47 @@ from fabric.operations import get, local, put
 from fabric.contrib.project import rsync_project
 from fabric.contrib import django
 
-
 from fabconf import *
+
 
 # hm. https://github.com/fabric/fabric/issues/256
 sys.path.insert(0, sys.path[0])
 
+# set some basic things, that are just needed.
+env.forward_agent = True
+
 # Set the default environment.
 stage()
+
+# check for some defaults to be set?
+# in a method, to be called after each setup? ie at the end of stage/live?
+# def check_setup():
+#     if not getattr(env, 'project_name'):
+#         exit("env.project_name must be set!")
+# project_name
+# repository
+# sites
+# is_postgresql
+# is_nginx_gunicorn
+# needs_main_nginx_files
+# is_uwsgi
+# remote_ref
+# requirements_files
+# requirements_file
+# deploy_crontab
+# roledefs
+# project_dir = '/home/{main_user}/sites/{project_name}-{env_prefix}'.format(**env)
+# virtualenv_dir = '{project_dir}/virtualenv'.format(**env)
+# gunicorn_restart_command = '~/init/{site_name}.{env_prefix}.sh restart'
+# nginx_restart_command = '~/init/nginx.sh restart'
+# uwsgi_restart_command = 'touch $HOME/uwsgi.d/{site_name}.{env_prefix}.ini'
+# project_conf = 'project.settings._{project_name}_{env_prefix}'.format(**env)
 
 
 # ==============================================================================
 # Actual tasks
 # ==============================================================================
+
 
 @task
 @roles('web', 'db')
