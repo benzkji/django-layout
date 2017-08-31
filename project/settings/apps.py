@@ -25,6 +25,7 @@ INSTALLED_APPS = (
     'compressor',
     'modeltranslation',
     'formfieldstash',
+    'ckeditor',
 
     'filer',
     'easy_thumbnails',
