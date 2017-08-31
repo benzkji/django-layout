@@ -2,6 +2,7 @@
 from fabric.api import task, env
 
 
+env.is_python3 = True
 env.project_name = '{{project_name}}'
 env.repository = 'git@bitbucket.org:bnzk/{project_name}.git'.format(**env)
 env.sites = ('{{ project_name }}', )

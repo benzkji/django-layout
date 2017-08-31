@@ -35,6 +35,7 @@ stage()
 # remote_ref
 # requirements_files
 # requirements_file
+# is_python3
 # deploy_crontab
 # roledefs
 # project_dir = '/home/{main_user}/sites/{project_name}-{env_prefix}'.format(**env)
@@ -65,7 +66,10 @@ def create_virtualenv(force=False):
             return
         else:
             run('rm -rf {virtualenv_dir}'.format(**env))
-    run('virtualenv {virtualenv_dir} --no-site-packages'.format(**env))
+    venv_command = 'virtualenv {virtualenv_dir} --no-site-packages'.format(**env)
+    if env.is_python3:
+        venv_command += ' --python=python3'
+    run(venv_command)
     requirements()
     puts('Created virtualenv at {virtualenv_dir}.'.format(**env))
 
