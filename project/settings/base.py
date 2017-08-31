@@ -12,7 +12,7 @@ PROJECT_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)),
 sys.path.append(os.path.join(PROJECT_PATH, 'apps/'))
 
 # the fake
-ugettext = lambda s: s
+ugettext = lambda s: s  # noqa
 
 ADMINS = [
     # no more! raven FTW. ('BNZK', 'support@bnzk.ch'),

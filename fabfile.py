@@ -62,7 +62,8 @@ def create_virtualenv(force=False):
     if exists:
         if not force:
             puts('Assuming virtualenv {virtualenv_dir} has already been created '
-                 'since this directory exists. If you need, you can force a recreation.'.format(**env))
+                 'since this directory exists.'
+                 'If you need, you can force a recreation.'.format(**env))
             return
         else:
             run('rm -rf {virtualenv_dir}'.format(**env))
@@ -258,6 +259,7 @@ def restart():
     if env.is_uwsgi:
         copy_restart_uwsgi()
 
+
 def stop_gunicorn():
     for site_name in env.sites:
         run(env.gunicorn_stop_command.format(site_name=site_name, **env))
@@ -361,14 +363,16 @@ def get_db_mysql(dump_only=False):
     dump_name = 'dump_%s_%s-%s.sql' % (env.project_name, env.env_prefix, date)
     remote_dump_file = os.path.join(env.project_dir, dump_name)
     local_dump_file = './%s' % dump_name
-    run('mysqldump '
+    run(
+        'mysqldump '
         # for pg conversion!
         # ' --compatible=postgresql'
         # ' --default-character-set=utf8'
         ' {database} > {file}'.format(
-        database=db_settings["default"]["NAME"],
-        file=remote_dump_file,
-    ))
+            database=db_settings["default"]["NAME"],
+            file=remote_dump_file,
+        )
+    )
     get(remote_path=remote_dump_file, local_path=local_dump_file)
     run('rm %s' % remote_dump_file)
     if not dump_only:
@@ -412,7 +416,7 @@ def create_mycnf(force=False):
         if exists:
             run('rm .my.cnf')
         local('echo "[client]" >> .my.cnf')
-        local('echo "# The following password will be sent to all standard MySQL clients" >> .my.cnf')
+        local('echo "# User/PW will be sent to all standard MySQL clients" >> .my.cnf')
         local('echo "password = \"{pw}\"" >> .my.cnf'.format(pw=db_settings["default"]["PASSWORD"]))
         local('echo "user = \"{user}\"" >> .my.cnf'.format(user=db_settings["default"]["USER"]))
         put('.my.cnf')

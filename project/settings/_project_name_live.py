@@ -1,7 +1,4 @@
 from split_settings.tools import include
-import os
-
-from base import PROJECT_PATH
 
 
 include(
