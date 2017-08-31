@@ -1,6 +1,7 @@
 # coding: utf-8
 
-import os, sys
+import os
+import sys
 
 import raven
 # just in case - know the defaults ;-)
@@ -13,9 +14,9 @@ sys.path.append(os.path.join(PROJECT_PATH, 'apps/'))
 # the fake
 ugettext = lambda s: s
 
-ADMINS = (
-    ('BNZK', 'support@bnzk.ch'),
-)
+ADMINS = [
+    # no more! raven FTW. ('BNZK', 'support@bnzk.ch'),
+]
 MANAGERS = ADMINS
 DEFAULT_FROM_EMAIL = '{{project_name}}@bnzk.ch'
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
