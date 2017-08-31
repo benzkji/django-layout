@@ -8,7 +8,7 @@ from django.contrib import admin
 
 # maybe use i18npatterns?!
 urlpatterns = [
-    # (r'', include('{{ project_name }}.urls.')),
+    # (r'', include('{{ project_name }}.urls')),
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
 ]
