@@ -350,6 +350,7 @@ def get_db_mysql(dump_only=False):
     """
     dump db on server, import to local mysql (must exist)
     """
+    create_mycnf()
     settings = get_settings()
     db_settings = settings.DATABASES
     date = datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
@@ -360,11 +361,7 @@ def get_db_mysql(dump_only=False):
         # for pg conversion!
         # ' --compatible=postgresql'
         # ' --default-character-set=utf8'
-        ' --user={user}'
-        ' --password={password}'
         ' {database} > {file}'.format(
-        user=db_settings["default"]["USER"],
-        password=db_settings["default"]["PASSWORD"],
         database=db_settings["default"]["NAME"],
         file=remote_dump_file,
     ))
@@ -379,6 +376,7 @@ def put_db_mysql(local_db_name=None):
     """
     dump local db, import on server database (must exist)
     """
+    create_mycnf()
     settings = get_settings()
     db_settings = settings.DATABASES
     if not local_db_name:
@@ -392,13 +390,29 @@ def put_db_mysql(local_db_name=None):
     remote_dump_file = os.path.join(env.project_dir, dump_name)
     put(remote_path=remote_dump_file, local_path=local_dump_file)
     local('rm %s' % local_dump_file)
-    run('mysql --user={user} --password={password} {database} < {file}'.format(
-        user=db_settings["default"]["USER"],
-        password=db_settings["default"]["PASSWORD"],
+    run('mysql {database} < {file}'.format(
         database=db_settings["default"]["NAME"],
         file=remote_dump_file,
     ))
     run('rm %s' % remote_dump_file)
+
+
+@task
+@roles('db')
+def create_mycnf(force=False):
+    with hide('running', 'stdout'):
+        exists = run('if [ -f ".my.cnf" ]; then echo 1; fi'.format(**env))
+    if force or not exists:
+        settings = get_settings()
+        db_settings = settings.DATABASES
+        if exists:
+            run('rm .my.cnf')
+        local('echo "[client]" >> .my.cnf')
+        local('echo "# The following password will be sent to all standard MySQL clients" >> .my.cnf')
+        local('echo "password = \"{pw}\"" >> .my.cnf'.format(pw=db_settings["default"]["PASSWORD"]))
+        local('echo "user = \"{user}\"" >> .my.cnf'.format(user=db_settings["default"]["USER"]))
+        put('.my.cnf')
+        local('rm .my.cnf')
 
 
 def get_db_postgresql(dump_only=False):
