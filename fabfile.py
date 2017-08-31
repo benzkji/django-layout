@@ -307,6 +307,17 @@ def requirements():
 
 
 @task
+@roles('web')
+def get_version():
+    """
+    Get installed version from each server.
+    """
+    with cd(env.project_dir):
+        run('git describe --tags')
+        run('git log --graph --pretty=oneline -n20')
+
+
+@task
 @roles('db')
 def get_db(dump_only=False):
     if env.is_postgresql:
