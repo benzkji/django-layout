@@ -1,4 +1,4 @@
-from base import ugettext
+from .base import ugettext
 
 
 CMS_PLACEHOLDER_CONF = {

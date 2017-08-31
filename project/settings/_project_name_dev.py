@@ -1,5 +1,5 @@
 import os
-from base import PROJECT_PATH
+from .base import PROJECT_PATH
 
 DEBUG = True
 # THUMBNAIL_DEBUG = True
