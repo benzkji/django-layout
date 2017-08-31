@@ -8,7 +8,7 @@ from fabric.operations import get, local, put
 from fabric.contrib.project import rsync_project
 from fabric.contrib import django
 
-from fabconf import *
+from fabconf import env, stage, live  # noqa
 
 
 # hm. https://github.com/fabric/fabric/issues/256
@@ -52,17 +52,19 @@ stage()
 
 @task
 @roles('web', 'db')
-def create_virtualenv():
+def create_virtualenv(force=False):
     """
     Bootstrap the environment.
     """
     with hide('running', 'stdout'):
         exists = run('if [ -d "{virtualenv_dir}" ]; then echo 1; fi'.format(**env))
     if exists:
-        puts('Assuming virtualenv {virtualenv_dir} has already been created '
-             'since this directory exists. You\' need to manually delete this '
-             'folder, if you really need to'.format(**env))
-        return
+        if not force:
+            puts('Assuming virtualenv {virtualenv_dir} has already been created '
+                 'since this directory exists. If you need, you can force a recreation.'.format(**env))
+            return
+        else:
+            run('rm -rf {virtualenv_dir}'.format(**env))
     run('virtualenv {virtualenv_dir} --no-site-packages'.format(**env))
     requirements()
     puts('Created virtualenv at {virtualenv_dir}.'.format(**env))
