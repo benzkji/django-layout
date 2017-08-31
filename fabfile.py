@@ -254,6 +254,10 @@ def restart():
     if env.is_uwsgi:
         copy_restart_uwsgi()
 
+def stop_gunicorn():
+    for site_name in env.sites:
+        run(env.gunicorn_stop_command.format(site_name=site_name, **env))
+
 
 def copy_restart_gunicorn():
     for site_name in env.sites:
