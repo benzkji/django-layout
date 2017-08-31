@@ -16,16 +16,15 @@ ALLOWED_HOSTS = (
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3'.
+        'ENGINE': 'django.db.backends.postgresql',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3'.
         'NAME': "{{project_name}}_live",  # Or path to database file if using sqlite3.
-        # The following settings are not used with sqlite3:
-        'USER': '{{project_name}}',
-        'PASSWORD': 'aaaa',
-        'CONN_MAX_AGE': 0,  # set 0 if using gevent and no connection pooling!
-        # 'STORAGE_ENGINE': "MyISAM", # if you updated django lately..
+        # mysl only
+        # 'USER': '{{project_name}}',
+        # 'PASSWORD': 'aaaaaaa',
+        # 'CONN_MAX_AGE': 0,  # set 0 if using gevent and no connection pooling!
         # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'HOST': '',
+        # 'HOST': '',
         # Set to empty string for default.
-        'PORT': '',
+        # 'PORT': '',
     }
 }
