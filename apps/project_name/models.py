@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.utils.translation import ugettext_lazy as _
 from cms.models.fields import PageField
 from django.db import models
+from django.conf import settings
 from filer.fields.file import FilerFileField
 
 
@@ -40,7 +41,15 @@ LINK_TYPE_CHOICES = (
 )
 
 
-LINK_FIELDS = ('link_text', ('link_type', 'link_target', ), 'page', 'file', 'mailto', 'external', 'free', )
+LINK_FIELDS = (
+    'link_text',
+    ('link_type', 'link_target', ),
+    'page',
+    'file',
+    'mailto',
+    'external',
+    'free',
+)
 
 
 # add target?
@@ -49,8 +58,13 @@ class LinkBase(models.Model):
                                  blank=True, default='')
     link_type = models.CharField(verbose_name=_('Link'), max_length=20, choices=LINK_TYPE_CHOICES,
                                  blank=True, default='')
-    link_target = models.CharField(verbose_name=_('Target'), max_length=20, choices=LINK_TARGET_CHOICES,
-                                     blank=True, default='')
+    link_target = models.CharField(
+        verbose_name=_('Target'),
+        max_length=20,
+        choices=LINK_TARGET_CHOICES,
+        blank=True,
+        default='',
+    )
     page = PageField(null=True, blank=True)
     file = FilerFileField(null=True, blank=True, related_name='link')
     mailto = models.EmailField(null=True, blank=True)
@@ -82,8 +96,8 @@ class LinkBase(models.Model):
 
     def get_link_text(self):
         obj = None
-        if self.name:
-            return self.name
+        if self.link_text:
+            return self.link_text
         if self.link_type:
             obj = getattr(self, self.link_type, None)
         elif self.page:
@@ -95,7 +109,7 @@ class LinkBase(models.Model):
         elif self.mailto:
             return self.mailto
 
-        if not object is None:
+        if object is not None:
             return unicode(obj)
         return ''
 
@@ -112,9 +126,9 @@ class LinkBase(models.Model):
             return "mailto"
 
     def get_link_target(self):
-        type = self.get_link_type()
-        if type in ['file', 'external']\
-                or type == 'page' and not self.page.site.id == settings.SITE_ID:
+        the_type = self.get_link_type()
+        if the_type in ['file', 'external']\
+                or the_type == 'page' and not self.page.site.id == settings.SITE_ID:
             return "_blank"
         return ""
 

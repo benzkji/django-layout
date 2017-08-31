@@ -19,4 +19,5 @@ class LinkAdmin(FormFieldStashMixin, DjangoLinkAdmin):
     class Media:
         js = ('cms/js/dist/bundle.admin.base.min.js',)
 
+
 admin.site.register(Link, LinkAdmin)
