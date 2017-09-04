@@ -95,14 +95,15 @@ def clone_repos():
 @roles('web', 'db')
 def create_database():
     # this will fail straight if the database already exists.
-    settings = get_settings()
-    db_settings = settings.DATABASES
-    run("echo \"CREATE DATABASE {dbname} CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
-        "\" | mysql -u {dbuser} --password={dbpassword}".format(
-            dbuser=db_settings["default"]["USER"],
-            dbpassword=db_settings["default"]["PASSWORD"],
-            dbname=db_settings["default"]["NAME"],
-        ))
+    if env.is_postgresql:
+        puts('PostgreSQL db must be created manually.')
+    else:
+        create_mycnf()
+        settings = get_settings()
+        db_settings = settings.DATABASES
+        run("echo \"CREATE DATABASE {dbname} CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
+            "\" | mysql ".format(
+                dbname=db_settings["default"]["NAME"],
 
 
 @task
