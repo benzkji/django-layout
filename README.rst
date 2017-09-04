@@ -41,6 +41,7 @@ Quickstart
 To bootstrap the project on your machine::
 
     cd {{ project_name }}
+    # check fabconf.py if env.is_python3 is true, if yes, add --python=python3
     mkvirtualenv --no-site-packages {{ project_name }}
     # without the venv-wrapper: virtualenv virtualenv {{ project_name }}
     # ditto: source virtualenv/{{ project_name }}/bin/activate

@@ -8,7 +8,7 @@ from fabric.operations import get, local, put
 from fabric.contrib.project import rsync_project
 from fabric.contrib import django
 
-from fabconf import *
+from fabconf import env, stage, live  # noqa
 
 
 # hm. https://github.com/fabric/fabric/issues/256
@@ -35,6 +35,7 @@ stage()
 # remote_ref
 # requirements_files
 # requirements_file
+# is_python3
 # deploy_crontab
 # roledefs
 # project_dir = '/home/{main_user}/sites/{project_name}-{env_prefix}'.format(**env)
@@ -52,18 +53,24 @@ stage()
 
 @task
 @roles('web', 'db')
-def create_virtualenv():
+def create_virtualenv(force=False):
     """
     Bootstrap the environment.
     """
     with hide('running', 'stdout'):
         exists = run('if [ -d "{virtualenv_dir}" ]; then echo 1; fi'.format(**env))
     if exists:
-        puts('Assuming virtualenv {virtualenv_dir} has already been created '
-             'since this directory exists. You\' need to manually delete this '
-             'folder, if you really need to'.format(**env))
-        return
-    run('virtualenv {virtualenv_dir} --no-site-packages'.format(**env))
+        if not force:
+            puts('Assuming virtualenv {virtualenv_dir} has already been created '
+                 'since this directory exists.'
+                 'If you need, you can force a recreation.'.format(**env))
+            return
+        else:
+            run('rm -rf {virtualenv_dir}'.format(**env))
+    venv_command = 'virtualenv {virtualenv_dir} --no-site-packages'.format(**env)
+    if env.is_python3:
+        venv_command += ' --python=python3'
+    run(venv_command)
     requirements()
     puts('Created virtualenv at {virtualenv_dir}.'.format(**env))
 
@@ -253,6 +260,11 @@ def restart():
         copy_restart_uwsgi()
 
 
+def stop_gunicorn():
+    for site_name in env.sites:
+        run(env.gunicorn_stop_command.format(site_name=site_name, **env))
+
+
 def copy_restart_gunicorn():
     for site_name in env.sites:
         run(
@@ -301,6 +313,17 @@ def requirements():
 
 
 @task
+@roles('web')
+def get_version():
+    """
+    Get installed version from each server.
+    """
+    with cd(env.project_dir):
+        run('git describe --tags')
+        run('git log --graph --pretty=oneline -n20')
+
+
+@task
 @roles('db')
 def get_db(dump_only=False):
     if env.is_postgresql:
@@ -333,24 +356,23 @@ def get_db_mysql(dump_only=False):
     """
     dump db on server, import to local mysql (must exist)
     """
+    create_mycnf()
     settings = get_settings()
     db_settings = settings.DATABASES
     date = datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
     dump_name = 'dump_%s_%s-%s.sql' % (env.project_name, env.env_prefix, date)
     remote_dump_file = os.path.join(env.project_dir, dump_name)
     local_dump_file = './%s' % dump_name
-    run('mysqldump '
+    run(
+        'mysqldump '
         # for pg conversion!
         # ' --compatible=postgresql'
         # ' --default-character-set=utf8'
-        ' --user={user}'
-        ' --password={password}'
         ' {database} > {file}'.format(
-        user=db_settings["default"]["USER"],
-        password=db_settings["default"]["PASSWORD"],
-        database=db_settings["default"]["NAME"],
-        file=remote_dump_file,
-    ))
+            database=db_settings["default"]["NAME"],
+            file=remote_dump_file,
+        )
+    )
     get(remote_path=remote_dump_file, local_path=local_dump_file)
     run('rm %s' % remote_dump_file)
     if not dump_only:
@@ -362,6 +384,7 @@ def put_db_mysql(local_db_name=None):
     """
     dump local db, import on server database (must exist)
     """
+    create_mycnf()
     settings = get_settings()
     db_settings = settings.DATABASES
     if not local_db_name:
@@ -375,13 +398,29 @@ def put_db_mysql(local_db_name=None):
     remote_dump_file = os.path.join(env.project_dir, dump_name)
     put(remote_path=remote_dump_file, local_path=local_dump_file)
     local('rm %s' % local_dump_file)
-    run('mysql --user={user} --password={password} {database} < {file}'.format(
-        user=db_settings["default"]["USER"],
-        password=db_settings["default"]["PASSWORD"],
+    run('mysql {database} < {file}'.format(
         database=db_settings["default"]["NAME"],
         file=remote_dump_file,
     ))
     run('rm %s' % remote_dump_file)
+
+
+@task
+@roles('db')
+def create_mycnf(force=False):
+    with hide('running', 'stdout'):
+        exists = run('if [ -f ".my.cnf" ]; then echo 1; fi'.format(**env))
+    if force or not exists:
+        settings = get_settings()
+        db_settings = settings.DATABASES
+        if exists:
+            run('rm .my.cnf')
+        local('echo "[client]" >> .my.cnf')
+        local('echo "# User/PW will be sent to all standard MySQL clients" >> .my.cnf')
+        local('echo "password = \"{pw}\"" >> .my.cnf'.format(pw=db_settings["default"]["PASSWORD"]))
+        local('echo "user = \"{user}\"" >> .my.cnf'.format(user=db_settings["default"]["USER"]))
+        put('.my.cnf')
+        local('rm .my.cnf')
 
 
 def get_db_postgresql(dump_only=False):

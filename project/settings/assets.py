@@ -2,7 +2,7 @@
 # all things concerning paths/assets/discovery
 
 import os
-from base import PROJECT_PATH
+from .base import PROJECT_PATH
 
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.

@@ -1,6 +1,7 @@
 # coding: utf-8
 
-import os, sys
+import os
+import sys
 # just in case - know the defaults ;-)
 # import django.conf.global_settings as DEFAULT_SETTINGS
 
@@ -8,7 +9,7 @@ PROJECT_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..', '.
 sys.path.append(os.path.join(PROJECT_PATH, 'apps/'))
 
 # the fake
-ugettext = lambda s: s
+ugettext = lambda s: s  # noqa
 
 ADMINS = (
     ('BNZK', 'support@bnzk.ch'),
