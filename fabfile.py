@@ -525,10 +525,12 @@ def put_media():
     )
 
 
-def get_settings():
+def get_settings(conf=None):
     # do this here. django settings cannot be imported more than once...probably.
     # still dont really get the mess here.
-    django.settings_module(env.project_conf)
+    if not conf:
+        conf = env.project_conf
+    django.settings_module(conf)
     from django.conf import settings
     return settings
 
