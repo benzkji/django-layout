@@ -45,6 +45,24 @@ STATICFILES_FINDERS = (
 #    'compressor.filters.cssmin.CSSMinFilter',  # pip install cssmin
 # ]
 
+# FILER_STORAGES = {
+#     'public': {
+#         'main': {
+#             'UPLOAD_TO': 'filer_addons.filer_utils.generate_folder_and_filename.short_uuid4',
+#         },
+#         'thumbnails': {
+#             'THUMBNAIL_OPTIONS': {
+#                 'base_dir': 'thumbnails',
+#             },
+#         },
+#     },
+#     'private': {
+#         'main': {
+#             'UPLOAD_TO': 'filer_addons.filer_utils.generate_folder_and_filename.short_uuid4',
+#         },
+#     },
+# }
+
 THUMBNAIL_PROCESSORS = (
     'easy_thumbnails.processors.colorspace',
     'easy_thumbnails.processors.autocrop',
