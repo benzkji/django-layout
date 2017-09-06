@@ -9,10 +9,10 @@
         {% page_attribute "title" as cms_title %}
         <title>{% spaceless %}{% block title_tag %}
             {% page_attribute "page_title" %}
-            {% if cms_page_title == cms_title %} | Whatever Default here{% endif %}
+            {% if cms_page_title == cms_title %}{% endif %}
         {% endblock %}
         {% endspaceless %}</title>
-        <meta name="description" content="">
+        <meta name="description" content="{% block meta_description %}{% page_attribute "meta_description" %}{% endblock %}">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         {% comment %}if has...<link rel="apple-touch-icon" href="apple-touch-icon.png">{% endcomment %}
