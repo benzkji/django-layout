@@ -40,6 +40,7 @@ RAVEN_CONFIG = {
 
 INTERNAL_IPS = (
     '127.0.0.1',
+    '0.0.0.0',
 )
 
 # Local time zone for this installation. Choices can be found here:
