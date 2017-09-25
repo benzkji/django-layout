@@ -1,5 +1,5 @@
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -49,5 +49,4 @@ INSTALLED_APPS = (
 
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
-
-)
+]
