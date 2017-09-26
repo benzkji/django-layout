@@ -482,7 +482,10 @@ def get_media():
     """
     # trivial version
     # get(os.path.join(env.project_dir, 'public', 'media'), 'public/media')
-    remote_dir = os.path.join(env.project_dir, 'public', 'media')
+    if getattr(env, 'custom_media_root', None):
+        remote_dir = env.custom_media_root
+    else:
+        remote_dir = os.path.join(env.project_dir, 'public', 'media', )
     local_dir = os.path.join('public')
     extra_opts = ""
     # extra_opts = "--dry-run"
@@ -512,7 +515,14 @@ def put_media():
         return
 
     # go for it!
-    remote_dir = os.path.join(env.project_dir, 'public')
+    if getattr(env, 'custom_media_root', None):
+        cust = env.custom_media_root
+        remote_dir, to_remove = os.path.split(env.custom_media_root)
+        if not to_remove:
+            # custom media root ended with a slash - let's do it again!
+            remote_dir, to_remove = os.path.split(cust)
+    else:
+        remote_dir = os.path.join(env.project_dir, 'public', )
     local_dir = os.path.join('public', 'media')
     extra_opts = ""
     # extra_opts = "--dry-run"
