@@ -484,6 +484,9 @@ def get_media():
     # get(os.path.join(env.project_dir, 'public', 'media'), 'public/media')
     if getattr(env, 'custom_media_root', None):
         remote_dir = env.custom_media_root
+        if remote_dir[-1] == '/':
+            # cannot end with a slash! rsync is not working!
+            remote_dir = remote_dir[0:-1]
     else:
         remote_dir = os.path.join(env.project_dir, 'public', 'media', )
     local_dir = os.path.join('public')
