@@ -15,7 +15,6 @@ PROJECT_NAME="{{ project_name }}"
 SITE="{{ project_name }}"
 
 PROJECT_DIR="$HOME/sites/$PROJECT_NAME-$PROJECT_ENV"
-SETTINGS="project.settings._${SITE}_${PROJECT_ENV}"
 WSGI="project.wsgi_${SITE}_${PROJECT_ENV}"
 THE_ENV="$PROJECT_DIR/virtualenv"
 # beware, choose the right version here! (2.7 for most mordern servers)
@@ -28,7 +27,7 @@ SOCKET="$PROJECT_DIR/../$SITE-$PROJECT_ENV.sock"
 DAEMON="$THE_ENV/bin/gunicorn"
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 WORKERS=2
-OPTS="-D -b unix:///$SOCKET --worker-class gevent --workers $WORKERS --pid $PIDFILE --settings $SETTINGS $WSGI $PRELOAD"
+OPTS="-D -b unix:///$SOCKET --worker-class gevent --workers $WORKERS --pid $PIDFILE $WSGI $PRELOAD"
 
 
 
