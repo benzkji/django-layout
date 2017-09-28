@@ -7,8 +7,10 @@ include(
     scope=globals()
 )
 
+ENV = 'stage'
+
 ALLOWED_HOSTS = (
-    '.bnzk.ch',
+    '.stage.bnzk.ch',
 )
 
 DATABASES = {

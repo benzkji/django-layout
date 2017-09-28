@@ -95,14 +95,15 @@ def clone_repos():
 @roles('web', 'db')
 def create_database():
     # this will fail straight if the database already exists.
-    settings = get_settings()
-    db_settings = settings.DATABASES
-    run("echo \"CREATE DATABASE {dbname} CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
-        "\" | mysql -u {dbuser} --password={dbpassword}".format(
-            dbuser=db_settings["default"]["USER"],
-            dbpassword=db_settings["default"]["PASSWORD"],
-            dbname=db_settings["default"]["NAME"],
-        ))
+    if env.is_postgresql:
+        puts('PostgreSQL db must be created manually.')
+    else:
+        create_mycnf()
+        settings = get_settings()
+        db_settings = settings.DATABASES
+        run("echo \"CREATE DATABASE {dbname} CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
+            "\" | mysql ".format(
+                dbname=db_settings["default"]["NAME"],
 
 
 @task
@@ -481,7 +482,13 @@ def get_media():
     """
     # trivial version
     # get(os.path.join(env.project_dir, 'public', 'media'), 'public/media')
-    remote_dir = os.path.join(env.project_dir, 'public', 'media')
+    if getattr(env, 'custom_media_root', None):
+        remote_dir = env.custom_media_root
+        if remote_dir[-1] == '/':
+            # cannot end with a slash! rsync is not working!
+            remote_dir = remote_dir[0:-1]
+    else:
+        remote_dir = os.path.join(env.project_dir, 'public', 'media', )
     local_dir = os.path.join('public')
     extra_opts = ""
     # extra_opts = "--dry-run"
@@ -511,7 +518,14 @@ def put_media():
         return
 
     # go for it!
-    remote_dir = os.path.join(env.project_dir, 'public')
+    if getattr(env, 'custom_media_root', None):
+        cust = env.custom_media_root
+        remote_dir, to_remove = os.path.split(env.custom_media_root)
+        if not to_remove:
+            # custom media root ended with a slash - let's do it again!
+            remote_dir, to_remove = os.path.split(cust)
+    else:
+        remote_dir = os.path.join(env.project_dir, 'public', )
     local_dir = os.path.join('public', 'media')
     extra_opts = ""
     # extra_opts = "--dry-run"
@@ -524,10 +538,12 @@ def put_media():
     )
 
 
-def get_settings():
+def get_settings(conf=None):
     # do this here. django settings cannot be imported more than once...probably.
     # still dont really get the mess here.
-    django.settings_module(env.project_conf)
+    if not conf:
+        conf = env.project_conf
+    django.settings_module(conf)
     from django.conf import settings
     return settings
 

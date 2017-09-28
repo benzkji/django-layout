@@ -3,7 +3,7 @@ from fabric.api import task, env
 
 
 env.is_python3 = True
-env.project_name = '{{project_name}}'
+env.project_name = '{{ project_name }}'
 env.repository = 'git@bitbucket.org:bnzk/{project_name}.git'.format(**env)
 env.sites = ('{{ project_name }}', )
 env.is_postgresql = True  # False for mysql! only used for put/get_db
@@ -29,7 +29,7 @@ def live():
     env.env_prefix = 'live'
     env.main_user = '{project_name}'.format(**env)
     server = '{main_user}@s20.wservices.ch'.format(**env)
-    env.deploy_crontab = True
+    env.deploy_crontab = False
     env.roledefs = {
         'web': [server],
         'db': [server],
@@ -45,7 +45,7 @@ def stage():
     env.env_prefix = 'stage'
     env.main_user = '{project_name}'.format(**env)
     server = '{main_user}@s20.wservices.ch'.format(**env)
-    env.deploy_crontab = False
+    env.deploy_crontab = True
     env.roledefs = {
         'web': [server],
         'db': [server],

@@ -4,7 +4,11 @@ DEBUG = True
 # more live behavious, if you pleas..
 # from deploy import *
 
-ALLOWED_HOSTS = []
+ENV = 'dev'
+
+ALLOWED_HOSTS = [
+    'localhost'
+]
 
 DATABASES = {
     'default': {

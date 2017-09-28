@@ -40,7 +40,13 @@ RAVEN_CONFIG = {
 
 INTERNAL_IPS = (
     '127.0.0.1',
+    '0.0.0.0',
 )
+
+MIGRATION_MODULES = {
+    'textblocks': 'apps.{{ project_name }}.migrations_textblocks',
+}
+
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name

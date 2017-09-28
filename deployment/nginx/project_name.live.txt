@@ -2,20 +2,20 @@
 # redirects ftw
 server {
     listen 127.0.0.1:62321;
-    server_name {{project_name}}.com {{project_name}}.live.bnzk.ch;
+    server_name {{ project_name }}.com {{ project_name }}.live.bnzk.ch;
     rewrite ^/(.*) http://www.{{ project_name }}.com permanent;
 }
 
-upstream {{project_name}}_live_server {
-    server unix:/home/{{project_name}}/sites/{{project_name}}-live.sock;
+upstream {{ project_name }}_live_server {
+    server unix:/home/{{ project_name }}/sites/{{ project_name }}-live.sock;
 }
 
 server {
     listen 127.0.0.1:62321;
     server_name
-        {{project_name}}.com
-        www.{{project_name}}.ch
-        {{project_name}}.live.bnzk.ch
+        {{ project_name }}.com
+        www.{{ project_name }}.ch
+        {{ project_name }}.live.bnzk.ch
         ;
 
     location / {
@@ -23,24 +23,24 @@ server {
         proxy_set_header Host $http_host;
         proxy_redirect off;
         if (!-f $request_filename) {
-            proxy_pass      http://{{project_name}}_live_server ;
+            proxy_pass      http://{{ project_name }}_live_server ;
             break;
         }
     }
 
-    error_log logs/{{project_name}}-live-error.log;
-    access_log logs/{{project_name}}-live-access.log;
+    error_log logs/{{ project_name }}-live-error.log;
+    access_log logs/{{ project_name }}-live-access.log;
 
     error_page 500 502 503 504 /nginx/50x.html;
     location /nginx/ {
-        root    /home/nuithonie/sites/nuithonie-stage/public/static/;
+        root    /home/{{ project_name }}/sites/{{ project_name }}-stage/public/static/;
     }
     location /static/ {
-        alias   /home/{{project_name}}/sites/{{project_name}}-live/public/static/;
+        alias   /home/{{ project_name }}/sites/{{ project_name }}-live/public/static/;
         expires 3M;
     }
     location /media/ {
-        alias   /home/{{project_name}}/sites/{{project_name}}-live/public/media/;
+        alias   /home/{{ project_name }}/sites/{{ project_name }}-live/public/media/;
         expires 3M;
     }
 }

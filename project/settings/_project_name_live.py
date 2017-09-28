@@ -7,6 +7,8 @@ include(
     scope=globals()
 )
 
+ENV = 'live'
+
 ALLOWED_HOSTS = (
     '{{ project_name }}.ch',
 )
