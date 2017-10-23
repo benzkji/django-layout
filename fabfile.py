@@ -104,6 +104,8 @@ def create_database():
         run("echo \"CREATE DATABASE {dbname} CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
             "\" | mysql ".format(
                 dbname=db_settings["default"]["NAME"],
+            )
+        )
 
 
 @task

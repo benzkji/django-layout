@@ -9,7 +9,7 @@ server {
         {{ project_name }}.stage.bnzk.ch
         ;
     # comment out or not
-    # return 301 http://{{ project_name }}.ch;
+    return 301 http://{{ project_name }}.ch;
 
     location / {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

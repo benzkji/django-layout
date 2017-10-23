@@ -11,6 +11,7 @@ ENV = 'live'
 
 ALLOWED_HOSTS = (
     '{{ project_name }}.ch',
+    'www.{{ project_name }}.ch',
 )
 
 DATABASES = {
