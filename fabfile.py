@@ -577,10 +577,16 @@ def dj(command):
     """
     Run a Django manage.py command on the server.
     """
-    virtualenv('{project_dir}/manage.py {dj_command} '
-               '--settings {project_conf}'.format(dj_command=command, **env))
-    # run('{virtualenv_dir}/bin/manage.py {dj_command} '
-    #    '--settings {project_conf}'.format(dj_command=command, **env))
+    cmd_prefix = 'cd {project_dir}'
+    if getattr(env, 'custom_manage_py_root', None):
+        cmd_prefix = 'cd {}'.format(env.custom_manage_py_root)
+    virtualenv(
+        '{cmd_prefix} && ./manage.py {dj_command} --settings {project_conf}'.format(
+            dj_command=command,
+            cmd_prefix=cmd_prefix,
+            **env
+        )
+    )
 
 
 def fix_permissions(path='.'):
