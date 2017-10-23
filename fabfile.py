@@ -68,7 +68,7 @@ def create_virtualenv(force=False):
         else:
             run('rm -rf {virtualenv_dir}'.format(**env))
     venv_command = 'virtualenv {virtualenv_dir} --no-site-packages'.format(**env)
-    if env.is_python3:
+    if getattr(env, 'is_python3', None):
         venv_command += ' --python=python3'
     run(venv_command)
     requirements()
@@ -110,7 +110,7 @@ def create_database():
 @roles('web', 'db')
 def bootstrap():
     clone_repos()
-    # create_nginx_folders()  # only on request, so we dont overwrite existing settings.
+    create_nginx_folders()
     create_virtualenv()
     create_database()
     puts('Bootstrapped {project_name} on {host} (cloned repos, created venv and db).'.format(**env))
@@ -122,7 +122,7 @@ def create_nginx_folders():
     """
     do it.
     """
-    if env.needs_main_nginx_files:
+    if getattr(env, 'needs_main_nginx_files', None):
         with hide('running', 'stdout'):
             exists = run('if [ -d "~/nginx" ]; then echo 1; fi')
         if exists:
@@ -213,8 +213,12 @@ def crontab():
     install crontab
     """
     if env.deploy_crontab:
+        if getattr(env, 'contab_file', None):
+            crontab_file = env.crontab_file
+        else:
+            crontab_file = 'deployment/crontab.txt'
         with cd(env.project_dir):
-            run('crontab deployment/crontab.txt')
+            run('crontab {}'.format(crontab_file))
     else:
         puts('not deploying crontab to %s!' % env.env_prefix)
 
@@ -259,6 +263,8 @@ def restart():
         copy_restart_nginx()
     if env.is_uwsgi:
         copy_restart_uwsgi()
+    if env.is_apache:
+        exit("apache restart not implemented!")
 
 
 def stop_gunicorn():
@@ -267,20 +273,20 @@ def stop_gunicorn():
 
 
 def copy_restart_gunicorn():
-    for site_name in env.sites:
+    for site in env.sites:
         run(
-            'cp {project_dir}/deployment/gunicorn/{site_name}.{env_prefix}.sh'
-            ' $HOME/init/.'.format(site_name=site_name, **env)
+            'cp {project_dir}/deployment/gunicorn/{site}-{env_prefix}.sh'
+            ' $HOME/init/.'.format(site=site, **env)
         )
-        run('chmod u+x $HOME/init/{site_name}.{env_prefix}.sh'.format(site_name=site_name, **env))
-        run(env.gunicorn_restart_command.format(site_name=site_name, **env))
+        run('chmod u+x $HOME/init/{site}-{env_prefix}.sh'.format(site=site, **env))
+        run(env.gunicorn_restart_command.format(site=site, **env))
 
 
 def copy_restart_nginx():
-    for site_name in env.sites:
+    for site in env.sites:
         run(
-            'cp {project_dir}/deployment/nginx/{site_name}.{env_prefix}.txt'
-            ' $HOME/nginx/conf/sites/.'.format(site_name=site_name, **env)
+            'cp {project_dir}/deployment/nginx/{site}-{env_prefix}.txt'
+            ' $HOME/nginx/conf/sites/.'.format(site=site, **env)
         )
     # nginx main, may be optional!
     if env.needs_main_nginx_files:
@@ -294,12 +300,12 @@ def copy_restart_nginx():
 
 
 def copy_restart_uwsgi():
-    for site_name in env.sites:
+    for site in env.sites:
         run(
-            'cp {project_dir}/deployment/uwsgi/{site_name}.{env_prefix}.ini'
-            ' $HOME/nginx/conf/sites/.'.format(site_name=site_name, **env)
+            'cp {project_dir}/deployment/uwsgi/{site}-{env_prefix}.ini'
+            ' $HOME/nginx/conf/sites/.'.format(site=site, **env)
         )
-        run(env.uwsgi_restart_command.format(site_name=site_name, **env))
+        run(env.uwsgi_restart_command.format(site=site, **env))
 
 
 @task

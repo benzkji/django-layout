@@ -58,8 +58,8 @@ def generic_env_settings():
         env.deploy_crontab = False
     env.project_dir = '/home/{main_user}/sites/{project_name}-{env_prefix}'.format(**env)
     env.virtualenv_dir = '{project_dir}/virtualenv'.format(**env)
-    env.gunicorn_restart_command = '~/init/{site_name}.{env_prefix}.sh restart'
-    env.gunicorn_stop_command = '~/init/{site_name}.{env_prefix}.sh stop'
+    env.gunicorn_restart_command = '~/init/{site_name}-{env_prefix}.sh restart'
+    env.gunicorn_stop_command = '~/init/{site_name}-{env_prefix}.sh stop'
     env.nginx_restart_command = '~/init/nginx.sh restart'
-    env.uwsgi_restart_command = 'touch $HOME/uwsgi.d/{site_name}.{env_prefix}.ini'
+    env.uwsgi_restart_command = 'touch $HOME/uwsgi.d/{site_name}-{env_prefix}.ini'
     env.project_conf = 'project.settings._{project_name}_{env_prefix}'.format(**env)
