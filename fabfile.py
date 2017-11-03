@@ -335,10 +335,11 @@ def get_version():
 @task
 @roles('db')
 def get_db(dump_only=False):
+    local_db_name = _get_local_db_name()
     if env.is_postgresql:
-        get_db_postgresql(dump_only)
+        get_db_postgresql(dump_only, local_db_name)
     else:
-        get_db_mysql(dump_only)
+        get_db_mysql(dump_only, local_db_name)
 
 
 @task
@@ -354,6 +355,8 @@ def put_db(local_db_name=False):
     if not yes_no2:
         return
 
+    if not local_db_name:
+        local_db_name = _get_local_db_name()
     # go for it!
     if env.is_postgresql:
         put_db_postgresql(local_db_name)
@@ -361,7 +364,7 @@ def put_db(local_db_name=False):
         put_db_mysql(local_db_name)
 
 
-def get_db_mysql(dump_only=False):
+def get_db_mysql(dump_only=False, local_db_name=None):
     """
     dump db on server, import to local mysql (must exist)
     """
@@ -385,7 +388,7 @@ def get_db_mysql(dump_only=False):
     get(remote_path=remote_dump_file, local_path=local_dump_file)
     run('rm %s' % remote_dump_file)
     if not dump_only:
-        local('mysql -u root %s < %s' % (env.project_name, local_dump_file))
+        local('mysql -u root %s < %s' % (local_db_name, local_dump_file))
         local('rm %s' % local_dump_file)
 
 
@@ -432,7 +435,7 @@ def create_mycnf(force=False):
         local('rm .my.cnf')
 
 
-def get_db_postgresql(dump_only=False):
+def get_db_postgresql(dump_only=False, local_db_name=None):
     """
     dump db on server, import to local mysql (must exist)
     """
@@ -451,7 +454,7 @@ def get_db_postgresql(dump_only=False):
     if not dump_only:
         # local('dropdb %s_dev' % env.project_name)
         # local('createdb %s_dev' % env.project_name)
-        local('psql %s < %s' % (env.project_name, local_dump_file))
+        local('psql %s < %s' % (local_db_name, local_dump_file))
         local('rm %s' % local_dump_file)
 
 
@@ -595,3 +598,10 @@ def fix_permissions(path='.'):
     """
     puts("no need for fixing permissions yet!")
     return
+
+
+def _get_local_db_name():
+    local_db_name = getattr(env, 'local_db_name', None)
+    if not local_db_name:
+        local_db_name = env.project_name
+    return local_db_name
