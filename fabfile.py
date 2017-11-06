@@ -580,7 +580,7 @@ def dj(command):
     """
     Run a Django manage.py command on the server.
     """
-    cmd_prefix = 'cd {project_dir}'
+    cmd_prefix = 'cd {project_dir}'.format(**env)
     if getattr(env, 'custom_manage_py_root', None):
         cmd_prefix = 'cd {}'.format(env.custom_manage_py_root)
     virtualenv(
