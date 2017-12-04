@@ -99,7 +99,7 @@ def create_database():
         puts('PostgreSQL db must be created manually.')
     else:
         create_mycnf()
-        settings = get_settings()
+        settings = _get_settings()
         db_settings = settings.DATABASES
         run("echo \"CREATE DATABASE {dbname} CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
             "\" | mysql ".format(
@@ -242,6 +242,8 @@ def migrate(sync=True, migrate=True):
     """
     dj('migrate --noinput')
     # needed when using django-modeltranslation
+    # with third party apps
+    # make it configurable?!
     # dj('sync_translation_fields')
 
 
@@ -336,10 +338,11 @@ def get_version():
 @roles('db')
 def get_db(dump_only=False):
     local_db_name = _get_local_db_name()
+    remote_db_name = _get_remote_db_name()
     if env.is_postgresql:
-        get_db_postgresql(dump_only, local_db_name)
+        get_db_postgresql(local_db_name, remote_db_name, dump_only, )
     else:
-        get_db_mysql(dump_only, local_db_name)
+        get_db_mysql(local_db_name, remote_db_name, dump_only, )
 
 
 @task
@@ -355,22 +358,21 @@ def put_db(local_db_name=False):
     if not yes_no2:
         return
 
+    remote_db_name = _get_remote_db_name()
     if not local_db_name:
         local_db_name = _get_local_db_name()
     # go for it!
     if env.is_postgresql:
-        put_db_postgresql(local_db_name)
+        put_db_postgresql(local_db_name, remote_db_name)
     else:
-        put_db_mysql(local_db_name)
+        put_db_mysql(local_db_name, remote_db_name)
 
 
-def get_db_mysql(dump_only=False, local_db_name=None):
+def get_db_mysql(local_db_name, remote_db_name, dump_only=False):
     """
     dump db on server, import to local mysql (must exist)
     """
     create_mycnf()
-    settings = get_settings()
-    db_settings = settings.DATABASES
     date = datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
     dump_name = 'dump_%s_%s-%s.sql' % (env.project_name, env.env_prefix, date)
     remote_dump_file = os.path.join(env.project_dir, dump_name)
@@ -381,7 +383,7 @@ def get_db_mysql(dump_only=False, local_db_name=None):
         # ' --compatible=postgresql'
         # ' --default-character-set=utf8'
         ' {database} > {file}'.format(
-            database=db_settings["default"]["NAME"],
+            database=remote_db_name,
             file=remote_dump_file,
         )
     )
@@ -392,15 +394,11 @@ def get_db_mysql(dump_only=False, local_db_name=None):
         local('rm %s' % local_dump_file)
 
 
-def put_db_mysql(local_db_name=None):
+def put_db_mysql(local_db_name, remote_db_name):
     """
     dump local db, import on server database (must exist)
     """
     create_mycnf()
-    settings = get_settings()
-    db_settings = settings.DATABASES
-    if not local_db_name:
-        local_db_name = env.project_name
     dump_name = 'dump_for_%s.sql' % env.env_prefix
     local_dump_file = './%s' % dump_name
     local('mysqldump --user=root {database} > {file}'.format(
@@ -411,7 +409,7 @@ def put_db_mysql(local_db_name=None):
     put(remote_path=remote_dump_file, local_path=local_dump_file)
     local('rm %s' % local_dump_file)
     run('mysql {database} < {file}'.format(
-        database=db_settings["default"]["NAME"],
+        database=remote_db_name,
         file=remote_dump_file,
     ))
     run('rm %s' % remote_dump_file)
@@ -423,7 +421,7 @@ def create_mycnf(force=False):
     with hide('running', 'stdout'):
         exists = run('if [ -f ".my.cnf" ]; then echo 1; fi'.format(**env))
     if force or not exists:
-        settings = get_settings()
+        settings = _get_settings()
         db_settings = settings.DATABASES
         if exists:
             run('rm .my.cnf')
@@ -435,18 +433,16 @@ def create_mycnf(force=False):
         local('rm .my.cnf')
 
 
-def get_db_postgresql(dump_only=False, local_db_name=None):
+def get_db_postgresql(local_db_name, remote_db_name, dump_only=False):
     """
     dump db on server, import to local mysql (must exist)
     """
-    settings = get_settings()
-    db_settings = settings.DATABASES
     date = datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
     dump_name = 'dump_%s_%s-%s.sql' % (env.project_name, env.env_prefix, date)
     remote_dump_file = os.path.join(env.project_dir, dump_name)
     local_dump_file = './%s' % dump_name
     run('pg_dump -cO {database} > {file}'.format(
-        database=db_settings["default"]["NAME"],
+        database=remote_db_name,
         file=remote_dump_file,
     ))
     get(remote_path=remote_dump_file, local_path=local_dump_file)
@@ -458,12 +454,10 @@ def get_db_postgresql(dump_only=False, local_db_name=None):
         local('rm %s' % local_dump_file)
 
 
-def put_db_postgresql(local_db_name=None):
+def put_db_postgresql(local_db_name, remote_db_name):
     """
     dump local db, import on server database (must exist)
     """
-    settings = get_settings()
-    db_settings = settings.DATABASES
     if not local_db_name:
         local_db_name = env.project_name
     dump_name = 'dump_for_%s.sql' % env.env_prefix
@@ -475,7 +469,6 @@ def put_db_postgresql(local_db_name=None):
     remote_dump_file = os.path.join(env.project_dir, dump_name)
     put(remote_path=remote_dump_file, local_path=local_dump_file)
     local('rm %s' % local_dump_file)
-    remote_db_name = db_settings["default"]["NAME"]
     # run('dropdb %s' % remote_db_name)
     # run('createdb %s' % remote_db_name)
     run('psql  {database} < {file}'.format(
@@ -549,14 +542,6 @@ def put_media():
     )
 
 
-def get_settings(conf=None):
-    # do this here. django settings cannot be imported more than once...probably.
-    # still dont really get the mess here.
-    if not conf:
-        conf = env.project_conf
-    django.settings_module(conf)
-    from django.conf import settings
-    return settings
 
 
 # ==============================================================================
@@ -600,8 +585,27 @@ def fix_permissions(path='.'):
     return
 
 
+def _get_settings(conf=None):
+    # do this here. django settings cannot be imported more than once...probably.
+    # still dont really get the mess here.
+    if not conf:
+        conf = env.project_conf
+    django.settings_module(conf)
+    from django.conf import settings
+    return settings
+
+
 def _get_local_db_name():
     local_db_name = getattr(env, 'local_db_name', None)
     if not local_db_name:
         local_db_name = env.project_name
     return local_db_name
+
+
+def _get_remote_db_name():
+    remote_db_name = getattr(env, 'remote_db_name', None)
+    if not remote_db_name:
+        settings = _get_settings()
+        db_settings = settings.DATABASES
+        remote_db_name = db_settings['default']['NAME']
+    return remote_db_name
