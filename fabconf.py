@@ -10,6 +10,7 @@ env.is_postgresql = True  # False for mysql! only used for put/get_db
 env.needs_main_nginx_files = True
 env.is_nginx_gunicorn = True
 env.is_uwsgi = False
+env.is_apache = False
 env.remote_ref = 'origin/master'
 # these will be checked for changes
 env.requirements_files = ['requirements/deploy.txt', ]
