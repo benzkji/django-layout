@@ -2,26 +2,30 @@
 # pip-compile requirements/deploy.in
 # pip-sync requirements/deploy.txt
 
-mysql-python==1.2.5
-psycopg2==2.7.3.1
-raven==6.1.0
 
-django==1.11.4
+# base
+# mysql-python==1.2.5
+psycopg2
+raven
+
+# django + tools
+django==1.11.8
 django-split-settings==0.2.5
 django-compressor==2.2
 django-modeltranslation==0.12
-django-ckeditor==5.2.1
+django-ckeditor==5.4
 
--e 'git+git@github.com:benzkji/django-ckeditor-link.git@8978040a976421444ac09f9427428696e78c0bc9#egg=django-ckeditor-link'
--e 'git+git@github.com:benzkji/django-mailprotector.git@8261b155f5d626d5949dbd9324e86a81e009797e#egg=django-mailprotector'
--e 'git+git@github.com:rouxcode/django-admin-sort.git@f510c80d4fefb87e87f7627f00070f4d909088ec#egg=django_admin_sort'
-django-formfieldstash==0.0.2
-django-ckeditor-link==0.1.3
-# djangocms-pluginbase==0.1
-# djangocms-tools==0.1
+# own tools
+-e 'git+git@github.com:benzkji/djangocms-baseplugins.git@develop#egg=djangocms-baseplugins'
+-e 'git+git@github.com:benzkji/django-filer-addons.git@develop#egg=djangocms-filer-addons'
+django-formfieldstash
+django-ckeditor-link
+djangocms-misc
 
-django-filer==1.2.8
-Pillow==3.2.0
+# filer
+django-filer==1.3
+easy-thumbnails==2.5
 
-django-cms==3.4.4
+# cms
+django-cms==3.4.5
 djangocms-admin-style==1.2.7
