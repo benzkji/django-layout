@@ -68,7 +68,7 @@ def create_virtualenv(force=False):
         else:
             run('rm -rf {virtualenv_dir}'.format(**env))
     venv_command = 'virtualenv {virtualenv_dir} --no-site-packages'.format(**env)
-    if env.is_python3:
+    if getattr(env, 'is_python3', None):
         venv_command += ' --python=python3'
     run(venv_command)
     requirements()
@@ -99,7 +99,7 @@ def create_database():
         puts('PostgreSQL db must be created manually.')
     else:
         create_mycnf()
-        settings = get_settings()
+        settings = _get_settings()
         db_settings = settings.DATABASES
         run("echo \"CREATE DATABASE {dbname} CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
             "\" | mysql ".format(
@@ -112,7 +112,7 @@ def create_database():
 @roles('web', 'db')
 def bootstrap():
     clone_repos()
-    # create_nginx_folders()  # only on request, so we dont overwrite existing settings.
+    create_nginx_folders()
     create_virtualenv()
     create_database()
     puts('Bootstrapped {project_name} on {host} (cloned repos, created venv and db).'.format(**env))
@@ -124,7 +124,7 @@ def create_nginx_folders():
     """
     do it.
     """
-    if env.needs_main_nginx_files:
+    if getattr(env, 'needs_main_nginx_files', None):
         with hide('running', 'stdout'):
             exists = run('if [ -d "~/nginx" ]; then echo 1; fi')
         if exists:
@@ -215,8 +215,12 @@ def crontab():
     install crontab
     """
     if env.deploy_crontab:
+        if getattr(env, 'contab_file', None):
+            crontab_file = env.crontab_file
+        else:
+            crontab_file = 'deployment/crontab.txt'
         with cd(env.project_dir):
-            run('crontab deployment/crontab.txt')
+            run('crontab {}'.format(crontab_file))
     else:
         puts('not deploying crontab to %s!' % env.env_prefix)
 
@@ -238,6 +242,8 @@ def migrate(sync=True, migrate=True):
     """
     dj('migrate --noinput')
     # needed when using django-modeltranslation
+    # with third party apps
+    # make it configurable?!
     # dj('sync_translation_fields')
 
 
@@ -261,6 +267,8 @@ def restart():
         copy_restart_nginx()
     if env.is_uwsgi:
         copy_restart_uwsgi()
+    if env.is_apache:
+        exit("apache restart not implemented!")
 
 
 def stop_gunicorn():
@@ -269,20 +277,20 @@ def stop_gunicorn():
 
 
 def copy_restart_gunicorn():
-    for site_name in env.sites:
+    for site in env.sites:
         run(
-            'cp {project_dir}/deployment/gunicorn/{site_name}.{env_prefix}.sh'
-            ' $HOME/init/.'.format(site_name=site_name, **env)
+            'cp {project_dir}/deployment/gunicorn/{site}-{env_prefix}.sh'
+            ' $HOME/init/.'.format(site=site, **env)
         )
-        run('chmod u+x $HOME/init/{site_name}.{env_prefix}.sh'.format(site_name=site_name, **env))
-        run(env.gunicorn_restart_command.format(site_name=site_name, **env))
+        run('chmod u+x $HOME/init/{site}-{env_prefix}.sh'.format(site=site, **env))
+        run(env.gunicorn_restart_command.format(site=site, **env))
 
 
 def copy_restart_nginx():
-    for site_name in env.sites:
+    for site in env.sites:
         run(
-            'cp {project_dir}/deployment/nginx/{site_name}.{env_prefix}.txt'
-            ' $HOME/nginx/conf/sites/.'.format(site_name=site_name, **env)
+            'cp {project_dir}/deployment/nginx/{site}-{env_prefix}.txt'
+            ' $HOME/nginx/conf/sites/.'.format(site=site, **env)
         )
     # nginx main, may be optional!
     if env.needs_main_nginx_files:
@@ -296,12 +304,13 @@ def copy_restart_nginx():
 
 
 def copy_restart_uwsgi():
-    for site_name in env.sites:
+    for site in env.sites:
         run(
-            'cp {project_dir}/deployment/uwsgi/{site_name}.{env_prefix}.ini'
-            ' $HOME/nginx/conf/sites/.'.format(site_name=site_name, **env)
+            'cp {project_dir}/deployment/uwsgi/{site}-{env_prefix}.ini'
+            ' $HOME/uwsgi.d/.'.format(site=site, **env)
         )
-        run(env.uwsgi_restart_command.format(site_name=site_name, **env))
+        # cp does the touch already!
+        # run(env.uwsgi_restart_command.format(site=site, **env))
 
 
 @task
@@ -329,10 +338,12 @@ def get_version():
 @task
 @roles('db')
 def get_db(dump_only=False):
+    local_db_name = _get_local_db_name()
+    remote_db_name = _get_remote_db_name()
     if env.is_postgresql:
-        get_db_postgresql(dump_only)
+        get_db_postgresql(local_db_name, remote_db_name, dump_only, )
     else:
-        get_db_mysql(dump_only)
+        get_db_mysql(local_db_name, remote_db_name, dump_only, )
 
 
 @task
@@ -348,20 +359,21 @@ def put_db(local_db_name=False):
     if not yes_no2:
         return
 
+    remote_db_name = _get_remote_db_name()
+    if not local_db_name:
+        local_db_name = _get_local_db_name()
     # go for it!
     if env.is_postgresql:
-        put_db_postgresql(local_db_name)
+        put_db_postgresql(local_db_name, remote_db_name)
     else:
-        put_db_mysql(local_db_name)
+        put_db_mysql(local_db_name, remote_db_name)
 
 
-def get_db_mysql(dump_only=False):
+def get_db_mysql(local_db_name, remote_db_name, dump_only=False):
     """
     dump db on server, import to local mysql (must exist)
     """
     create_mycnf()
-    settings = get_settings()
-    db_settings = settings.DATABASES
     date = datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
     dump_name = 'dump_%s_%s-%s.sql' % (env.project_name, env.env_prefix, date)
     remote_dump_file = os.path.join(env.project_dir, dump_name)
@@ -372,26 +384,22 @@ def get_db_mysql(dump_only=False):
         # ' --compatible=postgresql'
         # ' --default-character-set=utf8'
         ' {database} > {file}'.format(
-            database=db_settings["default"]["NAME"],
+            database=remote_db_name,
             file=remote_dump_file,
         )
     )
     get(remote_path=remote_dump_file, local_path=local_dump_file)
     run('rm %s' % remote_dump_file)
     if not dump_only:
-        local('mysql -u root %s < %s' % (env.project_name, local_dump_file))
+        local('mysql -u root %s < %s' % (local_db_name, local_dump_file))
         local('rm %s' % local_dump_file)
 
 
-def put_db_mysql(local_db_name=None):
+def put_db_mysql(local_db_name, remote_db_name):
     """
     dump local db, import on server database (must exist)
     """
     create_mycnf()
-    settings = get_settings()
-    db_settings = settings.DATABASES
-    if not local_db_name:
-        local_db_name = env.project_name
     dump_name = 'dump_for_%s.sql' % env.env_prefix
     local_dump_file = './%s' % dump_name
     local('mysqldump --user=root {database} > {file}'.format(
@@ -402,7 +410,7 @@ def put_db_mysql(local_db_name=None):
     put(remote_path=remote_dump_file, local_path=local_dump_file)
     local('rm %s' % local_dump_file)
     run('mysql {database} < {file}'.format(
-        database=db_settings["default"]["NAME"],
+        database=remote_db_name,
         file=remote_dump_file,
     ))
     run('rm %s' % remote_dump_file)
@@ -414,7 +422,7 @@ def create_mycnf(force=False):
     with hide('running', 'stdout'):
         exists = run('if [ -f ".my.cnf" ]; then echo 1; fi'.format(**env))
     if force or not exists:
-        settings = get_settings()
+        settings = _get_settings()
         db_settings = settings.DATABASES
         if exists:
             run('rm .my.cnf')
@@ -426,18 +434,16 @@ def create_mycnf(force=False):
         local('rm .my.cnf')
 
 
-def get_db_postgresql(dump_only=False):
+def get_db_postgresql(local_db_name, remote_db_name, dump_only=False):
     """
     dump db on server, import to local mysql (must exist)
     """
-    settings = get_settings()
-    db_settings = settings.DATABASES
     date = datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
     dump_name = 'dump_%s_%s-%s.sql' % (env.project_name, env.env_prefix, date)
     remote_dump_file = os.path.join(env.project_dir, dump_name)
     local_dump_file = './%s' % dump_name
     run('pg_dump -cO {database} > {file}'.format(
-        database=db_settings["default"]["NAME"],
+        database=remote_db_name,
         file=remote_dump_file,
     ))
     get(remote_path=remote_dump_file, local_path=local_dump_file)
@@ -445,16 +451,14 @@ def get_db_postgresql(dump_only=False):
     if not dump_only:
         # local('dropdb %s_dev' % env.project_name)
         # local('createdb %s_dev' % env.project_name)
-        local('psql %s < %s' % (env.project_name, local_dump_file))
+        local('psql %s < %s' % (local_db_name, local_dump_file))
         local('rm %s' % local_dump_file)
 
 
-def put_db_postgresql(local_db_name=None):
+def put_db_postgresql(local_db_name, remote_db_name):
     """
     dump local db, import on server database (must exist)
     """
-    settings = get_settings()
-    db_settings = settings.DATABASES
     if not local_db_name:
         local_db_name = env.project_name
     dump_name = 'dump_for_%s.sql' % env.env_prefix
@@ -466,7 +470,6 @@ def put_db_postgresql(local_db_name=None):
     remote_dump_file = os.path.join(env.project_dir, dump_name)
     put(remote_path=remote_dump_file, local_path=local_dump_file)
     local('rm %s' % local_dump_file)
-    remote_db_name = db_settings["default"]["NAME"]
     # run('dropdb %s' % remote_db_name)
     # run('createdb %s' % remote_db_name)
     run('psql  {database} < {file}'.format(
@@ -540,14 +543,6 @@ def put_media():
     )
 
 
-def get_settings(conf=None):
-    # do this here. django settings cannot be imported more than once...probably.
-    # still dont really get the mess here.
-    if not conf:
-        conf = env.project_conf
-    django.settings_module(conf)
-    from django.conf import settings
-    return settings
 
 
 # ==============================================================================
@@ -571,10 +566,16 @@ def dj(command):
     """
     Run a Django manage.py command on the server.
     """
-    virtualenv('{project_dir}/manage.py {dj_command} '
-               '--settings {project_conf}'.format(dj_command=command, **env))
-    # run('{virtualenv_dir}/bin/manage.py {dj_command} '
-    #    '--settings {project_conf}'.format(dj_command=command, **env))
+    cmd_prefix = 'cd {project_dir}'.format(**env)
+    if getattr(env, 'custom_manage_py_root', None):
+        cmd_prefix = 'cd {}'.format(env.custom_manage_py_root)
+    virtualenv(
+        '{cmd_prefix} && ./manage.py {dj_command} --settings {project_conf}'.format(
+            dj_command=command,
+            cmd_prefix=cmd_prefix,
+            **env
+        )
+    )
 
 
 def fix_permissions(path='.'):
@@ -583,3 +584,29 @@ def fix_permissions(path='.'):
     """
     puts("no need for fixing permissions yet!")
     return
+
+
+def _get_settings(conf=None):
+    # do this here. django settings cannot be imported more than once...probably.
+    # still dont really get the mess here.
+    if not conf:
+        conf = env.project_conf
+    django.settings_module(conf)
+    from django.conf import settings
+    return settings
+
+
+def _get_local_db_name():
+    local_db_name = getattr(env, 'local_db_name', None)
+    if not local_db_name:
+        local_db_name = env.project_name
+    return local_db_name
+
+
+def _get_remote_db_name():
+    remote_db_name = getattr(env, 'remote_db_name', None)
+    if not remote_db_name:
+        settings = _get_settings()
+        db_settings = settings.DATABASES
+        remote_db_name = db_settings['default']['NAME']
+    return remote_db_name

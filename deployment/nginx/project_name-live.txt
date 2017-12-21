@@ -2,7 +2,10 @@
 # redirects ftw
 server {
     listen 127.0.0.1:62321;
-    server_name {{ project_name }}.com {{ project_name }}.live.bnzk.ch;
+    server_name
+        {{ project_name }}.com
+        {{ project_name }}.live.bnzk.ch
+        ;
     rewrite ^/(.*) http://www.{{ project_name }}.com permanent;
 }
 

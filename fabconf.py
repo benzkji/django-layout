@@ -10,6 +10,7 @@ env.is_postgresql = True  # False for mysql! only used for put/get_db
 env.needs_main_nginx_files = True
 env.is_nginx_gunicorn = True
 env.is_uwsgi = False
+env.is_apache = False
 env.remote_ref = 'origin/master'
 # these will be checked for changes
 env.requirements_files = ['requirements/deploy.txt', ]
@@ -58,8 +59,9 @@ def generic_env_settings():
         env.deploy_crontab = False
     env.project_dir = '/home/{main_user}/sites/{project_name}-{env_prefix}'.format(**env)
     env.virtualenv_dir = '{project_dir}/virtualenv'.format(**env)
-    env.gunicorn_restart_command = '~/init/{site_name}.{env_prefix}.sh restart'
-    env.gunicorn_stop_command = '~/init/{site_name}.{env_prefix}.sh stop'
+    env.gunicorn_restart_command = '~/init/{site}-{env_prefix}.sh restart'
+    env.gunicorn_stop_command = '~/init/{site}-{env_prefix}.sh stop'
     env.nginx_restart_command = '~/init/nginx.sh restart'
-    env.uwsgi_restart_command = 'touch $HOME/uwsgi.d/{site_name}.{env_prefix}.ini'
+    # not needed with uwsgi emporer mode, cp is enough
+    # env.uwsgi_restart_command = 'touch $HOME/uwsgi.d/{site_name}-{env_prefix}.ini'
     env.project_conf = 'project.settings._{project_name}_{env_prefix}'.format(**env)
