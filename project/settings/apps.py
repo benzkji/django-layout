@@ -11,9 +11,11 @@ INSTALLED_APPS = [
 
     '{{ project_name }}',
 
-    'djangocms_misc',
+    # 'djangocms_misc',
+    'djangocms_misc.basic',
     # 'djangocms_misc.alternate_toolbar',
-    # 'djangocms_misc.global_untranslated_placeholder',
+    'djangocms_misc.admin_style',
+    'djangocms_misc.global_untranslated_placeholder',
     'formfieldstash',
     # 'ckeditor_link',
     # 'ckeditor_link.link_model',
