@@ -110,7 +110,7 @@ class LinkBase(models.Model):
             return self.mailto
 
         if object is not None:
-            return unicode(obj)
+            return str(obj)
         return ''
 
     def get_link_type(self):

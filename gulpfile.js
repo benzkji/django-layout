@@ -114,7 +114,20 @@ gulp.task('pip-compile', shell.task(
 );
 
 
+gulp.task('pip-compile-upgrade', shell.task(
+        [
+            'pip-compile requirements/dev.in --upgrade',
+            'pip-compile requirements/deploy.in --upgrade',
+            // let it get a bit older, until it really works
+            // 'pip-sync requirements/dev.txt',
+            'pip install -r requirements/dev.txt',
+        ]
+    )
+);
+
+
 gulp.task('default', ['sass', 'iconfont', 'svgstore', 'pip-compile', 'jshint', 'flake8']);
+
 
 gulp.task('watch', function () {
     livereload.listen();
