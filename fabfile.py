@@ -17,9 +17,6 @@ sys.path.insert(0, sys.path[0])
 # set some basic things, that are just needed.
 env.forward_agent = True
 
-# Set the default environment.
-stage()
-
 # check for some defaults to be set?
 # in a method, to be called after each setup? ie at the end of stage/live?
 # def check_setup():
