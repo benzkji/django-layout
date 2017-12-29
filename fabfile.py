@@ -99,9 +99,7 @@ def create_database():
         settings = _get_settings()
         db_settings = settings.DATABASES
         run("echo \"CREATE DATABASE {dbname} CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
-            "\" | mysql ".format(
-                dbname=db_settings["default"]["NAME"],
-            )
+            "\" | mysql ".format(dbname=db_settings["default"]["NAME"], )
         )
 
 
@@ -538,8 +536,6 @@ def put_media():
         delete=True,
         extra_opts=extra_opts,
     )
-
-
 
 
 # ==============================================================================

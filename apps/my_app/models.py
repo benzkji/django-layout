@@ -1,11 +1,12 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
+from django.urls import reverse
 from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.text import slugify
 
-from .managers import PublishedManager
+from {{ project_name }}.managers import PublishedManager
 
 
 @python_2_unicode_compatible

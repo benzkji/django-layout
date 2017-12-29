@@ -1,6 +1,7 @@
 -r basics.in
 
-fabric
+# fabric
+fabric3
 flake8
 # flake8-respect-noqa
 # mock

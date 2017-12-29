@@ -18,4 +18,5 @@ class MyPlugin(CMSPluginBase):
         context['placeholder'] = placeholder
         return context
 
+
 plugin_pool.register_plugin(MyPlugin)

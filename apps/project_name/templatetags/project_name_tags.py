@@ -24,7 +24,6 @@ def get_fb_image(context):
         content = placeholders.filter(slot='home_content')
         if not fb_image and content.count():
             plugins = content[0].get_plugins()
-            print plugins
             for plugin in plugins:
                 instance, plugin = plugin.get_plugin_instance()
                 if instance and getattr(instance, 'image', None):
