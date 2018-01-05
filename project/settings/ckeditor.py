@@ -1,24 +1,32 @@
+from django.urls import reverse_lazy
 
-# CKEDITOR_SETTINGS = {
-#    'language': '{{ language }}',
-#    'toolbar': 'CMS',
-#    'skin': 'moono',
-# }
 
-CKEDITOR_SETTINGS = {
-    'language': '{{ language }}',
-    'toolbar': 'BNZK',
-    'toolbar_BNZK': [
-        ['Undo', 'Redo'],
-        ['cmsplugins', ],
-        ['Bold', 'RemoveFormat', ],
-        ['Format'],
-        # ['H1', 'H2', 'H3', ], only works with standard CK!
-        ['BulletedList', 'NumberedList' '-', 'Outdent', 'Indent'],
-        ['Cut', 'Copy', 'PasteText', ],
-        ['cleanup', ],
-        ['ShowBlocks', 'Source'],
-    ],
-    'format_tags': 'h1;h2;h3;p',
-    'skin': 'moono',
+CKEDITOR_LINK_MODEL = '{{ project_name }}.models.Link'
+CKEDITOR_LINK_IFRAME_URL = reverse_lazy('admin:{{ project_name }}_link_add')
+CKEDITOR_LINK_VERIFY_URL = reverse_lazy('admin:{{ project_name }}_link_verify')
+
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'djangolinkIframeURL': CKEDITOR_LINK_IFRAME_URL,
+        'djangolinkVerifyURL': CKEDITOR_LINK_VERIFY_URL,
+        'djangolinkFallbackField': 'free',
+        'extraPlugins': ','.join(
+            [
+                # your extra plugins here
+                'djangolink',
+            ]),
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Format'],
+            ['Bold', ],
+            ['BulletedList', ],
+            ['DjangoLink', 'Unlink'],
+            ['Cut', 'Copy', 'PasteText', ],
+            ['cleanup', ],
+            ['ShowBlocks', 'Source'],
+        ],
+        'format_tags': 'h2;p',
+        'width': '750',
+    }
 }
