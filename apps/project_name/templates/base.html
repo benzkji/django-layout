@@ -17,7 +17,7 @@
 
         {% comment %}if has...<link rel="apple-touch-icon" href="apple-touch-icon.png">{% endcomment %}
 
-        <script type="text/javascript">
+        <script>
             document.querySelector('html').className += ' js';
             {# https://www.quora.com/How-do-I-disable-the-hover-CSS-rule-for-iPhone-and-iPad-touch-device-browsers/answer/John-Miller-386 #}
             document.addEventListener('touchstart', function addtouchclass(e){ // first time user touches the screen
@@ -58,10 +58,10 @@
         </div>
 
         {% compress js %}
-            <script src="{{ STATIC_URL }}{{ project_name }}/components/jquery/dist/jquery.js" type="text/javascript"></script>
-            <script src="{{ STATIC_URL }}{{ project_name }}/components/jqueryui/ui/widget.js" type="text/javascript"></script>
-            <script src="{{ STATIC_URL }}{{ project_name }}/js/whatever.js" type="text/javascript"></script>
-            <script src="{{ STATIC_URL }}{{ project_name }}/js/main.js" type="text/javascript"></script>
+            <script src="{{ STATIC_URL }}{{ project_name }}/components/jquery/dist/jquery.js"></script>
+            <script src="{{ STATIC_URL }}{{ project_name }}/components/jqueryui/ui/widget.js"></script>
+            <script src="{{ STATIC_URL }}{{ project_name }}/js/whatever.js"></script>
+            <script src="{{ STATIC_URL }}{{ project_name }}/js/main.js"></script>
         {% endcompress %}
 
         {% render_block "js" %}
