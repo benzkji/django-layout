@@ -369,18 +369,21 @@ def get_db_mysql(local_db_name, remote_db_name, dump_only=False):
     dump db on server, import to local mysql (must exist)
     """
     create_mycnf()
+    my_cnf_file = _get_my_cnf_name()
     date = datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
     dump_name = 'dump_%s_%s-%s.sql' % (env.project_name, env.env_prefix, date)
     remote_dump_file = os.path.join(env.project_dir, dump_name)
     local_dump_file = './%s' % dump_name
-    run(
-        'mysqldump '
+    run('mysqldump'
         # for pg conversion!
         # ' --compatible=postgresql'
         # ' --default-character-set=utf8'
+        ' --defaults-file={cnf_file}'
         ' {database} > {file}'.format(
+            cnf_file=my_cnf_file,
             database=remote_db_name,
             file=remote_dump_file,
+            **env
         )
     )
     get(remote_path=remote_dump_file, local_path=local_dump_file)
@@ -395,6 +398,7 @@ def put_db_mysql(local_db_name, remote_db_name):
     dump local db, import on server database (must exist)
     """
     create_mycnf()
+    my_cnf_file = _get_my_cnf_name()
     dump_name = 'dump_for_%s.sql' % env.env_prefix
     local_dump_file = './%s' % dump_name
     local('mysqldump --user=root {database} > {file}'.format(
@@ -404,29 +408,46 @@ def put_db_mysql(local_db_name, remote_db_name):
     remote_dump_file = os.path.join(env.project_dir, dump_name)
     put(remote_path=remote_dump_file, local_path=local_dump_file)
     local('rm %s' % local_dump_file)
-    run('mysql {database} < {file}'.format(
-        database=remote_db_name,
-        file=remote_dump_file,
-    ))
+    run('mysql  '
+        ' --defaults-file={cnf_file}'
+        ' {database} < {file} '.format(
+            cnf_file=my_cnf_file,
+            database=remote_db_name,
+            file=remote_dump_file,
+            **env
+        )
+    )
     run('rm %s' % remote_dump_file)
 
 
 @task
 @roles('db')
 def create_mycnf(force=False):
+    my_cnf_file = _get_my_cnf_name()
     with hide('running', 'stdout'):
-        exists = run('if [ -f ".my.cnf" ]; then echo 1; fi'.format(**env))
+        exists = run('if [ -f "{cnf_file}" ]; then echo 1; fi'.format(cnf_file=my_cnf_file, **env))
     if force or not exists:
         settings = _get_settings()
         db_settings = settings.DATABASES
         if exists:
-            run('rm .my.cnf')
-        local('echo "[client]" >> .my.cnf')
-        local('echo "# User/PW will be sent to all standard MySQL clients" >> .my.cnf')
-        local('echo "password = \"{pw}\"" >> .my.cnf'.format(pw=db_settings["default"]["PASSWORD"]))
-        local('echo "user = \"{user}\"" >> .my.cnf'.format(user=db_settings["default"]["USER"]))
-        put('.my.cnf')
-        local('rm .my.cnf')
+            run('rm {cnf_file}'.format(cnf_file=my_cnf_file, **env))
+        local('echo "[client]" >> {cnf_file}'.format(cnf_file=my_cnf_file, **env))
+        local('echo "# The following password will be sent to all'
+              'standard MySQL clients" >> {cnf_file}'.format(cnf_file=my_cnf_file, **env))
+        local('echo "password = \"{pw}\"" >> {cnf_file}'.format(
+                cnf_file=my_cnf_file,
+                pw=db_settings["default"]["PASSWORD"],
+                **env
+            )
+        )
+        local('echo "user = \"{db_user}\"" >> {cnf_file}'.format(
+                cnf_file=my_cnf_file,
+                db_user=db_settings["default"]["USER"],
+                **env
+            )
+        )
+        put('{cnf_file}'.format(cnf_file=my_cnf_file))
+        local('rm {cnf_file}'.format(cnf_file=my_cnf_file, **env))
 
 
 def get_db_postgresql(local_db_name, remote_db_name, dump_only=False):
@@ -587,6 +608,10 @@ def _get_settings(conf=None):
     django.settings_module(conf)
     from django.conf import settings
     return settings
+
+
+def _get_my_cnf_name():
+    return '.{project_name}-{env_prefix}.cnf'.format(**env)
 
 
 def _get_local_db_name():
