@@ -37,10 +37,11 @@
         {% endcompress %}
         {% comment %}if need...<script src="{{ STATIC_URL }}{{ project_name }}/components/modernizr/modernizr.js"></script>{% endcomment %}
 
+        {% render_block "css" %}
+
     </head>
     <body class="{% block body_class %}{% endblock %}">
 
-        {% render_block "css" %}
         {% cms_toolbar %}
 
         <div id="container">
@@ -64,8 +65,6 @@
             <script src="{{ STATIC_URL }}{{ project_name }}/js/main.js"></script>
         {% endcompress %}
 
-        {% render_block "js" %}
-
         {% if not debug and not request.user.is_staff %}
             <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
             <script>
@@ -77,6 +76,8 @@
                 ga('create','UA-{{analytics_ua}}','auto');ga('send','pageview');
             </script>
         {% endif %}
+
+        {% render_block "js" %}
 
     </body>
 </html>

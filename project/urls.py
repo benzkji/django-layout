@@ -10,10 +10,10 @@ from django.contrib import admin
 urlpatterns = [
     # url(r'', include('{{ project_name }}.urls')),
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-    url(r'^admin/', include(admin.site.urls)),
 ]
 
 urlpatterns = urlpatterns + i18n_patterns(
+    url(r'^admin/', admin.site.urls),
     url(r'^', include('cms.urls')),
 )
 
