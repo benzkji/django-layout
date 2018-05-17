@@ -34,4 +34,4 @@ class NearbyQuerySet(PublishedQuerySet):
                        where=[gcd_lt],
                        params=[lat, lng, lat, proximity],
                        order_by=['distance', ]
-                   )
+                   )  # noqa

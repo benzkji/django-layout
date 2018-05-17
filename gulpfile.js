@@ -126,7 +126,7 @@ gulp.task('pip-compile-upgrade', shell.task(
 );
 
 
-gulp.task('default', ['sass', 'iconfont', 'svgstore', 'pip-compile', 'jshint', 'flake8']);
+gulp.task('default', ['sass', 'pip-compile', 'jshint', 'flake8']);
 
 
 gulp.task('watch', function () {
