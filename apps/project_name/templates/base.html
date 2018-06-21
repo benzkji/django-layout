@@ -3,6 +3,7 @@
 {% load compress cms_tags menu_tags sekizai_tags %}
 
     <head>
+        {% language_chooser 'menus/hreflang.html' %}
         <meta charset="utf-8">
         {# <meta http-equiv="x-ua-compatible" content="ie=edge">#}
         {% page_attribute "page_title" as cms_page_title %}
