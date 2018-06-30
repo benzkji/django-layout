@@ -267,8 +267,8 @@ def restart():
 
 
 def stop_gunicorn():
-    for site_name in env.sites:
-        run(env.gunicorn_stop_command.format(site_name=site_name, **env))
+    for site in env.sites:
+        run(env.gunicorn_stop_command.format(site=site, **env))
 
 
 def copy_restart_gunicorn():

@@ -63,7 +63,7 @@ def generic_env_settings():
     env.gunicorn_stop_command = '~/init/{site}-{env_prefix}.sh stop'
     env.nginx_restart_command = '~/init/nginx.sh restart'
     # not needed with uwsgi emporer mode, cp is enough
-    # env.uwsgi_restart_command = 'touch $HOME/uwsgi.d/{site_name}-{env_prefix}.ini'
+    # env.uwsgi_restart_command = 'touch $HOME/uwsgi.d/{site}-{env_prefix}.ini'
     env.project_conf = 'project.settings._{project_name}_{env_prefix}'.format(**env)
 
 
