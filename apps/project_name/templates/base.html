@@ -1,6 +1,6 @@
 <!doctype html>
 <html class="no-js" lang="{{ LANGUAGE_CODE }}">
-{% load compress cms_tags menu_tags sekizai_tags %}
+{% load compress cms_tags menu_tags sekizai_tags static %}
 
     <head>
         {% language_chooser 'menus/hreflang.html' %}
@@ -33,10 +33,10 @@
         </script>
 
         {% compress css inline %}
-            <link rel="stylesheet" href="{{ STATIC_URL }}{{ project_name }}/components/normalize.css/normalize.css">
-            <link rel="stylesheet" href="{{ STATIC_URL }}{{ project_name }}/css/screen.css">
+            <link rel="stylesheet" href="{% static '{{ project_name }}/components/normalize.css/normalize.css' %}">
+            <link rel="stylesheet" href="{% static '{{ project_name }}/css/screen.css' %}">
         {% endcompress %}
-        {% comment %}if need...<script src="{{ STATIC_URL }}{{ project_name }}/components/modernizr/modernizr.js"></script>{% endcomment %}
+        {% comment %}if need...<script src="{% static '{{ project_name }}/components/modernizr/modernizr.js' %}"></script>{% endcomment %}
 
         {% render_block "css" %}
 
@@ -48,7 +48,7 @@
         <div id="container">
 
             <header>
-                <a class="logo"><img src="{{ STATIC_URL }}{{ project_name }}/img/logo.png" alt="Logo"></a>
+                <a class="logo"><img src="{% static '{{ project_name }}/img/logo.png' %}" alt="Logo"></a>
                 <nav class="nav nav_main">
                     {% show_menu 0 2 2 2 %}
                 </nav>
@@ -60,10 +60,10 @@
         </div>
 
         {% compress js %}
-            <script src="{{ STATIC_URL }}{{ project_name }}/components/jquery/dist/jquery.js"></script>
-            <script src="{{ STATIC_URL }}{{ project_name }}/components/jqueryui/ui/widget.js"></script>
-            <script src="{{ STATIC_URL }}{{ project_name }}/js/whatever.js"></script>
-            <script src="{{ STATIC_URL }}{{ project_name }}/js/main.js"></script>
+            <script src="{% static '{{ project_name }}/components/jquery/dist/jquery.js' %}"></script>
+            <script src="{% static '{{ project_name }}/components/jqueryui/ui/widget.js' %}"></script>
+            <script src="{% static '{{ project_name }}/js/whatever.js' %}"></script>
+            <script src="{% static '{{ project_name }}/js/main.js' %}"></script>
         {% endcompress %}
 
         {% if not debug and not request.user.is_staff %}
