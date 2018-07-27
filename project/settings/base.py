@@ -111,6 +111,7 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'sekizai.context_processors.sekizai',
                 'cms.context_processors.cms_settings',
+                'djangocms_misc.basic.context_processors.get_env',
             ],
             'loaders': [
                 'django.template.loaders.filesystem.Loader',

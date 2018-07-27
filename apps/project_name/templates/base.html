@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="{{ LANGUAGE_CODE }}">
+<html class="{{ ENV }} no-js" lang="{{ LANGUAGE_CODE }}">
 {% load compress cms_tags menu_tags sekizai_tags static %}
 
     <head>
@@ -68,7 +68,7 @@
             <script src="{% static '{{ project_name }}/js/main.js' %}"></script>
         {% endcompress %}
 
-        {% if not debug and not request.user.is_staff %}
+        {% if is_live and not request.user.is_staff %}
             <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
             <script>
                 (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
