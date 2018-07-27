@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     # 'filer_addons.filer_gui',
     # 'filer_addons.filer_signals',
 
+    # 'djangocms_baseplugins.baseplugin',
     # 'djangocms_baseplugins.section',
     # 'djangocms_baseplugins.slider',
     # 'djangocms_baseplugins.gallery',
