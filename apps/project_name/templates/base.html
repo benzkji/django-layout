@@ -36,7 +36,9 @@
             <link rel="stylesheet" href="{% static '{{ project_name }}/components/normalize.css/normalize.css' %}">
             <link rel="stylesheet" href="{% static '{{ project_name }}/css/screen.css' %}">
         {% endcompress %}
-        {% comment %}if need...<script src="{% static '{{ project_name }}/components/modernizr/modernizr.js' %}"></script>{% endcomment %}
+        {% comment %}
+            if need...<script src="{% static '{{ project_name }}/components/modernizr/modernizr.js' %}"></script>
+        {% endcomment %}
 
         {% render_block "css" %}
 
