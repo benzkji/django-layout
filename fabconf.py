@@ -28,7 +28,7 @@ def live():
     Use the live deployment environment.
     """
     env.env_prefix = 'live'
-    env.deploy_crontab = False
+    env.deploy_crontab = True
     env.main_user = '{project_name}'.format(**env)
     server = '{main_user}@s20.wservices.ch'.format(**env)
     env.roledefs = {
@@ -44,7 +44,7 @@ def stage():
     Use the sandbox deployment environment on xy.bnzk.ch.
     """
     env.env_prefix = 'stage'
-    env.deploy_crontab = True
+    env.deploy_crontab = False
     env.main_user = '{project_name}'.format(**env)
     server = '{main_user}@s20.wservices.ch'.format(**env)
     env.roledefs = {
