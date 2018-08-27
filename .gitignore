@@ -1,17 +1,35 @@
 
+# IDEs
+.idea/
+
+# user data (uploads, static files, etc)
+/public/
+/media/
+/static/
+# old style
+/project/public/
+/project/media/
+/project/static/
+
+# black hole
+node_modules/
+# python env
+virtualenv/
+
+# dumps, mysql conf/pw file
+*.cnf
+*.db
+*.sql
+
+# compiled, builds, cache, etc
 *.pyc
 *.egg-info
 docs/_build
-.idea/
-public/
 .sass-cache/
-node_modules/
-virtualenv/
+*.sock
+*.pid
 
-*database*.db
-dump*.sql
-# mysql user/pw files
-*.cnf
+
 
 # github default python gitignore. FTW.
 
@@ -61,7 +79,7 @@ coverage.xml
 *.mo
 *.pot
 
-# Django stuff:
+# logs?! nope:
 *.log
 
 # Sphinx documentation

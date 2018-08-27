@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="{{ LANGUAGE_CODE }}">
+<html class="{{ ENV }} no-js" lang="{{ LANGUAGE_CODE }}">
 {% load compress cms_tags menu_tags sekizai_tags static %}
 
     <head>
@@ -56,7 +56,9 @@
             <link rel="stylesheet" href="{% static '{{ project_name }}/components/normalize.css/normalize.css' %}">
             <link rel="stylesheet" href="{% static '{{ project_name }}/css/screen.css' %}">
         {% endcompress %}
-        {% comment %}if need...<script src="{% static '{{ project_name }}/components/modernizr/modernizr.js' %}"></script>{% endcomment %}
+        {% comment %}
+            if need...<script src="{% static '{{ project_name }}/components/modernizr/modernizr.js' %}"></script>
+        {% endcomment %}
 
         {% render_block "css" %}
 
@@ -86,7 +88,7 @@
             <script src="{% static '{{ project_name }}/js/main.js' %}"></script>
         {% endcompress %}
 
-        {% if not debug and not request.user.is_staff %}
+        {% if is_live and not request.user.is_staff %}
             {% compress js inline %}
                 <script>
                     // Google Analytics: change UA-XXXXX-X to be your site's ID. -->
