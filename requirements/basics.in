@@ -15,6 +15,7 @@ django-split-settings
 django-compressor
 django-modeltranslation
 django-ckeditor==5.4
+django-htmlmin
 
 # own tools
 -e 'git+git@github.com:benzkji/djangocms-baseplugins.git@master#egg=djangocms-baseplugins'

@@ -6,6 +6,24 @@
         {% language_chooser 'menus/hreflang.html' %}
         <meta charset="utf-8">
         {# <meta http-equiv="x-ua-compatible" content="ie=edge">#}
+
+        <!--
+
+
+        :::::::::  ::::    ::: ::::::::: :::    :::      ::::::::  :::    :::
+        :+:    :+: :+:+:   :+:      :+:  :+:   :+:      :+:    :+: :+:    :+:
+        +:+    +:+ :+:+:+  +:+     +:+   +:+  +:+       +:+        +:+    +:+
+        +#++:++#+  +#+ +:+ +#+    +#+    +#++:++        +#+        +#++:++#++
+        +#+    +#+ +#+  +#+#+#   +#+     +#+  +#+       +#+        +#+    +#+
+        #+#    #+# #+#   #+#+#  #+#      #+#   #+#  #+# #+#    #+# #+#    #+#
+        #########  ###    #### ######### ###    ### ###  ########  ###    ###
+
+        --
+        coded by bnzk.ch
+
+
+        -->
+        {# <meta http-equiv="x-ua-compatible" content="ie=edge">#}
         {% page_attribute "page_title" as cms_page_title %}
         {% page_attribute "title" as cms_title %}
         <title>{% spaceless %}{% block title_tag %}
@@ -18,19 +36,21 @@
 
         {% comment %}if has...<link rel="apple-touch-icon" href="apple-touch-icon.png">{% endcomment %}
 
-        <script>
-            document.querySelector('html').className += ' js';
-            {# https://www.quora.com/How-do-I-disable-the-hover-CSS-rule-for-iPhone-and-iPad-touch-device-browsers/answer/John-Miller-386 #}
-            document.addEventListener('touchstart', function addtouchclass(e){ // first time user touches the screen
-                document.documentElement.classList.add('is_touch'); // add "can-touch" class to document root using classList API
-                document.removeEventListener('touchstart', addtouchclass, false); // de-register touchstart event
-            }, false);
-            {% if request.toolbar.edit_mode %}
-                var cms_edit_mode = true;
-            {% else %}
-                var cms_edit_mode = false;
-            {% endif %}
-        </script>
+        {% compress js inline %}
+            <script>
+                document.querySelector('html').className += ' js';
+                {# https://www.quora.com/How-do-I-disable-the-hover-CSS-rule-for-iPhone-and-iPad-touch-device-browsers/answer/John-Miller-386 #}
+                document.addEventListener('touchstart', function addtouchclass(e){ // first time user touches the screen
+                    document.documentElement.classList.add('is_touch'); // add "can-touch" class to document root using classList API
+                    document.removeEventListener('touchstart', addtouchclass, false); // de-register touchstart event
+                }, false);
+                {% if request.toolbar.edit_mode %}
+                    var cms_edit_mode = true;
+                {% else %}
+                    var cms_edit_mode = false;
+                {% endif %}
+            </script>
+        {% endcompress %}
 
         {% compress css inline %}
             <link rel="stylesheet" href="{% static '{{ project_name }}/components/normalize.css/normalize.css' %}">
@@ -67,15 +87,17 @@
         {% endcompress %}
 
         {% if not debug and not request.user.is_staff %}
-            <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-            <script>
-                (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-                function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
-                e=o.createElement(i);r=o.getElementsByTagName(i)[0];
-                e.src='https://www.google-analytics.com/analytics.js';
-                r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-                ga('create','UA-{{analytics_ua}}','auto');ga('send','pageview');
-            </script>
+            {% compress js inline %}
+                <script>
+                    // Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+                    (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+                    function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+                    e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+                    e.src='https://www.google-analytics.com/analytics.js';
+                    r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+                    ga('create','UA-{{analytics_ua}}','auto');ga('send','pageview');
+                </script>
+            {% endcompress %}
         {% endif %}
 
         {% render_block "js" %}

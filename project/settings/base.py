@@ -21,6 +21,12 @@ MANAGERS = ADMINS
 DEFAULT_FROM_EMAIL = '{{project_name}}@bnzk.ch'
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
+# opposite of DEBUG!
+# HTML_MINIFY = True
+# add p when needed
+# EXCLUDE_TAGS_FROM_MINIFYING = ['custom', 'pre', 'textarea', 'p', 'script', 'style', ]
+KEEP_COMMENTS_ON_MINIFYING = True
+
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
@@ -91,6 +97,8 @@ MIDDLEWARE_CLASSES = (
 
     # 'painless_redirects.middleware.ManualRedirectMiddleware',
     # 'painless_redirects.middleware.ForceSiteDomainRedirectMiddleware',
+    'htmlmin.middleware.HtmlMinifyMiddleware',
+    'htmlmin.middleware.MarkRequestMiddleware',
 )
 
 TEMPLATES = [
