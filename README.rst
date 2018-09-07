@@ -8,7 +8,7 @@ Django Layout
 
 To use ``django-layout`` run the following command::
 
-     django-admin.py startproject --template=https://github.com/benzkji/django-layout/zipball/master --extension=py,rb,rst,sh,txt,js,json,gitignore,ruby-version,example,bowerrc,conf your_project_name
+     django-admin.py startproject --template=https://github.com/benzkji/django-layout/zipball/master --extension=py,rst,sh,txt,js,json,gitignore,conf your_project_name
 
 Things to adapt right after:
 
@@ -33,7 +33,7 @@ When making changes to this repository, make sure at least to check the followin
 .. {% endcomment %}
 
 {{ project_name }}
-======================
+==================
 
 Quickstart
 ----------

@@ -19,7 +19,8 @@ require('es6-promise').polyfill();
 var static_path = 'apps/{{ project_name }}/static/{{ project_name }}/';
 
 
-gulp.task('sass', ['iconfont', 'svgstore'], function () {
+// gulp.task('sass', ['iconfont', 'svgstore'], function () {
+gulp.task('sass', function () {
     gulp.src(static_path + 'sass/screen.sass')
         .pipe(sass({
                 sourceComments: 'map',
@@ -126,7 +127,22 @@ gulp.task('pip-compile-upgrade', shell.task(
 );
 
 
-gulp.task('default', ['sass', 'pip-compile', 'jshint', 'flake8']);
+gulp.task('node2static', function () {
+    return gulp.src(
+            [
+              'node_modules/jquery/**/*',
+              'node_modules/jquery-ui/**/*',
+              'node_modules/slick-carousel/**/*',
+              'node_modules/normalize-css/**/*',
+              'node_modules/magnific-popup/**/*',
+            ],
+            {'base': 'node_modules', }
+        )
+        .pipe(gulp.dest(static_path + '/libs/'));
+});
+
+
+gulp.task('default', ['sass', 'node2static', 'pip-compile', 'jshint', 'flake8']);
 
 
 gulp.task('watch', function () {

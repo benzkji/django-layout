@@ -1,0 +1,104 @@
+<!doctype html>
+<html class="{{ ENV }} no-js" lang="{{ LANGUAGE_CODE }}">
+{% load compress cms_tags menu_tags sekizai_tags static %}
+
+    <head>
+        {% language_chooser 'menu/hreflang.html' %}
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {# <meta http-equiv="x-ua-compatible" content="ie=edge">#}
+
+        <!--
+
+
+        :::::::::  ::::    ::: ::::::::: :::    :::      ::::::::  :::    :::
+        :+:    :+: :+:+:   :+:      :+:  :+:   :+:      :+:    :+: :+:    :+:
+        +:+    +:+ :+:+:+  +:+     +:+   +:+  +:+       +:+        +:+    +:+
+        +#++:++#+  +#+ +:+ +#+    +#+    +#++:++        +#+        +#++:++#++
+        +#+    +#+ +#+  +#+#+#   +#+     +#+  +#+       +#+        +#+    +#+
+        #+#    #+# #+#   #+#+#  #+#      #+#   #+#  #+# #+#    #+# #+#    #+#
+        #########  ###    #### ######### ###    ### ###  ########  ###    ###
+
+        --
+        coded by bnzk.ch
+
+
+        -->
+        <title>{% block title_tag %}{% endblock %}</title>
+        <meta name="description" content="{% block meta_description %}{% endblock %}">
+
+        <meta content="{% block facebook_url %}{% endblock %}" property="og:url"/>
+        <meta content="{% block facebook_title %}{% endblock %}" property="og:title"/>
+        <meta content="{% block facebook_description %}{% endblock %}" property="og:description"/>
+        <meta content="{% block facebook_image %}{% endblock %}" property="og:image"/>
+
+        {% compress js inline %}
+            <script>
+                document.querySelector('html').className += ' js';
+                {# https://www.quora.com/How-do-I-disable-the-hover-CSS-rule-for-iPhone-and-iPad-touch-device-browsers/answer/John-Miller-386 #}
+                document.addEventListener('touchstart', function addtouchclass(e){ // first time user touches the screen
+                    document.documentElement.classList.add('is_touch'); // add "can-touch" class to document root using classList API
+                    document.removeEventListener('touchstart', addtouchclass, false); // de-register touchstart event
+                }, false);
+                {% if request.toolbar.edit_mode %}
+                    var cms_edit_mode = true;
+                {% else %}
+                    var cms_edit_mode = false;
+                {% endif %}
+            </script>
+        {% endcompress %}
+
+        {% compress css inline %}
+            <link rel="stylesheet" href="{% static '{{ project_name }}/components/normalize.css/normalize.css' %}">
+            <link rel="stylesheet" href="{% static '{{ project_name }}/css/screen.css' %}">
+        {% endcompress %}
+        {% comment %}
+            if need...<script src="{% static '{{ project_name }}/components/modernizr/modernizr.js' %}"></script>
+        {% endcomment %}
+
+        {% render_block "css" %}
+
+    </head>
+    <body class="{% block body_class %}{% endblock %}">
+
+        {% cms_toolbar %}
+
+        <div id="container">
+
+            <header>
+                <a class="logo"><img src="{% static '{{ project_name }}/img/logo.png' %}" alt="Logo"></a>
+                <nav class="nav nav_main">
+                    {% show_menu 0 2 2 2 %}
+                </nav>
+            </header>
+
+            {% block content %}
+            {% endblock %}
+
+        </div>
+
+        {% compress js %}
+            <script src="{% static '{{ project_name }}/components/jquery/dist/jquery.js' %}"></script>
+            <script src="{% static '{{ project_name }}/components/jqueryui/ui/widget.js' %}"></script>
+            <script src="{% static '{{ project_name }}/js/navigation.js' %}"></script>
+            <script src="{% static '{{ project_name }}/js/main.js' %}"></script>
+        {% endcompress %}
+
+        {% if is_live and not request.user.is_staff %}
+            {% compress js inline %}
+                <script>
+                    // Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+                    (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+                    function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+                    e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+                    e.src='https://www.google-analytics.com/analytics.js';
+                    r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+                    ga('create','UA-{{analytics_ua}}','auto');ga('send','pageview');
+                </script>
+            {% endcompress %}
+        {% endif %}
+
+        {% render_block "js" %}
+
+    </body>
+</html>

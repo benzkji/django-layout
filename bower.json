@@ -1,8 +1,0 @@
-{
-  "name": "webproject",
-  "dependencies": {
-    "normalize-css": "normalize-css#^7.0.0",
-    "jquery": "^3.2.1",
-    "jquery-ui": "jquery-ui#^1.12.1"
-  }
-}
