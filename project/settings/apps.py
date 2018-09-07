@@ -52,7 +52,5 @@ INSTALLED_APPS = [
     'sekizai',
     'djangocms_admin_style',
 
-
-    # Uncomment the next line to enable the admin:
     'django.contrib.admin',
 ]
