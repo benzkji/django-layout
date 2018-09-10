@@ -49,7 +49,7 @@
         {% endcompress %}
 
         {% compress css inline %}
-            <link rel="stylesheet" href="{% static '{{ project_name }}/libs/normalize.css/normalize.css' %}">
+            <link rel="stylesheet" href="{% static '{{ project_name }}/libs/normalize-css/normalize.css' %}">
             <link rel="stylesheet" href="{% static 'djangocms_misc/css/cms_frontend_adjust.css' %}">
             <link rel="stylesheet" href="{% static '{{ project_name }}/css/screen.css' %}">
         {% endcompress %}
@@ -80,7 +80,7 @@
 
         {% compress js %}
             <script src="{% static '{{ project_name }}/libs/jquery/dist/jquery.js' %}"></script>
-            <script src="{% static '{{ project_name }}/libs/jqueryui/ui/widget.js' %}"></script>
+            <script src="{% static '{{ project_name }}/libs/jquery-ui/ui/widget.js' %}"></script>
             <script src="{% static '{{ project_name }}/js/navigation.js' %}"></script>
             <script src="{% static '{{ project_name }}/js/main.js' %}"></script>
         {% endcompress %}
