@@ -8,16 +8,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         {# <meta http-equiv="x-ua-compatible" content="ie=edge">#}
 
-        <!--
+        <!-- Roman
 
 
-        :::::::::  ::::    ::: ::::::::: :::    :::      ::::::::  :::    :::
-        :+:    :+: :+:+:   :+:      :+:  :+:   :+:      :+:    :+: :+:    :+:
-        +:+    +:+ :+:+:+  +:+     +:+   +:+  +:+       +:+        +:+    +:+
-        +#++:++#+  +#+ +:+ +#+    +#+    +#++:++        +#+        +#++:++#++
-        +#+    +#+ +#+  +#+#+#   +#+     +#+  +#+       +#+        +#+    +#+
-        #+#    #+# #+#   #+#+#  #+#      #+#   #+#  #+# #+#    #+# #+#    #+#
-        #########  ###    #### ######### ###    ### ###  ########  ###    ###
+
+         .o8                              oooo                      oooo
+        "888                              `888                      `888
+         888oooo.  ooo. .oo.     oooooooo  888  oooo       .ooooo.   888 .oo.
+         d88' `88b `888P"Y88b   d'""7d8P   888 .8P'       d88' `"Y8  888P"Y88b
+         888   888  888   888     .d8P'    888888.        888        888   888
+         888   888  888   888   .d8P'  .P  888 `88b.  .o. 888   .o8  888   888
+         `Y8bod8P' o888o o888o d8888888P  o888o o888o Y8P `Y8bod8P' o888o o888o
 
         --
         coded by bnzk.ch
@@ -44,6 +45,11 @@
                     var cms_edit_mode = true;
                 {% else %}
                     var cms_edit_mode = false;
+                {% endif %}
+                {% if request.user.is_staff %}
+                    var user_is_staff = true;
+                {% else %}
+                    var user_is_staff = false;
                 {% endif %}
             </script>
         {% endcompress %}
