@@ -1,6 +1,8 @@
 from django.urls import reverse_lazy
 
 
+TEXTBLOCKS_CKEDITORJS_URL = '/static/ckeditor/ckeditor/ckeditor.js'
+
 CKEDITOR_LINK_MODEL = '{{ project_name }}.models.Link'
 CKEDITOR_LINK_IFRAME_URL = reverse_lazy('admin:{{ project_name }}_link_add')
 CKEDITOR_LINK_VERIFY_URL = reverse_lazy('admin:{{ project_name }}_link_verify')
