@@ -28,7 +28,7 @@ docs/_build
 .sass-cache/
 *.sock
 *.pid
-
+yarn.lock
 
 
 # github default python gitignore. FTW.

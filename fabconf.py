@@ -13,7 +13,11 @@ env.is_uwsgi = False
 env.is_apache = False
 env.remote_ref = 'origin/master'
 # these will be checked for changes
-env.requirements_files = ['requirements/deploy.txt', ]
+env.requirements_files = [
+    'requirements/deploy.txt',
+    'requirements/deploy.in',
+    'requirements/basic.in',
+]
 # this is used with pip install -r
 env.requirements_file = env.requirements_files[0]
 
