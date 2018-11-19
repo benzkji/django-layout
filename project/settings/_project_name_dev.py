@@ -7,7 +7,9 @@ DEBUG = True
 ENV = 'dev'
 
 ALLOWED_HOSTS = [
-    'localhost'
+    'localhost',
+    '127.0.0.1',
+    '10.0.2.2',  # virtualbox
 ]
 
 DATABASES = {
