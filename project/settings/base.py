@@ -29,14 +29,6 @@ KEEP_COMMENTS_ON_MINIFYING = True
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
-# Hosts/domain names that are valid for this site; required if DEBUG is False
-# See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = [
-    '.{{project_name}}.com',
-    '.bnzk.ch',
-    'localhost:8888',
-]
-
 RAVEN_CONFIG = {
     'dsn': 'https://xxxxxxx:xxxxx@sentry.io/xxxx',
     # If you are using git, you can also automatically configure the

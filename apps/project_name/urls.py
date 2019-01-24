@@ -2,5 +2,5 @@
 #
 #
 # urlpatterns = [
-#     url(r'^(?P<slug>[a-z0-9]+)/$', WhatEver.as_view(), name='whatever'),
+#     url(r'^(?P<slug>[\w-]+)/$', WhatEver.as_view(), name='whatever'),
 # ]
