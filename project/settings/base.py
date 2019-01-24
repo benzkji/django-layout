@@ -135,7 +135,8 @@ ROOT_URLCONF = 'project.urls'
 WSGI_APPLICATION = '{{project_name}}.wsgi.application'
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
-SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+# only use when having redis or file cache backend!
+# SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

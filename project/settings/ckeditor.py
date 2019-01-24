@@ -13,6 +13,7 @@ CKEDITOR_CONFIGS = {
         'djangolinkIframeURL': CKEDITOR_LINK_IFRAME_URL,
         'djangolinkVerifyURL': CKEDITOR_LINK_VERIFY_URL,
         'djangolinkFallbackField': 'free',
+        'disallowedContent': 'a[style]; pre[style]; h1[style]; h2[style]; h3[style]; p[style]; ul[style]; ol[style]; li[style]',
         'extraPlugins': ','.join(
             [
                 # your extra plugins here
@@ -29,6 +30,6 @@ CKEDITOR_CONFIGS = {
             ['ShowBlocks', 'Source'],
         ],
         'format_tags': 'h2;p',
-        'width': '750',
+        'width': '793',
     }
 }
