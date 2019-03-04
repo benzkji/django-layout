@@ -15,7 +15,7 @@ var gulp = require('gulp'),
     dummy = 'last';
 
 // fix Promise() error from whiche package again?
-require('es6-promise').polyfill();
+// from the earlier days! require('es6-promise').polyfill();
 var static_path = 'apps/{{ project_name }}/static/{{ project_name }}/';
 
 
