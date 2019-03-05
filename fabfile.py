@@ -96,11 +96,15 @@ def create_database():
         puts('PostgreSQL db must be created manually.')
     else:
         create_mycnf()
+        my_cnf_file = _get_my_cnf_name()
         settings = _get_settings()
         db_settings = settings.DATABASES
         run("echo \"CREATE DATABASE {dbname} CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
-            "\" | mysql ".format(dbname=db_settings["default"]["NAME"], )
+            "\" | mysql --defaults-file={cnf_file} ".format(
+                dbname=db_settings["default"]["NAME"],
+                cnf_file=my_cnf_file,
             )
+        )
 
 
 @task
