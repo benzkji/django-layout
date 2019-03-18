@@ -50,6 +50,8 @@ STATICFILES_FINDERS = (
 #    'compressor.filters.cssmin.CSSMinFilter',  # pip install cssmin
 # ]
 
+FILER_PAGINATE_BY = 200
+
 FILER_STORAGES = {
     'public': {
         'main': {
