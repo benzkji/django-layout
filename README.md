@@ -42,11 +42,20 @@ To bootstrap the project on your machine::
 
     cd {{ project_name }}
     # check fabconf.py if env.is_python3 is true, if yes, add --python=python3
-    mkvirtualenv --no-site-packages {{ project_name }}
+    mkvirtualenv {{ project_name }} 
     # without the venv-wrapper: virtualenv virtualenv {{ project_name }}
     # ditto: source virtualenv/{{ project_name }}/bin/activate
+    # first time init of dependencies
+    yarn install
+    pip install pip-tools
+    # calculates and pins and installls deps
+    gulp pip-compile  
+    # not first time users, install deps
     pip install -r requirements/dev.txt
+    # django works
     manage.py syncdb --migrate
+    manage.py createsuperuser
+    manage.py runserver
 
 To bootstrap/deploy on remote server::
 
@@ -60,10 +69,7 @@ To bootstrap/deploy on remote server::
 
 have a look at fabfile.py
 
-Documentation
--------------
+Tests
+-----
 
-Developer documentation is available in Sphinx format in the docs directory.
-
-Initial installation instructions (including how to build the documentation as
-HTML) can be found in docs/install.rst.
+If available: run `tox` command, or `./manage.py test`.

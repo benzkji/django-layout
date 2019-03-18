@@ -142,16 +142,16 @@ gulp.task('node2static', function () {
 });
 
 
-gulp.task('default', ['sass', 'node2static', 'pip-compile', 'jshint', 'flake8']);
+gulp.task('default', gulp.parallel('sass', 'node2static', 'pip-compile', 'jshint', 'flake8'));
 
 
 gulp.task('watch', function () {
     livereload.listen();
-    gulp.watch(['**/*.html', '**/*.py', static_path + 'css/*']).on('change', livereload.changed);
-    gulp.watch(static_path + 'sass/*.sass', ['sass']);
+    gulp.watch(['apps/**/*.html', 'apps/**/*.py', static_path + 'css/*']).on('change', livereload.changed);
+    gulp.watch(static_path + 'sass/*.sass', gulp.series('sass'));
     // gulp.watch(static_path + 'iconfont/svg/*.svg', ['iconfont']);
     // gulp.watch(static_path + 'svgstore/*.svg', ['svgstore']);
-    gulp.watch('requirements/*.in', ['pip-compile']);
-    gulp.watch(['gulpfile.js', static_path + 'js/**.js'], ['jshint']);
-    gulp.watch('**/*.py', ['flake8']);
+    gulp.watch('requirements/*.in', gulp.series('pip-compile'));
+    gulp.watch(['gulpfile.js', static_path + 'js/**.js'], gulp.series('jshint'));
+    gulp.watch('apps/**/*.py', gulp.series('flake8'));
 });
