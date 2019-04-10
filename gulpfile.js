@@ -21,7 +21,7 @@ var static_path = 'apps/{{ project_name }}/static/{{ project_name }}/';
 
 // gulp.task('sass', ['iconfont', 'svgstore'], function () {
 gulp.task('sass', function () {
-    gulp.src(static_path + 'sass/screen.sass')
+    return gulp.src(static_path + 'sass/screen.sass')
         .pipe(sass({
                 sourceComments: 'map',
                 sourceMap: 'sass',
@@ -91,7 +91,7 @@ gulp.task('iconfont', function () {
 
 
 gulp.task('jshint', function () {
-    gulp.src(['gulpfile.js', static_path + 'js/**.js'])
+    return gulp.src(['gulpfile.js', static_path + 'js/**.js'])
         .pipe(jshint())
         .pipe(livereload());
 });
