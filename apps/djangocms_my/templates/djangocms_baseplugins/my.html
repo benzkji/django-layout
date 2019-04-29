@@ -3,14 +3,14 @@
 
 
 {% block plugin_content %}
-wjat
-<div class="plugin {{ object.get_css_classes }}">
-    {% if object.image %}
-        {% thumbnail object.image 1000x1000 crop=0 upscale=0 as resized %}
-        <figure>
-          <img src="{{ resized.url }}" alt="{{ object.caption }}">
-          {% if object.caption %}<figcaption>{{ object.caption }}</figcaption>{% endif %}
-        </figure>
-    {% endif %}
-</div>
+    wjat
+    <div class="plugin {{ object.get_css_classes }}">
+        {% if object.image %}
+            {% thumbnail object.image 1000x1000 crop=0 upscale=0 as resized %}
+            <figure>
+              <img src="{{ resized.url }}" alt="{{ object.caption }}">
+              {% if object.caption %}<figcaption>{{ object.caption }}</figcaption>{% endif %}
+            </figure>
+        {% endif %}
+    </div>
 {% endblock %}
