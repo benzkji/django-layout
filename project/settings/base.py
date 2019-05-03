@@ -45,6 +45,14 @@ MIGRATION_MODULES = {
     'textblocks': 'apps.{{ project_name }}.migrations_textblocks',
 }
 
+ROOT_URLCONF = 'project.urls'
+
+# Python dotted path to the WSGI application used by Django's runserver.
+WSGI_APPLICATION = '{{project_name}}.wsgi.application'
+
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
+# only use when having redis or file cache backend!
+# SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -68,7 +76,7 @@ USE_TZ = True
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '{{ secret_key }}'
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -121,14 +129,6 @@ TEMPLATES = [
     },
 ]
 
-ROOT_URLCONF = 'project.urls'
-
-# Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = '{{project_name}}.wsgi.application'
-
-SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
-# only use when having redis or file cache backend!
-# SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
