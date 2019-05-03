@@ -41,7 +41,7 @@
                     document.documentElement.classList.add('is_touch'); // add "can-touch" class to document root using classList API
                     document.removeEventListener('touchstart', addtouchclass, false); // de-register touchstart event
                 }, false);
-                {% if request.toolbar.edit_mode %}
+                {% if request.toolbar.edit_mode or request.toolbar.edit_mode_active %}
                     var cms_edit_mode = true;
                 {% else %}
                     var cms_edit_mode = false;
