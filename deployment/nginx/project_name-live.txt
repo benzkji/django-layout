@@ -6,7 +6,7 @@ server {
         {{ project_name }}.com
         {{ project_name }}.live.bnzk.ch
         ;
-    rewrite ^/(.*) http://www.{{ project_name }}.com permanent;
+    rewrite ^/(.*) http://www.{{ project_name }}.com/$1 permanent;
 }
 
 upstream {{ project_name }}_live_server {

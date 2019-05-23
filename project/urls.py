@@ -8,9 +8,11 @@ from django.contrib import admin
 
 # maybe use i18npatterns?!
 urlpatterns = [
+    # path('robots.txt', RobotsView.as_view())
     # url(r'', include('{{ project_name }}.urls')),
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 ]
+
 
 urlpatterns = urlpatterns + i18n_patterns(
     url(r'^admin/', admin.site.urls),
