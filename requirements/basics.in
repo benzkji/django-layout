@@ -6,7 +6,7 @@
 # base
 # mysql-python==1.2.5
 # mysqlclient
-psycopg2
+psycopg2-binary
 raven
 
 # django + tools
@@ -30,4 +30,4 @@ djangocms-misc
 django-filer
 
 # cms
-django-cms==3.6.0
+django-cms

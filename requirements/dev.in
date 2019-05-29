@@ -3,6 +3,7 @@
 # fabric
 fabric3
 flake8
+safety
 # flake8-respect-noqa
 # mock
 # mixer
