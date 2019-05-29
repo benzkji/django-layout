@@ -1,0 +1,14 @@
+
+
+// from / to (big / small)
+@mixin responsive_font_size($font_size_big, $font_size_small)
+    $big_reference: $font_size_big - $font_size_small
+    font-size: $font_size_small
+    @media($bp_sm)
+        font-size: $big_reference * 0.25 + $font_size_small
+    @media($bp_md)
+        font-size: $big_reference * 0.5 + $font_size_small
+    @media($bp_lg)
+        font-size: $big_reference * 0.75 + $font_size_small
+    @media($bp_xl)
+        font-size: $font_size_big
