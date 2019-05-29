@@ -29,12 +29,7 @@ KEEP_COMMENTS_ON_MINIFYING = True
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
-RAVEN_CONFIG = {
-    'dsn': 'https://xxxxxxx:xxxxx@sentry.io/xxxx',
-    # If you are using git, you can also automatically configure the
-    # release based on the git info.
-    'release': raven.fetch_git_sha(PROJECT_PATH),
-}
+SENTRY_DSN = ''
 
 INTERNAL_IPS = (
     '127.0.0.1',
