@@ -26,7 +26,7 @@ CMS_PLACEHOLDER_CONF = {
         'plugins': [
             'ImagePlugin',
             'TextImagePlugin',
-            'CustomTextPlugin',
+            'TextPlugin',
         ],
         # 'extra_context': {"size": "600x420"},
         # default_plugins: []

@@ -70,12 +70,14 @@
 
         {% cms_toolbar %}
 
-        <div id="container">
+        <div id="page" class="{% block page_class %}{% endblock %}">
 
             <header>
                 <a class="logo"><img src="{% static '{{ project_name }}/img/logo.png' %}" alt="Logo"></a>
                 <nav class="nav nav_main">
-                    {% show_menu 0 2 2 2 %}
+                    <ul>
+                        {% show_menu 0 2 2 2 %}
+                    </ul>
                 </nav>
             </header>
 

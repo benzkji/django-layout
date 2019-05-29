@@ -147,7 +147,12 @@ gulp.task('default', gulp.parallel('sass', 'node2static', 'pip-compile', 'jshint
 
 gulp.task('watch', function () {
     livereload.listen();
-    gulp.watch(['apps/**/*.html', 'apps/**/*.py', static_path + 'css/*']).on('change', livereload.changed);
+    gulp.watch([
+        'apps/**/*.html',
+        'apps/**/*.py',
+        static_path + 'css/*',
+        static_path + 'js/*',
+    ]).on('change', livereload.changed);
     gulp.watch(static_path + 'sass/*.sass', gulp.series('sass'));
     // gulp.watch(static_path + 'iconfont/svg/*.svg', ['iconfont']);
     // gulp.watch(static_path + 'svgstore/*.svg', ['svgstore']);
