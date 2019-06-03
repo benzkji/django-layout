@@ -166,7 +166,7 @@ def deploy(verbosity='noisy'):
 
 @task
 @roles('web')
-def reset_git_remote():
+def git_set_remote():
     """
     reset the repository's remote.
     """
