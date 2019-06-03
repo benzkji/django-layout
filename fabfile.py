@@ -165,6 +165,20 @@ def deploy(verbosity='noisy'):
 
 
 @task
+@roles('web')
+def reset_git_remote():
+    """
+    reset the repository's remote.
+    """
+    with cd(env.project_dir):
+        remote, dest_branch = env.remote_ref.split('/', 1)
+        run('git remote remove {}'.format(remote))
+        run('git remote add {} {}'.format(remote, env.repository))
+        run('git fetch {}'.format(remote))
+        run('git branch --set-upstream-to={} {}'.format(env.remote_ref, dest_branch))
+
+
+@task
 @roles('web', 'db')
 def update(action='check', tag=None):
     """
