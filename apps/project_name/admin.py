@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django import forms
+from django.contrib.admin.models import LogEntry
 from formfieldstash.admin import FormFieldStashMixin
 from ckeditor_link.admin import DjangoLinkAdmin
 from ckeditor_link.link_model.conf import CKEDITOR_LINK_TYPE_CHOICES, CKEDITOR_LINK_STYLE_CHOICES
@@ -30,6 +31,7 @@ class LinkAdminForm(forms.ModelForm):
     )
 
 
+@admin.register(Link)
 class LinkAdmin(FormFieldStashMixin, DjangoLinkAdmin):
     form = LinkAdminForm
     single_formfield_stash = ('link_type', )
@@ -39,4 +41,6 @@ class LinkAdmin(FormFieldStashMixin, DjangoLinkAdmin):
         js = ('cms/js/dist/bundle.admin.base.min.js',)
 
 
-admin.site.register(Link, LinkAdmin)
+@admin.register(LogEntry)
+class LogEntryAdmin(admin.ModelAdmin):
+    pass
