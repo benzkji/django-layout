@@ -29,7 +29,14 @@ KEEP_COMMENTS_ON_MINIFYING = True
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
-SENTRY_DSN = ''
+# SENTRY_DSN = 'https://xxxxxx@sentry.io/1416363'
+SENTRY_DSN = False
+
+def get_git_describe():
+    import subprocess
+    return subprocess.check_output(['git', 'describe', '--tags']).strip()
+
+VERSION = get_git_describe()
 
 INTERNAL_IPS = (
     '127.0.0.1',
