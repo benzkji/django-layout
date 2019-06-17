@@ -43,4 +43,15 @@ class LinkAdmin(FormFieldStashMixin, DjangoLinkAdmin):
 
 @admin.register(LogEntry)
 class LogEntryAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('__str__', 'edited_object', 'action_time', 'user', )
+    list_filter =  ('user', 'content_type', )
+
+    def edited_object(self, log_entry):
+        obj = log_entry.get_edited_object()
+        if obj:
+            return '<a href="{}">{}</a>'.format(log_entry.get_admin_url(), str(obj))
+        else:
+            return '-'
+
+    edited_object.short_description = 'Edited Object'
+    edited_object.allow_tags = True
