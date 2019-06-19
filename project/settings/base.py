@@ -3,7 +3,6 @@
 import os
 import sys
 
-import raven
 # just in case - know the defaults ;-)
 # import django.conf.global_settings as DEFAULT_SETTINGS
 
