@@ -7,18 +7,13 @@ DEBUG = False
 # COMPRESS_ENABLED = True
 
 
-def get_git_revision_short_hash():
-    import subprocess
-    return subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'])
-
-
-if SENTRY_DSN:
+if not DEBUG:
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
 
     sentry_sdk.init(
         dsn=SENTRY_DSN,
-        release=get_git_revision_short_hash(),
+        release=VERSION,
         integrations=[DjangoIntegration()],
     )
 
