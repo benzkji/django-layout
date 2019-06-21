@@ -1,4 +1,3 @@
-from .apps import INSTALLED_APPS
 
 DEBUG = False
 # the following set themselves, normally

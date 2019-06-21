@@ -284,9 +284,45 @@ def restart():
         exit("apache restart not implemented!")
 
 
+@task
+@roles('web')
+def stop_django():
+    """
+    stop django, for now, may be restarted...
+    """
+    if env.is_nginx_gunicorn:
+        stop_gunicorn()
+    if env.is_uwsgi:
+        exit("uswgi stop not implemented!")
+        stop_uwsgi()
+    if env.is_apache:
+        exit("apache stop not implemented!")
+
+
 def stop_gunicorn():
     for site in env.sites:
         run(env.gunicorn_stop_command.format(site=site, **env))
+
+
+@task
+@roles('web')
+def disable_django():
+    """
+    disable django service/app completely
+    """
+    if env.is_nginx_gunicorn:
+        disable_gunicorn()
+    if env.is_uwsgi:
+        exit("uswgi disable not implemented!")
+        disable_uwsgi()
+    if env.is_apache:
+        exit("apache disable not implemented!")
+
+
+def disable_gunicorn():
+    stop_gunicorn()
+    for site in env.sites:
+        run('rm $HOME/init/{site}-{env_prefix}.sh'.format(site=site, **env))
 
 
 def copy_restart_gunicorn():
@@ -608,6 +644,24 @@ def dj(command):
             **env
         )
     )
+
+
+@task
+@roles('web')
+def shell(command):
+    """
+    Run an arbitrary command on the server.
+    """
+    run(command)
+
+
+@task
+@roles('web')
+def memory():
+    """
+    Run an arbitrary command on the server.
+    """
+    run("ps -U %s --no-headers -o rss | awk '{ sum+=$1} END {print int(sum/1024) \"MB\"}'" % (env.main_user))
 
 
 def fix_permissions(path='.'):
