@@ -1,4 +1,4 @@
-.. {% comment %}
+{% comment %}
 
 # Django Layout
 
@@ -28,8 +28,9 @@ When making changes to this repository, make sure at least to check the followin
 
 -----
 
-.. {% endcomment %}
+..
 
+{% endcomment %}
 # {{ project_name }}
 
 
