@@ -45,12 +45,12 @@ class RobotsView(TemplateView):
         site = self.request.site
         env = settings.ENV
         return (
-            'robots_{}.txt'.format(site.domain),
             'robots_{}_{}.txt'.format(site.domain, env),
-            'robots_{}.txt'.format(site.name),
+            'robots_{}.txt'.format(site.domain),
             'robots_{}_{}.txt'.format(site.name, env),
-            'robots_{}.txt'.format(site.id),
+            'robots_{}.txt'.format(site.name),
             'robots_{}_{}.txt'.format(site.id, env),
             'robots_{}.txt'.format(env),
+            'robots_{}.txt'.format(site.id),
             'robots.txt'.format(site.id),
         )
