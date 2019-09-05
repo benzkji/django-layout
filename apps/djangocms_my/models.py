@@ -10,9 +10,9 @@ from djangocms_baseplugins.baseplugin.models import AbstractBasePlugin
 class My(AbstractBasePlugin):
     amount = models.CharField(max_length=255)
 
-    def __str__(self):
-        text = self.amount
-        return self.add_hidden_flag(text)
+    def to_string(self):
+        text = 'check {}'.format(self.amount)
+        return text
 
     # def copy_relations(self, old_instance):
     #     super().copy_relations(old_instance)
