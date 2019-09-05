@@ -22,9 +22,11 @@ server {
         ;
 
     location / {
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header Host $http_host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        # x-forwarded-proto for gunicorn, x-forwarded-protocol for Django!
+        # $scheme is http, as the front nginx is doing ssl termination!
+        proxy_set_header X-Forwarded-Proto $scheme;
         proxy_redirect off;
         if (!-f $request_filename) {
             proxy_pass      http://{{ project_name }}_live_server ;

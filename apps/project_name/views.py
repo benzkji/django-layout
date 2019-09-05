@@ -1,16 +1,17 @@
+from django.conf import settings
 from django.http import HttpResponsePermanentRedirect
+from django.views.generic import TemplateView
 
 
 class LanguageChooserEnhancerMixin(object):
     """
-    this calls correct get_absolute_urls in language_chooser tags!
+    this calls correct get_absolute_urls in cms's language_chooser tags!
     """
     def get(self, request, **kwargs):
         self.object = self.get_object()
         if hasattr(self.request, 'toolbar'):
             self.request.toolbar.set_object(self.object)
         return super(LanguageChooserEnhancerMixin, self).get(request, **kwargs)
-
 
 
 class AutoSlugMixin(object):
@@ -32,3 +33,24 @@ class PublishedViewMixin():
         if self.request.toolbar.edit_mode:
             return self.get_model().objects.all()
         return self.get_model().objects.published()
+
+
+class RobotsView(TemplateView):
+    """
+    flexible robots.txt, from within your base templates folder
+    """
+    content_type = 'text/plain'
+
+    def get_template_names(self):
+        site = self.request.site
+        env = settings.ENV
+        return (
+            'robots_{}.txt'.format(site.domain),
+            'robots_{}_{}.txt'.format(site.domain, env),
+            'robots_{}.txt'.format(site.name),
+            'robots_{}_{}.txt'.format(site.name, env),
+            'robots_{}.txt'.format(site.id),
+            'robots_{}_{}.txt'.format(site.id, env),
+            'robots_{}.txt'.format(env),
+            'robots.txt'.format(site.id),
+        )
