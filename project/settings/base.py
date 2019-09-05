@@ -81,8 +81,9 @@ USE_TZ = True
 SECRET_KEY = '{{ secret_key }}'
 
 MIDDLEWARE = (
-    'django.middleware.common.CommonMiddleware',
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -100,6 +101,8 @@ MIDDLEWARE = (
 
     # 'painless_redirects.middleware.ManualRedirectMiddleware',
     # 'painless_redirects.middleware.ForceSiteDomainRedirectMiddleware',
+
+    'axes.middleware.AxesMiddleware',
     'htmlmin.middleware.HtmlMinifyMiddleware',
     'htmlmin.middleware.MarkRequestMiddleware',
 )

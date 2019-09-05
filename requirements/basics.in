@@ -1,10 +1,8 @@
-
 # pip-compile requirements/deploy.in
 # pip-sync requirements/deploy.txt
 
 
 # base
-# mysql-python==1.2.5
 # mysqlclient
 psycopg2-binary
 sentry-sdk
@@ -17,6 +15,7 @@ django-modeltranslation
 django-ckeditor==5.4
 django-htmlmin
 django-textblocks
+django-axes
 
 # own tools
 -e 'git+git@github.com:benzkji/djangocms-baseplugins.git@master#egg=djangocms-baseplugins'

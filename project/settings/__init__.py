@@ -7,6 +7,7 @@ include(
     'cms.py',
     'placeholders.py',
     'ckeditor.py',
+    'security.py',
     '_{{ project_name }}_dev.py',
     optional('local.py'),
     scope=globals()
