@@ -11,6 +11,7 @@ INSTALLED_APPS = [
 
     '{{ project_name }}',
 
+    'axes',
     # 'djangocms_misc',
     'djangocms_misc.basic',
     # 'djangocms_misc.alternate_toolbar',
