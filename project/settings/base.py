@@ -47,6 +47,7 @@ INTERNAL_IPS = (
 
 MIGRATION_MODULES = {
     'textblocks': 'apps.{{ project_name }}.migrations_textblocks',
+    # 'image': 'apps.{{ project_name }}.migrations_plugins.image',
 }
 
 ROOT_URLCONF = 'project.urls'

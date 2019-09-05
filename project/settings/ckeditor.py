@@ -30,6 +30,6 @@ CKEDITOR_CONFIGS = {
             ['ShowBlocks', 'Source'],
         ],
         'format_tags': 'h2;p',
-        'width': '793',
+        'width': '730',
     }
 }
