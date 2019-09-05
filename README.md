@@ -50,8 +50,9 @@ To bootstrap the project on your machine::
     gulp pip-compile  
     # not first time users, install deps
     pip install -r requirements/dev.txt
-    # django works
-    manage.py syncdb --migrate
+    # django works?
+    manage.py check
+    manage.py migrate
     manage.py createsuperuser
     manage.py runserver
 
@@ -60,7 +61,7 @@ To bootstrap/deploy on remote server::
     git init
     git add .
     git commit -a -m'initial'
-    git add remote origin git@bitbucket.org:bnzk/{{project_name}}
+    git add remote origin ssh://git@yourgitprovider.com/org/{{project_name}}.git
     git push --set-upstream origin master
 
     fab bootstrap
