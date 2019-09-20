@@ -29,7 +29,7 @@ KEEP_COMMENTS_ON_MINIFYING = True
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 # enable when behind nginx proxy
-# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTOCOL', 'https')
 
 # SENTRY_DSN = 'https://xxxxxx@sentry.io/1416363'
 SENTRY_DSN = False
