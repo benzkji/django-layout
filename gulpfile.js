@@ -3,7 +3,7 @@ var gulp = require('gulp'),
     consolidate = require('gulp-consolidate'),
     autoprefixer = require('gulp-autoprefixer'),
     shell = require('gulp-shell'),
-    jshint= require('gulp-jshint'),
+    jshint = require('gulp-jshint'),
     livereload = require('gulp-livereload'),
 
     // iconfont = require('gulp-iconfont'),
@@ -23,10 +23,10 @@ var static_path = 'apps/{{ project_name }}/static/{{ project_name }}/';
 gulp.task('sass', function () {
     return gulp.src(static_path + 'sass/screen.sass')
         .pipe(sass({
-                sourceComments: 'map',
-                sourceMap: 'sass',
-                outputStyle: 'nested'
-            }).on('error', sass.logError))
+            sourceComments: 'map',
+            sourceMap: 'sass',
+            outputStyle: 'nested'
+        }).on('error', sass.logError))
         .pipe(autoprefixer("last 2 versions"))
         .pipe(gulp.dest(static_path + 'css/'))
 });
@@ -42,7 +42,7 @@ gulp.task('svgstore', function () {
                 $('[fill]').removeAttr('fill');
                 $('[style]').removeAttr('style');
             },
-            parserOptions: { xmlMode: true }
+            parserOptions: {xmlMode: true}
         }))
         .pipe(svgmin(function (file) {
             var prefix = path.basename(file.relative, path.extname(file.relative));
@@ -62,7 +62,7 @@ gulp.task('svgstore', function () {
 
 // last used: bos
 gulp.task('iconfont', function () {
-    var runTimestamp = Math.round(Date.now()/1000);
+    var runTimestamp = Math.round(Date.now() / 1000);
     return gulp.src([static_path + 'iconfont/svg/*.svg'])
         .pipe(iconfont({
                 fontName: 'icons', // required
@@ -72,21 +72,21 @@ gulp.task('iconfont', function () {
                 formats: ['ttf', 'eot', 'woff'], // default, 'woff2' and 'svg' are available
                 timestamp: runTimestamp // recommended to get consistent builds when watching files
             }
-        )
-    ).on('glyphs', function(glyphs, options) {
-        // CSS templating, e.g.
-        console.log(glyphs, options);
-        gulp.src(static_path + 'iconfont/scss/_iconfont.scss')
-            .pipe(consolidate('lodash', {
-                glyphs: glyphs,
-                fontName: 'icons',
-                fontPath: '../iconfont/font/',
-                className: 'icon'
-            })
-        )
-        .pipe(gulp.dest(static_path + 'sass/'));
-    })
-    .pipe(gulp.dest(static_path + 'iconfont/font/'));
+            )
+        ).on('glyphs', function (glyphs, options) {
+            // CSS templating, e.g.
+            console.log(glyphs, options);
+            gulp.src(static_path + 'iconfont/scss/_iconfont.scss')
+                .pipe(consolidate('lodash', {
+                        glyphs: glyphs,
+                        fontName: 'icons',
+                        fontPath: '../iconfont/font/',
+                        className: 'icon'
+                    })
+                )
+                .pipe(gulp.dest(static_path + 'sass/'));
+        })
+        .pipe(gulp.dest(static_path + 'iconfont/font/'));
 });
 
 
@@ -98,48 +98,51 @@ gulp.task('jshint', function () {
 
 
 gulp.task('flake8', shell.task(
-        ['flake8 --ignore=errors']
+    ['flake8 --ignore=errors']
     )
 );
 
 
 gulp.task('pip-compile', shell.task(
-        [
-            'pip-compile requirements/dev.in',
-            'pip install -r requirements/dev.txt',
-            'pip-compile requirements/deploy.in',
-            'safety check',
-            // let it get a bit older, until it really works
-            // 'pip-sync requirements/dev.txt',
-        ]
+    [
+        'pip-compile requirements/dev.in',
+        'pip install -r requirements/dev.txt',
+        'pip-compile requirements/deploy.in',
+        'safety check',
+        // let it get a bit older, until it really works
+        // 'pip-sync requirements/dev.txt',
+    ]
     )
 );
 
 
 gulp.task('pip-compile-upgrade', shell.task(
-        [
-            'pip-compile requirements/dev.in --upgrade',
-            'pip install -r requirements/dev.txt',
-            'pip-compile requirements/deploy.in --upgrade',
-            'safety check',
-            // let it get a bit older, until it really works
-            // 'pip-sync requirements/dev.txt',
-        ]
+    [
+        'pip-compile requirements/dev.in --upgrade',
+        'pip install -r requirements/dev.txt',
+        'pip-compile requirements/deploy.in --upgrade',
+        'safety check',
+        // let it get a bit older, until it really works
+        // 'pip-sync requirements/dev.txt',
+    ]
     )
 );
 
 
 gulp.task('node2static', function () {
+    // jquery/ui: (and other?!)
+    // save some repository space, by adding specific sub folders only
+    // base is always node_modules, so a folder jquery/dist will be made
     return gulp.src(
-            [
-              'node_modules/jquery/**/*',
-              'node_modules/jquery-ui/**/*',
-              'node_modules/slick-carousel/**/*',
-              'node_modules/normalize-css/**/*',
-              'node_modules/magnific-popup/**/*',
-            ],
-            {'base': 'node_modules', }
-        )
+        [
+            'node_modules/jquery/dist/*',
+            'node_modules/jquery-ui/ui/widget.js',
+            'node_modules/slick-carousel/**/*',
+            'node_modules/normalize-css/**/*',  // size ok
+            'node_modules/magnific-popup/**/*',
+        ],
+        {'base': 'node_modules',}
+    )
         .pipe(gulp.dest(static_path + '/libs/'));
 });
 
