@@ -18,8 +18,13 @@ django-textblocks
 django-axes
 
 # own tools
+<<<<<<< HEAD
 -e 'git+https://github.com/benzkji/djangocms-baseplugins.git@master#egg=djangocms-baseplugins'
 -e 'git+https://github.com/benzkji/django-filer-addons.git@master#egg=django-filer-addons'
+=======
+-e 'git+git@github.com:benzkji/djangocms-baseplugins.git@develop#egg=djangocms-baseplugins'
+-e 'git+git@github.com:benzkji/django-filer-addons.git@master#egg=django-filer-addons'
+>>>>>>> 6a95165f9cffce710b5661209405e4d5a82958de
 django-formfieldstash
 django-ckeditor-link
 django-mailprotector
