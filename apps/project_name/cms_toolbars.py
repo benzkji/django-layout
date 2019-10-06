@@ -19,3 +19,8 @@ class CustomToolbar(AlternateBasicToolbar):
         #     _('Projects'),
         #     url=admin_reverse('newsevents_event_changelist')
         # )
+        # self.admin_menu.add_sideframe_item(
+        #     _('Texte'),
+        #     url=admin_reverse('textblocks_textblock_changelist')
+        # )
+
