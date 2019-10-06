@@ -28,6 +28,8 @@ KEEP_COMMENTS_ON_MINIFYING = True
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
+TEXTBLOCKS_SHOWKEY = True
+
 # enable when behind nginx proxy
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTOCOL', 'https')
 

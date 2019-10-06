@@ -19,8 +19,8 @@ $.widget( "bnzk.navigation", {
         this.$burger = this.element.find(this.options.burger_selector);
         this.$close = this.element.find(this.options.close_selector);
         this.$nav = this.element.find(this.options.nav_selector);
-        this.$burger.click($.proxy(this._on_toggle, this));
-        this.$close.click($.proxy(this.hide_nav, this));
+        this._on(this.$burger, {'click': this._on_toggle});
+        this._on(this.$close, {'click': this.hide_nav});
     },
 
     _on_toggle: function(e) {
