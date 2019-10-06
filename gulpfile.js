@@ -104,6 +104,17 @@ gulp.task('flake8', shell.task(
 
 
 gulp.task('pip-compile', shell.task(
+<<<<<<< HEAD
+        [
+            'pip-compile requirements/dev.in',
+            // 'pip install -r requirements/dev.txt',
+            'pip-sync requirements/dev.txt',
+            'pip-compile requirements/deploy.in',
+            'safety check',
+            // let it get a bit older, until it really works
+            // 'pip-sync requirements/dev.txt',
+        ]
+=======
     [
         'pip-compile requirements/dev.in',
         'pip install -r requirements/dev.txt',
@@ -112,11 +123,23 @@ gulp.task('pip-compile', shell.task(
         // let it get a bit older, until it really works
         // 'pip-sync requirements/dev.txt',
     ]
+>>>>>>> 6a95165f9cffce710b5661209405e4d5a82958de
     )
 );
 
 
 gulp.task('pip-compile-upgrade', shell.task(
+<<<<<<< HEAD
+        [
+            'pip-compile requirements/dev.in --upgrade',
+            // 'pip install -r requirements/dev.txt',
+            'pip-sync requirements/dev.txt',
+            'pip-compile requirements/deploy.in --upgrade',
+            'safety check',
+            // let it get a bit older, until it really works
+            // 'pip-sync requirements/dev.txt',
+        ]
+=======
     [
         'pip-compile requirements/dev.in --upgrade',
         'pip install -r requirements/dev.txt',
@@ -125,6 +148,7 @@ gulp.task('pip-compile-upgrade', shell.task(
         // let it get a bit older, until it really works
         // 'pip-sync requirements/dev.txt',
     ]
+>>>>>>> 6a95165f9cffce710b5661209405e4d5a82958de
     )
 );
 
