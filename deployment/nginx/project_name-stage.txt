@@ -12,16 +12,17 @@ server {
     # comment out or not
     # return 301 http://{{ project_name }}.ch;
 
-    # protected! (or not)
+    # protected! (or not. user/pw: test)
     auth_basic "Access prohibited. test";
-    auth_basic_user_file /home/bodenschatz/sites/bodenschatz-stage/deployment/nginx/.htpasswd-stage;
+    auth_basic_user_file /home/{{ project_name }}/sites/{{ project_name }}-stage/deployment/nginx/.htpasswd-stage;
 
     location / {
         proxy_set_header Host $http_host;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_redirect off;
         # x-forwarded-proto for gunicorn, x-forwarded-protocol for Django!
         # $scheme is http, as the front nginx is doing ssl termination!
-        proxy_set_header X-Forwarded-Proto $scheme;        proxy_redirect off;
+        proxy_set_header X-Forwarded-Proto $scheme;
         if (!-f $request_filename) {
             proxy_pass      http://{{ project_name }}_stage_server ;
             break;

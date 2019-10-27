@@ -3,8 +3,8 @@
 server {
     listen 127.0.0.1:62321;
     server_name
-        {{ project_name }}.com
-        {{ project_name }}.live.bnzk.ch
+        {{ project_name }}.ch
+        # {{ project_name }}.live.bnzk.ch
         ;
     rewrite ^/(.*) http://www.{{ project_name }}.com/$1 permanent;
 }
@@ -16,8 +16,7 @@ upstream {{ project_name }}_live_server {
 server {
     listen 127.0.0.1:62321;
     server_name
-        {{ project_name }}.com
-        www.{{ project_name }}.ch
+        {{ project_name }}.ch
         {{ project_name }}.live.bnzk.ch
         ;
 
