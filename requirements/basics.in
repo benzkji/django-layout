@@ -4,27 +4,22 @@
 
 # base
 # mysqlclient
-psycopg2-binary
+psycopg2-binary<2.8
 sentry-sdk
 
 # django + tools
-django>=1.11,<2
+django<3
 django-split-settings
 django-compressor
 django-modeltranslation
-django-ckeditor==5.4
+django-ckeditor<6
 django-htmlmin
 django-textblocks
 django-axes
 
 # own tools
-<<<<<<< HEAD
 -e 'git+https://github.com/benzkji/djangocms-baseplugins.git@master#egg=djangocms-baseplugins'
 -e 'git+https://github.com/benzkji/django-filer-addons.git@master#egg=django-filer-addons'
-=======
--e 'git+git@github.com:benzkji/djangocms-baseplugins.git@develop#egg=djangocms-baseplugins'
--e 'git+git@github.com:benzkji/django-filer-addons.git@master#egg=django-filer-addons'
->>>>>>> 6a95165f9cffce710b5661209405e4d5a82958de
 django-formfieldstash
 django-ckeditor-link
 django-mailprotector
