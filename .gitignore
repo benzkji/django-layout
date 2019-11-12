@@ -1,6 +1,7 @@
 
-# IDEs
+# IDEs, own custom files
 .idea/
+/project/settings/local.py
 
 # user data (uploads, static files, etc)
 /public/
