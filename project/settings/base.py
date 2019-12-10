@@ -129,6 +129,7 @@ TEMPLATES = [
                 'sekizai.context_processors.sekizai',
                 'cms.context_processors.cms_settings',
                 'djangocms_misc.basic.context_processors.get_env',
+                '{{ project_name }}.context_processors.general_contextor',
             ],
             'loaders': [
                 'django.template.loaders.filesystem.Loader',

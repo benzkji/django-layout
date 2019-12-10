@@ -94,7 +94,7 @@
             <script src="{% static '{{ project_name }}/js/main.js' %}"></script>
         {% endcompress %}
 
-        {% if is_live and not request.user.is_staff %}
+        {% if is_live and not request.user.is_staff and analytics_ua %}
             {% compress js inline %}
                 <script>
                     // Google Analytics: change UA-XXXXX-X to be your site's ID. -->
@@ -103,10 +103,11 @@
                     e=o.createElement(i);r=o.getElementsByTagName(i)[0];
                     e.src='https://www.google-analytics.com/analytics.js';
                     r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-                    ga('create','UA-{{analytics_ua}}','auto');ga('send','pageview');
+                    ga('create','{{ analytics_ua }}','auto');ga('send','pageview');
                 </script>
             {% endcompress %}
         {% endif %}
+
 
         {% render_block "js" %}
 

@@ -9,6 +9,8 @@ include(
 
 ENV = 'live'
 
+ANALYTICS_UA = 'UA-xxxxx-1'
+
 ALLOWED_HOSTS = (
     '{{ project_name }}.ch',
     'www.{{ project_name }}.ch',
