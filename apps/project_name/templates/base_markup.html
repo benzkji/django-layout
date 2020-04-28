@@ -28,6 +28,8 @@
         -->
         <title>{% block title_tag %}{% endblock %}</title>
         <meta name="description" content="{% block meta_description %}{% endblock %}">
+        {% include '{{ project_name }}/partials/favicon.html' %}
+
 
         <meta content="{% block facebook_url %}{% endblock %}" property="og:url"/>
         <meta content="{% block facebook_title %}{% endblock %}" property="og:title"/>
