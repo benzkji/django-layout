@@ -1,14 +1,40 @@
+@use "sass:map"
+
+
+%max_width_item
+    box-sizing: border-box
+    max-width: $bp_max_width
+    margin-right: auto
+    margin-left: auto
+
+%content-padding
+    padding-left: 12px
+    padding-right: 12px
+    @media($bp_md)
+        padding-left: 20px
+        padding-right: 20px
+    @media($bp_lg)
+        padding-left: 50px
+        padding-right: 50px
 
 
 // from / to (big / small)
-@mixin responsive_font_size($font_size_big, $font_size_small)
+@mixin advanced_responsive_font_size($font_size_big, $font_size_small)
     $big_reference: $font_size_big - $font_size_small
     font-size: $font_size_small
     @media($bp_sm)
-        font-size: $big_reference * 0.25 + $font_size_small
+        font-size: $big_reference * 0.2 + $font_size_small
     @media($bp_md)
-        font-size: $big_reference * 0.5 + $font_size_small
+        font-size: $big_reference * 0.4 + $font_size_small
     @media($bp_lg)
-        font-size: $big_reference * 0.75 + $font_size_small
+        font-size: $big_reference * 0.77 + $font_size_small
     @media($bp_xl)
         font-size: $font_size_big
+
+
+@mixin responsive_font_size($font_size_name)
+    $big: map-get($fs, $font_size_name)
+    $small: map-get($fsm, $font_size_name)
+    +advanced_responsive_font_size($big, $small)
+
+
