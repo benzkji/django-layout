@@ -105,6 +105,7 @@ gulp.task('flake8', shell.task(
 
 gulp.task('pip-compile', shell.task(
         [
+            'pip install -U pip setuptools pip-tools',
             'pip-compile requirements/dev.in',
             // 'pip install -r requirements/dev.txt',
             'pip-sync requirements/dev.txt',
@@ -117,6 +118,7 @@ gulp.task('pip-compile', shell.task(
 
 gulp.task('pip-compile-upgrade', shell.task(
         [
+            'pip install -U pip setuptools pip-tools',
             'pip-compile requirements/dev.in --upgrade',
             // 'pip install -r requirements/dev.txt',
             'pip-sync requirements/dev.txt',
