@@ -2,7 +2,7 @@ import datetime
 import os
 import sys
 
-from fabric.api import task, run, roles, cd, execute, hide, puts
+from fabric.api import task, run, settings, roles, cd, execute, hide, puts
 from fabric.contrib.console import confirm
 from fabric.operations import get, local, put
 from fabric.contrib.project import rsync_project
@@ -573,11 +573,13 @@ def get_db_postgresql(local_db_name, remote_db_name, dump_only=False):
     dump_name = 'dump_%s_%s-%s.sql' % (env.project_name, env.env_prefix, date)
     remote_dump_file = os.path.join(env.project_dir, dump_name)
     local_dump_file = './%s' % dump_name
-    options, prompts = _get_postgres_options_prompts(remote_db_options)
+    django_settings = _get_settings()
+    remote_db_settings = django_settings.DATABASES.get('default', None)
+    options, prompts = _get_postgres_options_prompts(remote_db_settings)
     with settings(prompts=prompts):
         run('pg_dump {options} --clean --no-owner --if-exists --schema=public {database} > {file}'.format(
             options=options,
-            database=remote_db_options['NAME'],
+            database=remote_db_settings['NAME'],
             file=remote_dump_file,
         ))
     get(remote_path=remote_dump_file, local_path=local_dump_file)
@@ -608,12 +610,14 @@ def put_db_postgresql(local_db_name, from_file, remote_db_name):
     if not from_file:
         local('rm %s' % local_dump_file)
     # up you go
-    options, prompts = _get_postgres_options_prompts(remote_db_options)
+    django_settings = _get_settings()
+    remote_db_settings = django_settings.DATABASES.get('default', None)
+    options, prompts = _get_postgres_options_prompts(remote_db_settings)
     with settings(prompts=prompts):
         print(prompts)
         run('psql {options} {database} < {file}'.format(
             options=options,
-            database=remote_db_options['NAME'],
+            database=remote_db_settings['NAME'],
             file=remote_dump_file,
         ))
     run('rm %s' % remote_dump_file)
