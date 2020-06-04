@@ -1,6 +1,6 @@
 # for djangocms-baseplugins, or other plugins, as needed
 
-# if you do, do migrations on your own!
+# if you dont, do migrations on your own! (as with translate!)
 DJANGOCMS_BASEPLUGINS_USE_FILER_ADDONS = True
 
 
