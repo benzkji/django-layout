@@ -73,26 +73,34 @@
 
         {% cms_toolbar %}
 
-        <div id="page" class="{% block page_class %}{% endblock %}">
+        <div id="page" class="{% block page_class %}page {% endblock %}">
 
             <header>
-                <a class="logo"><img src="{% static '{{ project_name }}/img/logo.png' %}" alt="Logo"></a>
-                <nav class="nav nav_main">
+                {% if show_location %}<a class="header-location" href="/"><img src="{% static 'guardaval/img/logo-braun.png' %}" alt="Open Goole Maps">Sporz</a>{% endif %}
+                <a class="header-logo" href="/"><img src="{% static 'guardaval/img/logo-braun.png' %}" alt="Logo Guarda Val"></a>
+                <span class="burger"></span>
+            </header>
+
+            {% block content %}
+                <div class="content">
+                    {% placeholder content %}
+                </div>
+            {% endblock %}
+
+            <div class="menu-overlay">
+                <nav class="menu">
                     <ul>
                         {% show_menu 0 2 2 2 %}
                     </ul>
                 </nav>
-            </header>
-
-            {% block content %}
-            {% endblock %}
+            </div>
 
         </div>
 
         {% compress js %}
             <script src="{% static '{{ project_name }}/libs/jquery/dist/jquery.js' %}"></script>
             <script src="{% static '{{ project_name }}/libs/jquery-ui/ui/widget.js' %}"></script>
-            <script src="{% static '{{ project_name }}/js/navigation.js' %}"></script>
+            <script src="{% static '{{ project_name }}/js/menu.js' %}"></script>
             <script src="{% static '{{ project_name }}/js/main.js' %}"></script>
         {% endcompress %}
 

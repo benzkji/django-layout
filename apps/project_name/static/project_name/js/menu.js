@@ -1,24 +1,24 @@
 
-$.widget( "bnzk.navigation", {
+$.widget( "bnzk.menu", {
 
     options: {
         in_time: 230,
         out_time: 100,
         'burger_selector': '.burger',
-        'close_selector': '.close_nav',
-        'nav_selector': '.nav-main',
+        'close_selector': '.menu-close',
+        'overlay_selector': '.menu-overlay',
         _: "_"
     },
 
     $burger: null,
     $close: null,
-    $nav: null,
+    $overlay: null,
     visible: false,
 
     _create: function() {
         this.$burger = this.element.find(this.options.burger_selector);
         this.$close = this.element.find(this.options.close_selector);
-        this.$nav = this.element.find(this.options.nav_selector);
+        this.$overlay = this.element.find(this.options.overlay_selector);
         this._on(this.$burger, {'click': this._on_toggle});
         this._on(this.$close, {'click': this.hide_nav});
     },
@@ -32,12 +32,16 @@ $.widget( "bnzk.navigation", {
     },
 
     show_nav: function() {
-        this.$nav.show(this.in_time);
+        $('body').addClass('body-overlay-visible');
+        this.$overlay.addClass('menu-overlay_visible');
+        this.$overlay.show(this.in_time);
         this.visible = true;
     },
 
     hide_nav: function() {
-        this.$nav.hide(this.out_time);
+        $('body').removeClass('body-overlay-visible');
+        this.$overlay.removeClass('menu-overlay_visible');
+        this.$overlay.hide(this.out_time);
         this.visible = false;
     },
 
