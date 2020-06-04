@@ -18,7 +18,7 @@ django-textblocks
 django-axes
 
 # own tools
--e 'git+https://github.com/benzkji/djangocms-baseplugins.git@master#egg=djangocms-baseplugins'
+-e 'git+https://github.com/benzkji/djangocms-baseplugins.git@develop#egg=djangocms-baseplugins'
 -e 'git+https://github.com/benzkji/django-filer-addons.git@master#egg=django-filer-addons'
 django-formfieldstash
 django-ckeditor-link
