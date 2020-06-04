@@ -1,6 +1,9 @@
 from .base import ugettext
 
 
+# just in case...
+DJANGOCMS_MISC_UNTRANSLATED_PLACEHOLDERS = False
+
 CMS_TEMPLATES = (
     ('{{project_name}}/standard.html', ugettext('Standard')),
     ('{{project_name}}/home.html', ugettext('Homepage')),

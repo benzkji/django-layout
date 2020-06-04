@@ -1,26 +1,8 @@
-{ % if is_live and not request.user.is_staff and analytics_us %}
-{ % compress
-js
-inline %}
-< script >
-// Google
-Analytics: change
-UA - XXXXX - X
-to
-be
-your
-site
-'s ID. -->
-(function(b, o, i, l, e, r){b.GoogleAnalyticsObject=l;b[l] | | (b[l]=
-function()
-{(b[l].q=b[l].q | |[]).push(arguments)});b[l].l = +new
-Date;
-e = o.createElement(i);
-r = o.getElementsByTagName(i)[0];
-e.src = 'https://www.google-analytics.com/analytics.js';
-r.parentNode.insertBefore(e, r)}(window, document, 'script', 'ga'));
-ga('create', '{{ analytics_ua }}', 'auto');
-ga('send', 'pageview');
-< / script >
-{ % endcompress %}
-{ % endif %}
+from django.conf import settings
+
+
+def general_contextor(request):
+    context = {}
+    if getattr(settings, 'GOOGLE_ANALYTICS_UA', None):
+        context['analytics_ua'] = settings.GOOGLE_ANALYTICS_UA
+    return context

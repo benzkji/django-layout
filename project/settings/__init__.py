@@ -6,6 +6,7 @@ include(
     'apps.py',
     'cms.py',
     'placeholders.py',
+    'plugins.py',
     'ckeditor.py',
     '_{{ project_name }}_dev.py',
     'security.py',
