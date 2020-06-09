@@ -88,11 +88,14 @@
             {% endblock %}
 
             <div class="menu-overlay">
-                <nav class="menu">
-                    <ul>
-                        {% show_menu 0 2 2 2 %}
-                    </ul>
-                </nav>
+                <div class="menu-overlay__inner">
+                    <span class="menu-overlay__close">×</span>
+                    <nav class="menu">
+                        <ul>
+                            {% show_menu 0 2 2 2 %}
+                        </ul>
+                    </nav>
+                </div>
             </div>
 
         </div>

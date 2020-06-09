@@ -1,4 +1,4 @@
 
 $( document ).ready(function() {
-    $("header").navigation()
+    $("header").menu()
 });
