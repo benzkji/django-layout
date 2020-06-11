@@ -1,6 +1,9 @@
 from .base import ugettext
 
 
+# just in case...
+DJANGOCMS_MISC_UNTRANSLATED_PLACEHOLDERS = False
+
 CMS_TEMPLATES = (
     ('{{project_name}}/standard.html', ugettext('Standard')),
     ('{{project_name}}/home.html', ugettext('Homepage')),
@@ -24,26 +27,26 @@ LANGUAGE_CODE = 'de'
 LANGUAGES = (
     ('de', ugettext(u"Deutsch")),
     ('en', ugettext(u"English")),
-    ('fr', ugettext(u"Francais")),
+    ('it', ugettext(u"Italiano")),
 )
 
 CMS_LANGUAGES = {
     1: [
         {
             'code': 'de',
-            'name': ugettext('Deutsch'),
+            'name': ('DE'),
             'fallbacks': ['en', 'fr'],
             'public': True,
         },
         {
             'code': 'en',
-            'name': ugettext('English'),
+            'name': ('EN'),
             'fallbacks': ['fr', 'de'],
             'public': True,
         },
         {
-            'code': 'fr',
-            'name': ugettext('French'),
+            'code': 'it',
+            'name': ('IT'),
             'fallbacks': ['en', 'de'],
             'public': True,
         },

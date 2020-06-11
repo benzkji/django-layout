@@ -2,7 +2,7 @@ import datetime
 import os
 import sys
 
-from fabric.api import task, run, roles, cd, execute, hide, puts
+from fabric.api import task, run, settings, roles, cd, execute, hide, puts
 from fabric.contrib.console import confirm
 from fabric.operations import get, local, put
 from fabric.contrib.project import rsync_project
@@ -240,6 +240,45 @@ def crontab():
 
 @task
 @roles('web')
+def supervisord():
+    """
+    install and restart supervisord
+    """
+    if env.get('deploy_supervisord', None):
+        run(
+            'cp {project_dir}/deployment/supervisor/supervisord.conf'
+            ' ~/supervisor/.'.format(**env)
+        )
+        run(
+            'cp {project_dir}/deployment/supervisor/supervisord.sh'
+            ' ~/init/.'.format(**env)
+        )
+        run('rm -f ~/supervisor/programs/*-{env_prefix}'.format(**env))
+        run(
+            'cp {project_dir}/deployment/supervisor//programs/*-{env_prefix}'
+            ' ~/supervisor/programs/.'.format(**env)
+        )
+        run('supervisorctl -c ~/supervisor/supervisord.conf update')
+        run('supervisorctl -c ~/supervisor/supervisord.conf status')
+    else:
+        puts('not deploying supervisord to %s!' % env.env_prefix)
+
+
+@task
+@roles('web')
+def supervisorctl(command):
+    """
+    control supervisord
+    """
+    if env.get('deploy_supervisord', None):
+        run('supervisorctl -c ~/supervisor/supervisord.conf {}'.format(command))
+    else:
+        puts('supervisord not deployed to %s!' % env.env_prefix)
+
+
+
+@task
+@roles('web')
 def collectstatic():
     """
     Collect static files from apps and other locations in a single location.
@@ -397,7 +436,7 @@ def get_db(dump_only=False):
 
 @task
 @roles('db')
-def put_db(local_db_name=False):
+def put_db(local_db_name=False, from_file=None):
     yes_no1 = confirm(
         "This will erase your remote DB! Continue?",
         default=False,
@@ -413,9 +452,9 @@ def put_db(local_db_name=False):
         local_db_name = _get_local_db_name()
     # go for it!
     if env.is_postgresql:
-        put_db_postgresql(local_db_name, remote_db_name)
+        put_db_postgresql(local_db_name, from_file, remote_db_name)
     else:
-        put_db_mysql(local_db_name, remote_db_name)
+        put_db_mysql(local_db_name, from_file, remote_db_name)
 
 
 def get_db_mysql(local_db_name, remote_db_name, dump_only=False):
@@ -453,15 +492,20 @@ def put_db_mysql(local_db_name, remote_db_name):
     """
     create_mycnf()
     my_cnf_file = _get_my_cnf_name()
-    dump_name = 'dump_for_%s.sql' % env.env_prefix
-    local_dump_file = './%s' % dump_name
-    local('mysqldump --user=root {database} > {file}'.format(
-        database=local_db_name,
-        file=local_dump_file,
-    ))
+    if not from_file:
+        dump_name = 'dump_for_%s.sql' % env.env_prefix
+        local_dump_file = './%s' % dump_name
+        local('mysqldump --user=root {database} > {file}'.format(
+            database=local_db_name,
+            file=local_dump_file,
+        ))
+    else:
+        dump_name = os.path.basename(from_file)
+        local_dump_file = from_file
     remote_dump_file = os.path.join(env.project_dir, dump_name)
     put(remote_path=remote_dump_file, local_path=local_dump_file)
-    local('rm %s' % local_dump_file)
+    if not from_file:
+        local('rm %s' % local_dump_file)
     run('mysql  '
         ' --defaults-file={cnf_file}'
         ' {database} < {file} '.format(
@@ -504,6 +548,23 @@ def create_mycnf(force=False):
         local('rm {cnf_file}'.format(cnf_file=my_cnf_file, **env))
 
 
+def _get_postgres_options_prompts(remote_db_options):
+    options = ''
+    user = remote_db_options.get('USER', '')
+    if user:
+        options += ' --username={}'.format(user)
+    if remote_db_options.get('HOST', None):
+        options += ' --host={}'.format(remote_db_options['HOST'])
+    prompts = {}
+    if remote_db_options.get('PASSWORD', None):
+        options += ' --password'
+        prompts = {
+            'Password: ': remote_db_options['PASSWORD'],
+            'Password for user {}: '.format(user): remote_db_options['PASSWORD'],
+        }
+    return options, prompts
+
+
 def get_db_postgresql(local_db_name, remote_db_name, dump_only=False):
     """
     dump db on server, import to local mysql (must exist)
@@ -512,10 +573,15 @@ def get_db_postgresql(local_db_name, remote_db_name, dump_only=False):
     dump_name = 'dump_%s_%s-%s.sql' % (env.project_name, env.env_prefix, date)
     remote_dump_file = os.path.join(env.project_dir, dump_name)
     local_dump_file = './%s' % dump_name
-    run('pg_dump -cO {database} > {file}'.format(
-        database=remote_db_name,
-        file=remote_dump_file,
-    ))
+    django_settings = _get_settings()
+    remote_db_settings = django_settings.DATABASES.get('default', None)
+    options, prompts = _get_postgres_options_prompts(remote_db_settings)
+    with settings(prompts=prompts):
+        run('pg_dump {options} --clean --no-owner --if-exists --schema=public {database} > {file}'.format(
+            options=options,
+            database=remote_db_settings['NAME'],
+            file=remote_dump_file,
+        ))
     get(remote_path=remote_dump_file, local_path=local_dump_file)
     run('rm %s' % remote_dump_file)
     if not dump_only:
@@ -525,27 +591,35 @@ def get_db_postgresql(local_db_name, remote_db_name, dump_only=False):
         local('rm %s' % local_dump_file)
 
 
-def put_db_postgresql(local_db_name, remote_db_name):
+def put_db_postgresql(local_db_name, from_file, remote_db_name):
     """
     dump local db, import on server database (must exist)
     """
-    if not local_db_name:
-        local_db_name = env.project_name
-    dump_name = 'dump_for_%s.sql' % env.env_prefix
-    local_dump_file = './%s' % dump_name
-    local('pg_dump -cO {database} > {file}'.format(
-        database=local_db_name,
-        file=local_dump_file,
-    ))
+    if not from_file:
+        dump_name = 'dump_for_%s.sql' % env.env_prefix
+        local_dump_file = './%s' % dump_name
+        local('pg_dump --clean --no-owner --if-exists --schema=public {database} > {file}'.format(
+            database=local_db_name,
+            file=local_dump_file,
+        ))
+    else:
+        dump_name = os.path.basename(from_file)
+        local_dump_file = from_file
     remote_dump_file = os.path.join(env.project_dir, dump_name)
     put(remote_path=remote_dump_file, local_path=local_dump_file)
-    local('rm %s' % local_dump_file)
-    # run('dropdb %s' % remote_db_name)
-    # run('createdb %s' % remote_db_name)
-    run('psql  {database} < {file}'.format(
-        database=remote_db_name,
-        file=remote_dump_file,
-    ))
+    if not from_file:
+        local('rm %s' % local_dump_file)
+    # up you go
+    django_settings = _get_settings()
+    remote_db_settings = django_settings.DATABASES.get('default', None)
+    options, prompts = _get_postgres_options_prompts(remote_db_settings)
+    with settings(prompts=prompts):
+        print(prompts)
+        run('psql {options} {database} < {file}'.format(
+            options=options,
+            database=remote_db_settings['NAME'],
+            file=remote_dump_file,
+        ))
     run('rm %s' % remote_dump_file)
 
 
