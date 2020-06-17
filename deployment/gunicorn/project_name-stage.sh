@@ -18,7 +18,7 @@ PROJECT_DIR="$HOME/sites/$PROJECT_NAME-$PROJECT_ENV"
 WSGI="project.wsgi_${SITE}_${PROJECT_ENV}"
 THE_ENV="$PROJECT_DIR/virtualenv"
 # beware, choose the right version here! (2.7 for most mordern servers)
-PYTHONPATH="$THE_ENV/lib/python2.7/site-packages:$PROJECT_DIR"
+PYTHONPATH="$THE_ENV/lib/python3.7/site-packages:$PROJECT_DIR"
 
 # "--preload" - does prohibit kill -HUP!
 PRELOAD=""
