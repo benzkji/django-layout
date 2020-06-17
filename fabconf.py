@@ -49,7 +49,7 @@ def stage():
     """
     env.env_prefix = 'stage'
     env.deploy_crontab = False
-    env.main_user = '{project_name}'.format(**env)
+    env.main_user = 'bnzk-stage'.format(**env)
     server = '{main_user}@s20.wservices.ch'.format(**env)
     env.roledefs = {
         'web': [server],
