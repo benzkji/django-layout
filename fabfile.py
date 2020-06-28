@@ -486,7 +486,7 @@ def get_db_mysql(local_db_name, remote_db_name, dump_only=False):
         local('rm %s' % local_dump_file)
 
 
-def put_db_mysql(local_db_name, remote_db_name):
+def put_db_mysql(local_db_name, from_file, remote_db_name):
     """
     dump local db, import on server database (must exist)
     """
