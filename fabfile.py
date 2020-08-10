@@ -240,11 +240,12 @@ def crontab():
 
 @task
 @roles('web')
-def supervisord():
+def copy_restart_supervisord():
     """
     install and restart supervisord
     """
-    if env.get('deploy_supervisord', None):
+    if env.get('is_supervisord', None):
+        run('mkdir --parents ~/supervisor/')
         run(
             'cp {project_dir}/deployment/supervisor/supervisord.conf'
             ' ~/supervisor/.'.format(**env)
@@ -258,7 +259,8 @@ def supervisord():
             'cp {project_dir}/deployment/supervisor//programs/*-{env_prefix}'
             ' ~/supervisor/programs/.'.format(**env)
         )
-        run('supervisorctl -c ~/supervisor/supervisord.conf update')
+        run('~/init/supervisord.sh restart')
+        # run('supervisorctl -c ~/supervisor/supervisord.conf update')
         run('supervisorctl -c ~/supervisor/supervisord.conf status')
     else:
         puts('not deploying supervisord to %s!' % env.env_prefix)
@@ -270,7 +272,7 @@ def supervisorctl(command):
     """
     control supervisord
     """
-    if env.get('deploy_supervisord', None):
+    if env.get('is_supervisord', None):
         run('supervisorctl -c ~/supervisor/supervisord.conf {}'.format(command))
     else:
         puts('supervisord not deployed to %s!' % env.env_prefix)
@@ -321,7 +323,10 @@ def restart():
         copy_restart_uwsgi()
     if env.is_apache:
         exit("apache restart not implemented!")
-
+    if env.get('is_supervisord', None):
+        copy_restart_supervisord()
+    if env.get('is_systemd', None):
+        exit("global systemd restart not implemented!")
 
 @task
 @roles('web')
@@ -371,7 +376,8 @@ def copy_restart_gunicorn():
             ' $HOME/init/.'.format(site=site, **env)
         )
         run('chmod u+x $HOME/init/{site}-{env_prefix}.sh'.format(site=site, **env))
-        run(env.gunicorn_restart_command.format(site=site, **env))
+        if (not env.get('is_supervisord', None) and not env.get('is_systemd', Noe)):
+            run(env.gunicorn_restart_command.format(site=site, **env))
 
 
 def copy_restart_nginx():
