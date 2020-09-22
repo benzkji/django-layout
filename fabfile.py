@@ -376,7 +376,7 @@ def copy_restart_gunicorn():
             ' $HOME/init/.'.format(site=site, **env)
         )
         run('chmod u+x $HOME/init/{site}-{env_prefix}.sh'.format(site=site, **env))
-        if (not env.get('is_supervisord', None) and not env.get('is_systemd', Noe)):
+        if (not env.get('is_supervisord', None) and not env.get('is_systemd', None)):
             run(env.gunicorn_restart_command.format(site=site, **env))
 
 
