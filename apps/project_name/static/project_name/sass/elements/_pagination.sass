@@ -1,0 +1,17 @@
+
+
+.pagination
+    width: 100%
+    display: flex
+    justify-content: space-between
+    align-items: center
+    > span
+        @extend %bold
+        +responsive_font_size($fs_small)
+        //margin: 0 1em
+    a
+        @extend %arrow-button
+        margin-top: 0
+    .pagination__back
+        a span
+            transform: rotate(-180deg)
