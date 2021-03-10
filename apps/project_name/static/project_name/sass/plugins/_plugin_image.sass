@@ -1,0 +1,42 @@
+
+// home
+
+$pad: 5.65vw
+$pad2: 4.55vw
+
+&.page_home
+    .content
+        padding-bottom: 0
+    .plugin-image
+        position: fixed
+        // z-index: 2
+        top: $pad2
+        bottom: $pad2
+        left: $pad
+        right: $pad
+        text-align: center
+        figure, img
+            width: 100%
+            height: 100%
+            object-fit: cover
+            object-position: center center
+        figcaption
+            @extend %font-bold
+            text-transform: uppercase
+            display: block
+            margin-top: 0.5em
+
+.content
+    .plugin-gallery__sizer
+        width: 16.666%
+        // for rowHeight...
+        //span
+        //    display: block
+        //    height: 0
+        //    width: 100%
+        //    padding-top: 66%
+    .plugin-gallery
+        .children
+            @extend %masonry-container
+    .plugin-image
+        +masonry_item('plugin-image')
