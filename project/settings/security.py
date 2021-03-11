@@ -1,6 +1,13 @@
 
 # AXES: https://django-axes.readthedocs.io/en/latest/4_configuration.html
-AXES_FAILURE_LIMIT = 10
+AXES_FAILURE_LIMIT = 20  # high value, still protects
+AXES_LOCK_OUT_BY_COMBINATION_USER_AND_IP = True  # IP AND username
+AXES_COOLOFF_TIME = 12  # COOL down after 12 hours
+AXES_RESET_ON_SUCCESS = True
+AXES_META_PRECEDENCE_ORDER = [
+   'HTTP_X_FORWARDED_FOR',
+   'REMOTE_ADDR',
+]
 
 AUTHENTICATION_BACKENDS = [
     # AxesBackend should be the first backend in the AUTHENTICATION_BACKENDS list.
