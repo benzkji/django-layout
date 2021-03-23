@@ -1,0 +1,36 @@
+
+
+// styles for specific plugin
+
+.plugin-teaser
+    position: absolute
+    top: 0%
+    left: 0%
+    width: 160px
+    height: 160px
+    @media($bp_md)
+        width: 220px
+        height: 220px
+    border-radius: 200px
+    //@extend %font-regular
+    display: flex
+    z-index: 2
+    align-items: center
+    justify-content: center
+    text-align: center
+    @extend %font-bold
+    text-transform: uppercase
+    +responsive_font_size('normal')
+    text-decoration: none
+    span
+        max-width: 91%
+    &_smaller
+        width: 120px
+        height: 120px
+        @media($bp_md)
+            width: 180px
+            height: 180px
+    &_green
+        background-color: $c_green
+    &_red
+        background-color: $c_pink

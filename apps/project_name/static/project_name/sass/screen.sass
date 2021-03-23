@@ -1,14 +1,18 @@
 
 @import vars
+
+@import mixins/font
+@import mixins/padding
+@import elements/forms
+@import elements/pagination
+
+// main stuff
 @import body
-@import mixins
+@import base
+@import layout
+@import menu
 
-// instead of "body class", introduce "page_class" block!
-// use body only for scroll disabling and stuff that cant be done otherwise!
-#page
-    @import base
-    @import layout
-    @import menu
-    @import plugin
+// plugins
+@import plugins/base
+@import plugins/plugin_text
 
-@import plugin_x

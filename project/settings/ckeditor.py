@@ -21,6 +21,7 @@ CKEDITOR_CONFIGS = {
             ]),
         'toolbar': 'Custom',
         'toolbar_Custom': [
+            ['Maximize'],
             ['Format'],
             ['Bold', ],
             ['BulletedList', ],
