@@ -13,8 +13,21 @@ toolbar_pool.unregister(AlternateBasicToolbar)
 @toolbar_pool.register
 class CustomToolbar(AlternateBasicToolbar):
 
+    def add_crud_menu_item(self, app, model, menu=None, label=None, view='changelist'):
+        if not menu:
+            menu = self.admin_menu
+        if not label:
+            label = model
+        if self.request.user.has_perm('{}.view_{}'.format(app, model)):
+            menu.add_sideframe_item(
+                label,
+                url=reverse('admin:{}_{}_{}'.format(app, model, view)),
+            )
+
     def add_more_admin_menu_items(self):
-        pass
+
+        self.add_crud_menu_item('admin', 'log', label='Admin Log')
+
         # self.admin_menu.add_sideframe_item(
         #     _('Projects'),
         #     url=admin_reverse('newsevents_event_changelist')

@@ -4,6 +4,8 @@ from django.contrib.admin.models import LogEntry
 from formfieldstash.admin import FormFieldStashMixin
 from ckeditor_link.admin import DjangoLinkAdmin
 from ckeditor_link.link_model.conf import CKEDITOR_LINK_TYPE_CHOICES, CKEDITOR_LINK_STYLE_CHOICES
+from django.utils.html import format_html
+from django.template.defaultfilters import truncatechars
 
 from .models import Link
 
@@ -43,13 +45,16 @@ class LinkAdmin(FormFieldStashMixin, DjangoLinkAdmin):
 
 @admin.register(LogEntry)
 class LogEntryAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'edited_object', 'action_time', 'user', )
+    list_display = ('get_title', 'edited_object', 'action_time', 'user', )
     list_filter =  ('user', 'content_type', )
+
+    def get_title(self, log_entry):
+        return truncatechars(str(log_entry), 130)
 
     def edited_object(self, log_entry):
         obj = log_entry.get_edited_object()
         if obj:
-            return '<a href="{}">{}</a>'.format(log_entry.get_admin_url(), str(obj))
+            return format_html('<a href="{}">{}</a>', log_entry.get_admin_url(), truncatechars(str(obj), 70))
         else:
             return '-'
 
