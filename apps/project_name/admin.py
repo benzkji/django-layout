@@ -15,16 +15,22 @@ MY_CKEDITOR_LINK_TYPE_CHOICES = list(CKEDITOR_LINK_TYPE_CHOICES)
 #     ('project', 'Project', )
 # )
 
+MY_CKEDITOR_LINK_STYLE_CHOICES = list(CKEDITOR_LINK_STYLE_CHOICES)
+# MY_CKEDITOR_LINK_STYLE_CHOICES.append(
+#     ('fat_button', 'Fat Button', )
+# )
+
+LINK_TYPE_STASH = {
+    'cms_page': ['cms_page', 'html_anchor', ],
+}
+
 
 class LinkAdminForm(forms.ModelForm):
     link_type = forms.ChoiceField(
         required=False,
         choices=MY_CKEDITOR_LINK_TYPE_CHOICES,
         widget=forms.Select(
-            attrs={
-                'data-formfield-stash': 'true',
-                'data-original-field': 'link_type',
-            }
+            attrs=get_advanced_stash_attrs('link_type', LINK_TYPE_STASH)
         )
     )
     link_style = forms.ChoiceField(
@@ -36,11 +42,11 @@ class LinkAdminForm(forms.ModelForm):
 @admin.register(Link)
 class LinkAdmin(FormFieldStashMixin, DjangoLinkAdmin):
     form = LinkAdminForm
-    single_formfield_stash = ('link_type', )
 
+    # OLD TIMES!
     # fix for page widget error! use with cms 3.3.1
-    class Media:
-        js = ('cms/js/dist/bundle.admin.base.min.js',)
+    # class Media:
+    #     js = ('cms/js/dist/bundle.admin.base.min.js',)
 
 
 @admin.register(LogEntry)

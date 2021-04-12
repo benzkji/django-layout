@@ -1,0 +1,21 @@
+
+
+[program:project_name-live]
+
+environment=DJANGO_SETTINGS_MODULE=project.settings._project_name_live
+
+directory=%(ENV_HOME)s/sites/hauserspezial-live
+command=
+    %(ENV_HOME)s/sites/hauserspezial-stage/virtualenv/bin/gunicorn
+    --bind unix:///%(ENV_HOME)s/sites/project_name-live.sock
+    --worker-class gevent
+    --workers 2
+    project.wsgi
+
+autostart=true
+autorestart=true
+
+stdout_logfile=%(ENV_HOME)s/supervisor/logs/%(program_name)s.log
+stdout_logfile_maxbytes=10MB
+stderr_logfile=%(ENV_HOME)s/supervisor/logs/%(program_name)s.err
+stderr_logfile_maxbytes=10MB
