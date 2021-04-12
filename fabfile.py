@@ -245,7 +245,8 @@ def copy_restart_supervisord():
     install and restart supervisord
     """
     if env.get('is_supervisord', None):
-        run('mkdir --parents ~/supervisor/')
+        run('mkdir --parents ~/supervisor/programs')
+        run('mkdir --parents ~/supervisor/logs')
         run(
             'cp {project_dir}/deployment/supervisor/supervisord.conf'
             ' ~/supervisor/.'.format(**env)
@@ -254,11 +255,16 @@ def copy_restart_supervisord():
             'cp {project_dir}/deployment/supervisor/supervisord.sh'
             ' ~/init/.'.format(**env)
         )
+        run('chmod u+x $HOME/init/supervisord.sh')
+
+        # programs
         run('rm -f ~/supervisor/programs/*-{env_prefix}'.format(**env))
         run(
             'cp {project_dir}/deployment/supervisor//programs/*-{env_prefix}'
             ' ~/supervisor/programs/.'.format(**env)
         )
+
+        # restart
         run('~/init/supervisord.sh restart')
         # run('supervisorctl -c ~/supervisor/supervisord.conf update')
         run('supervisorctl -c ~/supervisor/supervisord.conf status')
@@ -317,7 +323,8 @@ def restart():
     Copy gunicorn & nginx config, restart them.
     """
     if env.is_nginx_gunicorn:
-        copy_restart_gunicorn()
+        if not getattr(env, 'is_supervisord', None):
+            copy_restart_gunicorn()
         copy_restart_nginx()
     if env.is_uwsgi:
         copy_restart_uwsgi()
@@ -392,9 +399,15 @@ def copy_restart_nginx():
             ' $HOME/nginx/conf/.'.format(**env))
         run('cp {project_dir}/deployment/nginx/nginx.conf'
             ' $HOME/nginx/conf/.'.format(**env))
-        run('cp {project_dir}/deployment/nginx/nginx.sh $HOME/init/.'.format(**env))
-        run('chmod u+x $HOME/init/nginx.sh')
-    run(env.nginx_restart_command)
+        if not getattr(env, 'is_supervisord', None):
+            run('cp {project_dir}/deployment/nginx/nginx.sh $HOME/init/.'.format(**env))
+            run('chmod u+x $HOME/init/nginx.sh')
+    if not getattr(env, 'is_supervisord', None):
+        run(env.nginx_restart_command)
+    else:
+        run('cp {project_dir}/deployment/supervisor/programs/nginx'
+            ' $HOME/supervisor/programs/.'.format(**env))
+
 
 
 def copy_restart_uwsgi():
