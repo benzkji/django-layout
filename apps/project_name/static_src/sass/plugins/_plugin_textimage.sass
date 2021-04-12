@@ -1,0 +1,53 @@
+
+
+// styles for specific plugin
+
+.plugin-textimage
+    $component: &
+    @extend %content-padding
+    &_teaser
+        min-height: 65vh
+        position: relative
+        display: flex
+        align-items: center
+        justify-content: center
+        .textimage_image
+            &::after
+                position: absolute
+                content: ""
+                top: 0
+                left: 0
+                width: 100%
+                height: 100%
+                background-color: rgba(0,0,0, 0.3)
+            img
+                position: absolute
+                top: 0
+                left: 0
+                width: 100%
+                height: 100%
+                object-fit: cover
+                object-position: center center
+        .textimage_text
+            max-width: $bp_max_width_text
+            text-align: center
+            max-width:
+            position: relative
+            z-index: 2
+            p, a
+                +responsive_font_size('normal_bigger')
+
+    &_left, &_right
+        @extend %max-width-item
+        display: flex
+        align-items: center
+        justify-content: space-between
+        flex-wrap: wrap
+        .textimage_image
+            width: 60%
+            img
+                width: 100%
+        .textimage_text
+            width: 35%
+    &_right
+        flex-direction: row-reverse

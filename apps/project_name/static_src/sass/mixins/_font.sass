@@ -1,0 +1,32 @@
+@use "sass:map"
+
+
+%font-regular
+    font-family: $font_regular
+    font-weight: 300
+
+%font-bold
+    font-family: $font_bold
+    font-weight: 700
+
+
+// from / to (big / small)
+@mixin advanced_responsive_font_size($font_size_big, $font_size_small)
+    $big_reference: $font_size_big - $font_size_small
+    font-size: $font_size_small
+    @media($bp_sm)
+        font-size: $big_reference * 0.2 + $font_size_small
+    @media($bp_md)
+        font-size: $big_reference * 0.4 + $font_size_small
+    @media($bp_lg)
+        font-size: $big_reference * 0.77 + $font_size_small
+    @media($bp_xl)
+        font-size: $font_size_big
+
+
+@mixin responsive_font_size($font_size_name)
+    $big: map-get($fs, $font_size_name)
+    $small: map-get($fsm, $font_size_name)
+    +advanced_responsive_font_size($big, $small)
+
+

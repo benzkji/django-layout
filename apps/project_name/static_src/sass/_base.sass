@@ -1,0 +1,41 @@
+
+%text-style
+    p, ul, li, h1, h2, h3, a, span
+        color: $c_text_main
+        &:not(a):first-child
+            margin-top: 0
+    h1, h2, h3, .h1, .h2
+        line-height: $lh_title
+        @extend %font-bold
+        a
+            @extend %font-bold
+    h1, .h1
+        +responsive_font_size('huge')
+        span
+            @extend %font-bold
+            padding-top: 0.5em
+            line-height: $lh_base
+            display: block
+            +responsive_font_size('normal_bigger')
+    h2, .h2, h2 a, .h2 a
+        +responsive_font_size('medium')
+        span
+            @extend %font-bold
+            padding-top: 0.5em
+            line-height: $lh_base
+            display: block
+            +responsive_font_size('normal')
+    b, strong
+        @extend %font-bold
+    p, ul, li, a, span
+        @extend %font-regular
+        +responsive_font_size('normal')
+    a.button, .button
+        @extend %button
+    a.button_small, .button_small
+        @extend %button_small
+    a.button_inverted, .button_inverted
+        @extend %button_inverted
+
+.text
+    @extend %text-style

@@ -1,0 +1,78 @@
+
+
+header
+    display: flex
+    // justify-content: space-between
+    justify-content: center
+    align-items: center
+    padding: 5%
+    @media($bp_md)
+        padding: 25px
+    .header-logo, .basket
+        width: 25%
+        @media($bp_md)
+            width: 20%
+        @media($bp_lg)
+            width: 16%
+    .header-logo
+        img
+            width: 100%
+            max-width: 200px
+    .basket
+        text-align: right
+        svg
+            max-width: 80px
+            fill: $c_text_inactive
+        &:hover svg
+            fill: white
+
+.footer
+    padding: 40px 0
+    background: $c_background2
+    &__inner
+        @extend %max-width-item
+        @extend %content-padding
+        display: flex
+        flex-wrap: wrap
+        justify-content: space-between
+        // align-items: flex-end
+    // &__
+    &__address
+        img
+            width: 160px
+        p:last-child
+            margin-bottom: 0
+    &__menu
+        //align-self: center
+        display: none
+        @media($bp_md)
+            display: block
+        a
+            @extend %font-bold
+            +responsive_font_size('normal_bigger')
+            display: inline-block
+            padding: 5px
+            color: $c_text_inactive
+            text-decoration: none
+            &:hover
+                color: $c_text_main
+        > ul > li > ul
+            a
+                +responsive_font_size('normal')
+        ul, li
+            margin: 0
+            padding: 0
+            list-style-type: none
+        > ul
+            display: flex
+            > li
+                margin: 0 20px
+    &__credits
+        margin-bottom: 0
+        align-self: flex-end
+        width: 100%
+        @media($bp_md)
+            width: auto
+
+.content
+    margin-bottom: 150px

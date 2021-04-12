@@ -1,0 +1,27 @@
+
+%button
+    cursor: pointer
+    +responsive_font_size('normal_bigger')
+    @extend %font-bold
+    display: inline-block
+    padding: 0.5em 0.9em
+    background-color: $c_background2
+    color: white
+    text-decoration: none
+    border-radius: 0.2em
+    margin-top: 0.8em
+    outline: 0
+    border: 4px solid $c_background2
+    box-sizing: border-box
+    &:hover
+        background-color: $c_background
+
+%button_small
+    +responsive_font_size('normal')
+
+%button_inverted
+    border: 4px solid $c_background
+    background-color: $c_background
+    &:hover
+        background-color: $c_background2
+

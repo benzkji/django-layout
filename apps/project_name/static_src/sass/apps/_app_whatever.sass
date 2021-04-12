@@ -1,0 +1,176 @@
+
+
+.product-list
+    @extend %max-width-item, %text-style, %content-padding
+    display: flex
+    flex-wrap: wrap
+    justify-content: space-between
+    &__item
+        border-radius: 4px
+        padding: 30px
+        box-sizing: border-box
+        background: $c_background2
+        display: flex
+        justify-content: space-between
+        width: 100%
+        margin-bottom: 3%
+        h2
+            margin-bottom: 0.5em
+        a
+            text-decoration: none
+        @media($bp_lg)
+            width: 48.4%
+        &__text
+            width: 64%
+        &__image
+            display: inline-block
+            width: 30%
+            position: relative
+            padding-top: 70%
+        img
+            position: absolute
+            top: 0
+            left: 0
+            height: 100%
+            width: 100%
+            object-fit: contain
+            object-position: center center
+        form
+            input
+                display: inline-block
+            //display: flex
+            //flex-wrap: wrap
+
+.article-detail
+    display: flex
+    align-items: center
+    justify-content: space-between
+    max-width: $bp_max_width_text
+    @extend %max-width-item
+    @extend %text-style
+    &__image
+        width: 27%
+        img
+            width: 100%
+    &__text
+
+        width: 59%
+        padding-bottom: 30px
+        form
+            input
+                display: inline-block
+
+
+.basket-list
+    @extend %max-width-item
+    max-width: $bp_max_width
+    @extend %text-style
+
+    &__item
+        padding: 20px
+        display: flex
+        align-items: center
+        border-bottom: 5px solid $c_background2
+        a
+            text-decoration: none
+        > *
+            margin-right: 2%
+        &_headers span
+            @extend %font-bold
+        &__image
+            width: 15%
+            img
+                width: 100%
+                object-fit: contain
+                height: 170px
+        &__text
+            width: 35%
+            strong
+                display: block
+        &__unit
+            width: 10%
+        &__amount
+            width: 20%
+        &__total
+            margin-right: 0
+            text-align: right
+            width: 12%
+        form
+            input
+                display: inline-block
+
+    &__total
+        padding: 20px
+        display: flex
+        align-items: center
+        justify-content: flex-end
+        h2
+            margin: 0
+        a.button
+            margin-left: 2%
+            margin-top: 0
+
+
+.address-form
+    @extend %max-width-item
+    max-width: $bp_max_width_text
+    @extend %text-style
+    &__next
+        width: 100%
+        text-align: right
+    &__form
+        overflow: hidden
+        p
+            .error
+                display: block
+                color: $c_orange
+            &.error
+                color: $c_orange
+                input
+                    border-color: $c_orange
+            &:nth-child(2n+3)
+                clear: both
+            margin-left: 3%
+            margin-right: 3%
+            margin-bottom: 0.3em
+            width: 44%
+            float: left
+            input
+                &[type="text"],
+                &[type="email"]
+                    width: 100%
+
+.summary
+    @extend %text-style
+    @extend %max-width-item
+    .basket-list
+        @extend %max-width-item
+        max-width: $bp_max_width_medium
+        &__item
+            &__image
+                width: 15%
+            &__text
+                width: 47%
+            &__unit
+                width: 10%
+            &__amount
+                width: 10%
+            &__total
+                width: 10%
+    .summary-address
+        padding-top: 3em
+        @extend %max-width-item
+        @extend %content-padding
+        max-width: $bp_max_width_medium
+        display: flex
+        align-items: flex-end
+        justify-content: space-between
+        flex-wrap: wrap
+        &__address
+            width: 45%
+            p
+                margin-bottom: 0
+        &__trigger
+            width: 45%
+            text-align: right
+

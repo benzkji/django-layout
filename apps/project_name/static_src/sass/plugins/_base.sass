@@ -1,0 +1,12 @@
+
+
+// general plugin styles
+.plugin
+    @extend %text-style
+    position: relative
+    +responsive_font_size('medium')
+    margin-bottom: 3em
+
+.plugin-textimage:not(.plugin-textimage_teaser), .plugin-text
+    &:first-child
+        margin-top: 3em

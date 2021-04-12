@@ -1,0 +1,25 @@
+
+
+// styles for specific plugin
+
+.plugin-text
+    $component: &
+    @extend %max-width-item
+    @extend %content-padding
+    &_normal
+
+        max-width: $bp_max_width_text
+    &_left, &_right
+        max-width: $bp_max_width - 200px
+        #{$component}__text
+            max-width: $bp_max_width_text
+    &_right
+        #{$component}__text
+            margin-left: auto
+            //text-align: right
+    p, h1, h2, h3, h4, ul, ol
+    ul, ol
+        margin: 0
+        padding: 0
+        li
+            margin-left: 1.2em
