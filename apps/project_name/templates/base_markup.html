@@ -58,9 +58,13 @@
         {% endcompress %}
 
         {% compress css inline %}
-            <link rel="stylesheet" href="{% static '{{ project_name }}/libs/normalize-css/normalize.css' %}">
+{#            thiw would go through sass/js/webpack #}
+{#            <link rel="stylesheet" href="{% static '{{ project_name }}/libs/normalize-css/normalize.css' %}"> #}
+{#            OLD STYLE #}
+{#            <link rel="stylesheet" href="{% static '{{ project_name }}/css/screen.css' %}">#}
+{#            check: https://pascalw.me/blog/2020/04/19/webpack-django.html  #}
+            <link rel="stylesheet" href="{% static webpack_static|add:'bundle.css' %}">
             <link rel="stylesheet" href="{% static 'djangocms_misc/css/cms_frontend_adjust.css' %}">
-            <link rel="stylesheet" href="{% static '{{ project_name }}/css/screen.css' %}">
         {% endcompress %}
         {% comment %}
             if need...<script src="{% static '{{ project_name }}/components/modernizr/modernizr.js' %}"></script>
@@ -101,11 +105,14 @@
         </div>
 
         {% compress js %}
-            <script src="{% static '{{ project_name }}/libs/jquery/dist/jquery.js' %}"></script>
-            <script src="{% static '{{ project_name }}/libs/jquery-ui/ui/widget.js' %}"></script>
-            <script src="{% static '{{ project_name }}/js/menu.js' %}"></script>
-            <script src="{% static '{{ project_name }}/js/main.js' %}"></script>
+            <script src="{% static webpack_static|add:'bundle.js' %}"></script>
         {% endcompress %}
+{#        {% compress js %}#}
+{#            <script src="{% static '{{ project_name }}/libs/jquery/dist/jquery.js' %}"></script>#}
+{#            <script src="{% static '{{ project_name }}/libs/jquery-ui/ui/widget.js' %}"></script>#}
+{#            <script src="{% static '{{ project_name }}/js/menu.js' %}"></script>#}
+{#            <script src="{% static '{{ project_name }}/js/main.js' %}"></script>#}
+{#        {% endcompress %}#}
 
         {% if is_live and not request.user.is_staff and analytics_ua %}
             {% compress js inline %}
