@@ -3,6 +3,7 @@ const _ = require('lodash');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+
 module.exports = (env, argv) => {
 
     // simple webpack mode.
@@ -30,6 +31,7 @@ module.exports = (env, argv) => {
         module: {
             rules: [
                 {
+                    // the sass job
                     test: /\.s[ac]ss$/i,
                     use: [
                         // Creates `style` nodes from JS strings
@@ -43,6 +45,18 @@ module.exports = (env, argv) => {
                     ],
                 },
                 {
+                    // otherwise throws errors when loading fonts in sass/css!
+                    test: /\.(eot|woff|woff2|ttf|svg|png|jpg|gif)$/,
+                    use: {
+                        loader: 'url-loader', // requires url-loader packages
+                        options: {
+                            limit: 100000,
+                            name: '[name].[ext]'
+                        }
+                    }
+                },
+                {
+                    // enhancing back to IE11, maybe
                     test: /\.m?js$/,
                     exclude: /(node_modules|bower_components)/,
                     use: {
