@@ -6,6 +6,7 @@ from ckeditor_link.admin import DjangoLinkAdmin
 from ckeditor_link.link_model.conf import CKEDITOR_LINK_TYPE_CHOICES, CKEDITOR_LINK_STYLE_CHOICES
 from django.utils.html import format_html
 from django.template.defaultfilters import truncatechars
+from formfieldstash.helpers import get_advanced_stash_attrs
 
 from .models import Link
 
