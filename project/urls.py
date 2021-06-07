@@ -6,19 +6,16 @@ from django.urls import path
 from django.contrib import admin
 
 
-# maybe use i18npatterns?!
 urlpatterns = [
-    # path('robots.txt', RobotsView.as_view())
+    # path('robots.txt', RobotsView.as_view(), name='robots_txt'),
     # path('', include('{{ project_name }}.urls')),
     # path('admin/doc/', include('django.contrib.admindocs.urls')),
 ]
-
 
 urlpatterns = urlpatterns + i18n_patterns(
     path('admin/', admin.site.urls),
     path('', include('cms.urls')),
 )
-
 
 if settings.DEBUG and settings.MEDIA_ROOT:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
