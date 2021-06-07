@@ -15,6 +15,7 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
+    "stimulus": "^2.0.0",
     "jquery": "^3.3.1",
     "jquery-ui": "^1.12.1",
     "normalize-css": "^2.3.1",
@@ -24,7 +25,7 @@
     "serve": "webpack serve --mode=development --progress",
     "build": "webpack build --mode=production --progress",
     "pip-compile": "pip install -U pip setuptools pip-tools && pip-compile requirements/dev.in && pip-sync requirements/dev.txt && pip-compile requirements/deploy.in && safety check",
-    "pip-compile-upgrade": "pip install -U pip setuptools pip-tools && pip-compile pip-compile requirements/dev.in --upgrade && pip-sync requirements/dev.txt && pip-compile requirements/deploy.in --upgrade && safety check"
+    "pip-compile-upgrade": "pip install -U pip setuptools pip-tools && pip-compile requirements/dev.in --upgrade && pip-sync requirements/dev.txt && pip-compile requirements/deploy.in --upgrade && safety check"
   },
   "browserslist": "> 0.25%, not dead"
 }

@@ -55,7 +55,7 @@ MIGRATION_MODULES = {
 ROOT_URLCONF = 'project.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = '{{project_name}}.wsgi.application'
+WSGI_APPLICATION = 'project.wsgi.application'
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 # only use when having redis or file cache backend!
