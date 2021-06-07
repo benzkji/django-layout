@@ -63,7 +63,7 @@
 {#            OLD STYLE #}
 {#            <link rel="stylesheet" href="{% static '{{ project_name }}/css/screen.css' %}">#}
 {#            check: https://pascalw.me/blog/2020/04/19/webpack-django.html  #}
-            <link rel="stylesheet" href="{% static webpack_static|add:'bundle.css' %}">
+            <link rel="stylesheet" href="{% static '{{ project_name }}/bundle/bundle.css' %}">
             <link rel="stylesheet" href="{% static 'djangocms_misc/css/cms_frontend_adjust.css' %}">
         {% endcompress %}
         {% comment %}
@@ -105,7 +105,7 @@
         </div>
 
         {% compress js %}
-            <script src="{% static webpack_static|add:'bundle.js' %}"></script>
+            <script src="{% static '{{ project_name }}bundle/bundle.js' %}"></script>
         {% endcompress %}
 {#        {% compress js %}#}
 {#            <script src="{% static '{{ project_name }}/libs/jquery/dist/jquery.js' %}"></script>#}

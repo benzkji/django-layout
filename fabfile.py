@@ -284,6 +284,24 @@ def supervisorctl(command):
         puts('supervisord not deployed to %s!' % env.env_prefix)
 
 
+@task
+@roles('web')
+def build_put_webpack():
+    """
+    build webpack, put on server!
+    """
+    local_branch = local('git branch --show-current')
+    if not env.remote_ref.endswith(local_branch):
+        yes_no = confirm("Configured remote_ref for {} is {}, but you are on branch {}. Continue anyway (y/N)?", default=False)
+        if not yes_no:
+            exit(0)
+    local('yarn build')
+    base_static_path = 'apps/{project_name}/static/{project_name}/'.format(**env)
+    local_path = '{}bundle'.format(base_static_path)
+    remote_path = '{}/{}.'.format(env.project_dir, base_static_path)
+    run('mkdir --parent {}'.format(remote_path))
+    put(local_path=local_path, remote_path=remote_path)
+
 
 @task
 @roles('web')

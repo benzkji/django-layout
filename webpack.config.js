@@ -4,11 +4,16 @@ const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 
+// reference: https://dev.to/pascalw/django-webpack-without-any-plugins-94p
+
+
 module.exports = (env, argv) => {
 
     // simple webpack mode.
-    // use dev folder for development
-    // dist for production (under version control)
+    // use dev folder for development NOMORE
+    // dist for production (under version control) NOMORE!
+    // all files go to bundle directory.
+    // fab deploy will create production builds an upload those.
 
     const base_path = './apps/{{ project_name }}/';
     const entry_base_path = base_path + 'static_src/';
@@ -23,7 +28,7 @@ module.exports = (env, argv) => {
             // 'print': entry_base_path + 'js/index_print.js',
         },
         output: {
-            path: path.resolve(out_base_path + 'dist/'),
+            path: path.resolve(out_base_path + 'bundle/'),
             filename: "[name].js",
             chunkFilename: "[id]-[chunkhash].js",  // ?!
             clean: true,
@@ -76,10 +81,11 @@ module.exports = (env, argv) => {
         },
     };
     // development? different directory!
-    if (argv.mode === 'development') {
-        // config.devtool = 'source-map';
-        config.output.path = path.resolve(out_base_path + 'dev/');
-    }
+    // if (argv.mode === 'development') {
+    //     // config.devtool = 'source-map';
+    //     config.output.path = path.resolve(out_base_path + 'dev/');
+    // }
+
     // let print_config = {};
     // _.defaultsDeep(print_config, config);
     // print_config.name = 'print';

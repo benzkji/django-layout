@@ -4,6 +4,7 @@
 /project/settings/local.py
 
 # user data (uploads, static files, etc)
+bundle/
 /public/
 /media/
 /static/
