@@ -1,8 +1,8 @@
+// const webpack = require('webpack');
+// const _ = require('lodash');
 const path = require('path');
-const _ = require('lodash');
-const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-
+const LiveReloadPlugin = require('webpack-livereload-plugin');
 
 // reference: https://dev.to/pascalw/django-webpack-without-any-plugins-94p
 
@@ -22,7 +22,10 @@ module.exports = (env, argv) => {
     let config = {
         // context: __dirname,
         name: 'main',
-        plugins: [new MiniCssExtractPlugin()],
+        plugins: [
+            new MiniCssExtractPlugin(),
+            new LiveReloadPlugin(),
+        ],
         entry: {
             'bundle': entry_base_path + 'js/index.js',
             // 'print': entry_base_path + 'js/index_print.js',
@@ -74,17 +77,17 @@ module.exports = (env, argv) => {
                 }
             ],
         },
-        devServer: {
-            port: 8080,
-            writeToDisk: true, // Write files to disk in dev mode, so Django can serve the assets
-            // hot: true,  // hot module reloading...irk?
-        },
+        // devServer: {
+        //     port: 8080,
+        //     writeToDisk: true, // Write files to disk in dev mode, so Django can serve the assets
+        //     hot: true,  // hot module reloading...irk?
+        // },
     };
     // development? different directory!
-    // if (argv.mode === 'development') {
-    //     // config.devtool = 'source-map';
-    //     config.output.path = path.resolve(out_base_path + 'dev/');
-    // }
+    if (argv.mode === 'development') {
+        config.devtool = 'source-map';
+        // config.output.path = path.resolve(out_base_path + 'dev/');
+    }
 
     // let print_config = {};
     // _.defaultsDeep(print_config, config);
