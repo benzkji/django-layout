@@ -25,7 +25,8 @@ class CustomToolbar(AlternateBasicToolbar):
 
         # misc_menu = self.admin_menu.get_or_create_menu("misc", _("Diverses"),  )
 
-        self.add_crud_menu_item('admin', 'log', label=_('Admin Log'))
+        self.add_crud_menu_item('textblocks', 'textblock', label=_('Texteblöcke'))
+        self.add_crud_menu_item('admin', 'logentry', label=_('Admin Log'))
         # self.admin_menu.add_sideframe_item(
         #     _('Projects'),
         #     url=admin_reverse('newsevents_event_changelist')
