@@ -6,6 +6,10 @@ from django.urls import path
 from django.contrib import admin
 
 
+admin.autodiscover()
+admin.site.enable_nav_sidebar = False
+
+
 urlpatterns = [
     # path('robots.txt', RobotsView.as_view(), name='robots_txt'),
     # path('', include('{{ project_name }}.urls')),
