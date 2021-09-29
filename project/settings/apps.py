@@ -12,6 +12,7 @@ INSTALLED_APPS = [
     '{{ project_name }}',
 
     'axes',
+    # 'painless_redirects',
     # 'djangocms_misc',
     'djangocms_misc.basic',
     # 'djangocms_misc.alternate_toolbar',

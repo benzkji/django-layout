@@ -24,6 +24,7 @@ django-formfieldstash
 django-ckeditor-link
 django-mailprotector
 djangocms-misc
+djangocms-painless-redirects
 
 # filer
 django-filer
