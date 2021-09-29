@@ -42,6 +42,7 @@ class RobotsView(TemplateView):
     content_type = 'text/plain'
 
     def get_template_names(self):
+        # requires 'django.contrib.sites.middleware.CurrentSiteMiddleware',
         site = self.request.site
         env = settings.ENV
         return (
@@ -50,7 +51,7 @@ class RobotsView(TemplateView):
             'robots_{}_{}.txt'.format(site.name, env),
             'robots_{}.txt'.format(site.name),
             'robots_{}_{}.txt'.format(site.id, env),
-            'robots_{}.txt'.format(env),
             'robots_{}.txt'.format(site.id),
-            'robots.txt'.format(site.id),
+            'robots_{}.txt'.format(env),
+            'robots.txt',
         )
