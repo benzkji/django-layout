@@ -260,7 +260,7 @@ def copy_restart_supervisord():
         # programs
         run('rm -f ~/supervisor/programs/*-{env_prefix}'.format(**env))
         run(
-            'cp {project_dir}/deployment/supervisor//programs/*-{env_prefix}'
+            'cp {project_dir}/deployment/supervisor/programs/*-{env_prefix}'
             ' ~/supervisor/programs/.'.format(**env)
         )
 

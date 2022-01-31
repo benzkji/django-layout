@@ -53,7 +53,7 @@ KEEP_COMMENTS_ON_MINIFYING = True
 TEXTBLOCKS_SHOWKEY = True
 # SENTRY_DSN = 'https://xxxxxx@sentry.io/1416363'
 SENTRY_DSN = False
-VERSION = subprocess.check_output(['git', 'describe', '--tags']).strip()
+VERSION = str(subprocess.check_output(['git', 'describe', '--tags']).strip())
 
 
 # middleware and templates
