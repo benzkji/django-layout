@@ -112,9 +112,18 @@ def create_database():
 def bootstrap():
     clone_repos()
     create_nginx_folders()
+    create_supervisor_folders()
     create_virtualenv()
     create_database()
     puts('Bootstrapped {project_name} on {host} (cloned repos, created venv and db).'.format(**env))
+
+
+@task
+@roles('web', 'db')
+def create_supervisor_folders():
+    if getattr(env, 'is_supervisord', None):
+        run('mkdir --parents ~/supervisor/programs')
+        run('mkdir --parents ~/supervisor/logs')
 
 
 @task
