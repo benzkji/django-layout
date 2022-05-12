@@ -64,7 +64,7 @@ def create_virtualenv(force=False):
             return
         else:
             run('rm -rf {virtualenv_dir}'.format(**env))
-    venv_command = 'virtualenv {virtualenv_dir} --no-site-packages'.format(**env)
+    venv_command = 'virtualenv {virtualenv_dir} '.format(**env)
     if getattr(env, 'is_python3', None):
         venv_command += ' --python=python3'
     run(venv_command)
