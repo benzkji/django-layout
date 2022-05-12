@@ -23,8 +23,9 @@
   "scripts": {
     "serve": "webpack --watch --mode=development --progress",
     "build": "webpack build --mode=production --progress",
-    "pip-compile": "pip install -U pip setuptools pip-tools && pip-compile requirements/dev.in && pip-sync requirements/dev.txt && pip-compile requirements/deploy.in && safety check",
-    "pip-compile-upgrade": "pip install -U pip setuptools pip-tools && pip-compile requirements/dev.in --upgrade && pip-sync requirements/dev.txt && pip-compile requirements/deploy.in --upgrade && safety check"
+    "pip-init-upgrade": "pip install -U pip setuptools pip-tools",
+    "pip-compile": "pip-compile requirements/dev.in && pip-sync requirements/dev.txt && pip-compile requirements/deploy.in && safety check",
+    "pip-compile-upgrade": "pip-compile requirements/dev.in --upgrade && pip-sync requirements/dev.txt && pip-compile requirements/deploy.in --upgrade && safety check"
   },
   "browserslist": "> 0.25%, not dead"
 }
