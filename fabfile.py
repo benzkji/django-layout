@@ -9,7 +9,7 @@ from fabric.contrib.project import rsync_project
 from fabric.contrib import django
 
 from fabconf import env, stage, live  # noqa
-
+from fabconf import upgrade_glitchtip, custom_bootstrap
 
 # hm. https://github.com/fabric/fabric/issues/256
 sys.path.insert(0, sys.path[0])
@@ -228,6 +228,9 @@ def update(action='check', tag=None):
         # Not using execute() because we don't want to run multiple times for
         # each role (since this task gets run per role).
         requirements()
+    if getattr(env, 'env_file', None):
+        remote_path = os.path.join(env.project_dir, 'envs', '.env-{env_prefix}'.format(**env))
+        put(local_path='envs/.env-{env_prefix}'.format(**env), remote_path=remote_path)
 
 
 @task
@@ -757,10 +760,14 @@ def dj(command):
     cmd_prefix = 'cd {project_dir}'.format(**env)
     if getattr(env, 'custom_manage_py_root', None):
         cmd_prefix = 'cd {}'.format(env.custom_manage_py_root)
+    source_env = ''
+    if getattr(env, 'env_file', None):
+        source_env = ' && source ../envs/.env-{env_prefix}'.format(**env)
     virtualenv(
-        '{cmd_prefix} && ./manage.py {dj_command} --settings {project_conf}'.format(
+        '{cmd_prefix} {source_env} && export DJANGO_SETTINGS_MODULE={project_conf} && ./manage.py {dj_command}'.format(
             dj_command=command,
             cmd_prefix=cmd_prefix,
+            source_env=source_env,
             **env
         )
     )
