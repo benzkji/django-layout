@@ -1,9 +1,14 @@
 -r basics.in
 
 # fabric
-fabric3
+fab-classic
+ansible
 flake8
-safety
+pip-audit
+-e 'git+https://github.com/benzkji/fabric-bnzk.git@main#egg=fabric-bnzk'
+
+
+# safety
 # flake8-respect-noqa
 # mock
 # mixer

@@ -17,7 +17,7 @@ DEBUG = env.bool('DEBUG', False)
 # more live behavious, if you pleas..
 # from deploy import *
 
-ALLOWED_HOSTS = env.get('ALLOWED_HOSTS'),
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS'),
 
 DATABASES = {
     'default': env.db_url(),
@@ -29,7 +29,7 @@ ADMINS = [
     # no more! raven FTW. ('BNZK', 'support@bnzk.ch'),
 ]
 MANAGERS = ADMINS
-DEFAULT_FROM_EMAIL = env.get('DEFAULT_FROM_EMAIL')
+DEFAULT_FROM_EMAIL = env.str('DEFAULT_FROM_EMAIL')
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 # enable when behind nginx proxy
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTOCOL', 'https')
@@ -42,7 +42,7 @@ MIGRATION_MODULES = {
     'textblocks': 'apps.{{ project_name }}.migrations_textblocks',
     # 'image': 'apps.{{ project_name }}.migrations_plugins.image',
 }
-SITE_ID = env.get('SITE_ID')
+SITE_ID = env.int('SITE_ID')
 ROOT_URLCONF = 'project.urls'
 # default time zone
 TIME_ZONE = 'Europe/Zurich'

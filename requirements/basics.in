@@ -8,11 +8,11 @@ psycopg2-binary<2.8
 sentry-sdk
 
 # django + tools
-django<3
+django<4
 django-split-settings
 django-compressor
 django-modeltranslation
-django-ckeditor<6
+django-ckeditor
 django-htmlmin
 django-textblocks
 django-axes
@@ -23,12 +23,12 @@ django-axes
 django-formfieldstash
 django-ckeditor-link
 django-mailprotector
+django-painless-redirects
 djangocms-misc
-djangocms-painless-redirects
 
 # filer
 django-filer
 
 # cms
 django-cms
-django-treebeard<4.5
+# django-treebeard
