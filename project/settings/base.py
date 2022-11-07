@@ -2,6 +2,8 @@ import os
 import sys
 import subprocess
 
+import environ
+
 # just in case - know the defaults ;-)
 # import django.conf.global_settings as DEFAULT_SETTINGS
 
@@ -9,6 +11,15 @@ import subprocess
 PROJECT_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../')
 sys.path.append(os.path.join(PROJECT_PATH, 'apps/'))
 ugettext = lambda s: s  # noqa
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False),
+    ALLOWED_HOSTS=(list, ['localhost', ]),
+    DEFAULT_FROM_EMAIL=(str, '{{project_name}}@bnzk.ch'),
+    SITE_ID=(int, 1),
+)
+environ.Env.read_env(os.path.join(PROJECT_PATH, '.env'))
 
 
 DEBUG = env.bool('DEBUG', False)
