@@ -1,0 +1,10 @@
+
+DEBUG=True
+ALLOWED_HOSTS=localhost
+DEFAULT_FROM_EMAIL=localhost@bnzk.ch
+DATABASE_URL=postgres://{{ project_name }}@localhost/{{ project_name }}
+
+# leave empty, so django will not start if kept like this
+SECRET_KEY=
+# ROOT_URLCONF=project.other_urls
+# SECURE_PROXY_SSL_HEADER=HTTP_X_FORWARDED_PROTOCOL,https

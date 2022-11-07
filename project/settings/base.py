@@ -11,15 +11,29 @@ sys.path.append(os.path.join(PROJECT_PATH, 'apps/'))
 ugettext = lambda s: s  # noqa
 
 
+DEBUG = env.bool('DEBUG', False)
+# THUMBNAIL_DEBUG = True
+# COMPRESS_ENABLED = False
+# more live behavious, if you pleas..
+# from deploy import *
+
+ALLOWED_HOSTS = env.get('ALLOWED_HOSTS'),
+
+DATABASES = {
+    'default': env.db_url(),
+}
+
+
 # some django things
 ADMINS = [
     # no more! raven FTW. ('BNZK', 'support@bnzk.ch'),
 ]
 MANAGERS = ADMINS
-DEFAULT_FROM_EMAIL = '{{project_name}}@bnzk.ch'
+DEFAULT_FROM_EMAIL = env.get('DEFAULT_FROM_EMAIL')
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 # enable when behind nginx proxy
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTOCOL', 'https')
+# SECURE_PROXY_SSL_HEADER = env.tuple('SECURE_PROXY_SSL_HEADER', None)
 INTERNAL_IPS = (
     '127.0.0.1',
     '0.0.0.0',
@@ -28,7 +42,7 @@ MIGRATION_MODULES = {
     'textblocks': 'apps.{{ project_name }}.migrations_textblocks',
     # 'image': 'apps.{{ project_name }}.migrations_plugins.image',
 }
-SITE_ID = 1
+SITE_ID = env.get('SITE_ID')
 ROOT_URLCONF = 'project.urls'
 # default time zone
 TIME_ZONE = 'Europe/Zurich'
@@ -40,7 +54,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 WSGI_APPLICATION = 'project.wsgi.application'
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
-SECRET_KEY = '{{ secret_key }}'
+SECRET_KEY = env.str('SECRET_KEY')
 
 
 # some third party things
@@ -52,8 +66,19 @@ SECRET_KEY = '{{ secret_key }}'
 KEEP_COMMENTS_ON_MINIFYING = True
 TEXTBLOCKS_SHOWKEY = True
 # SENTRY_DSN = 'https://xxxxxx@sentry.io/1416363'
-SENTRY_DSN = False
+SENTRY_DSN = None
 VERSION = str(subprocess.check_output(['git', 'describe', '--tags']).strip())
+
+if not DEBUG and SENTRY_DSN:
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        release=VERSION,
+        # sample_rate=0.01,
+        integrations=[DjangoIntegration()],
+    )
 
 
 # middleware and templates
