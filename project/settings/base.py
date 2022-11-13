@@ -22,13 +22,13 @@ env = environ.Env(
 environ.Env.read_env(os.path.join(PROJECT_PATH, '.env'))
 
 
-DEBUG = env.bool('DEBUG', False)
+DEBUG = env('DEBUG')
 # THUMBNAIL_DEBUG = True
 # COMPRESS_ENABLED = False
 # more live behavious, if you pleas..
 # from deploy import *
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS'),
+ALLOWED_HOSTS = env('ALLOWED_HOSTS')
 
 DATABASES = {
     'default': env.db_url(),

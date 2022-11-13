@@ -30,10 +30,10 @@ class PublishedViewMixin():
     in edit mode, get all, otherwise only published
     """
     def get_queryset(self):
-        if self.request.toolbar.edit_mode:
-            return self.get_model().objects.all()
-        return self.get_model().objects.published()
-
+        if getattr(self.request, 'toolbar', None):
+            if self.request.toolbar.edit_mode:
+                return self.model.objects.all()
+        return self.model.objects.published()
 
 class RobotsView(TemplateView):
     """
