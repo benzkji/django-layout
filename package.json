@@ -21,7 +21,7 @@
     "slick-carousel": "^1.8.1"
   },
   "scripts": {
-    "serve": "webpack --watch --mode=development --progress",
+    "watch": "webpack --watch --mode=development --progress",
     "build": "webpack build --mode=production --progress",
     "pip-init-upgrade": "pip install -U pip setuptools pip-tools",
     "pip-compile": "pip-compile requirements/dev.in && pip-sync requirements/dev.txt && pip-compile requirements/deploy.in && pip-audit",

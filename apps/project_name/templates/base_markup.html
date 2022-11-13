@@ -80,8 +80,7 @@
         <div id="page" class="{% block page_class %}page {% endblock %}">
 
             <header>
-                {% if show_location %}<a class="header-location" href="/"><img src="{% static 'guardaval/img/logo-braun.png' %}" alt="Open Goole Maps">Sporz</a>{% endif %}
-                <a class="header-logo" href="/"><img src="{% static 'guardaval/img/logo-braun.png' %}" alt="Logo Guarda Val"></a>
+                <a class="header-logo" href="/"><img src="{% static '{{ project_name }}/img/logo.svg' %}" alt="Logo {{ project_name }}"></a>
                 <span class="burger"></span>
             </header>
 
