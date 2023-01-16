@@ -40,15 +40,12 @@ To bootstrap the project on your machine::
 
     cd {{ project_name }}
     # check fabconf.py if env.is_python3 is true, if yes, add --python=python3
-    mkvirtualenv {{ project_name }} 
-    # without the venv-wrapper: virtualenv virtualenv {{ project_name }}
-    # ditto: source virtualenv/{{ project_name }}/bin/activate
-    # first time init of dependencies
-    yarn install
-    pip install pip-tools
+    mkvirtualenv {{ project_name }}
+    # init pip-tools, upgrade pip and setuptools
+    yarn pip-init-upgrade
     # calculates and pins and installls deps
-    gulp pip-compile  
-    # not first time users, install deps
+    yarn pip-compile  
+    # not first time users can install deps directly
     pip install -r requirements/dev.txt
     # django works?
     manage.py check

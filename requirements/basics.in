@@ -10,6 +10,7 @@ sentry-sdk
 # django + tools
 django<4
 django-split-settings
+django-environ
 django-compressor
 django-modeltranslation
 django-ckeditor
