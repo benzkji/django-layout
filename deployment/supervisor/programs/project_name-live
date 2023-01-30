@@ -1,15 +1,13 @@
-
-
 [program:project_name-live]
 
-environment=DJANGO_SETTINGS_MODULE=project.settings._project_name_live
+environment=DJANGO_SETTINGS_MODULE=project.settings
 
-directory=%(ENV_HOME)s/sites/hauserspezial-live
+directory=%(ENV_HOME)s/sites/%(program_name)s
 command=
-    %(ENV_HOME)s/sites/hauserspezial-stage/virtualenv/bin/gunicorn
-    --bind unix:///%(ENV_HOME)s/sites/project_name-live.sock
+    %(ENV_HOME)s/sites/%(program_name)s/virtualenv/bin/gunicorn
+    --bind unix:///%(ENV_HOME)s/sites/%(program_name)s.sock
     --worker-class gevent
-    --workers 2
+    --workers 4
     project.wsgi
 
 autostart=true
