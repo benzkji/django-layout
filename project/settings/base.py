@@ -18,6 +18,7 @@ env = environ.Env(
     ALLOWED_HOSTS=(list, ['localhost', ]),
     DEFAULT_FROM_EMAIL=(str, '{{project_name}}@bnzk.ch'),
     SITE_ID=(int, 1),
+    SENTRY_DSN=(str, None),
 )
 environ.Env.read_env(os.path.join(PROJECT_PATH, '.env'))
 
@@ -77,7 +78,7 @@ SECRET_KEY = env.str('SECRET_KEY')
 KEEP_COMMENTS_ON_MINIFYING = True
 TEXTBLOCKS_SHOWKEY = True
 # SENTRY_DSN = 'https://xxxxxx@sentry.io/1416363'
-SENTRY_DSN = None
+SENTRY_DSN = env('SENTRY_DSN', None)
 VERSION = str(subprocess.check_output(['git', 'describe', '--tags']).strip())
 
 if not DEBUG and SENTRY_DSN:
