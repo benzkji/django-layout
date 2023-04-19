@@ -42,9 +42,9 @@ To bootstrap the project on your machine::
     # check fabconf.py if env.is_python3 is true, if yes, add --python=python3
     mkvirtualenv {{ project_name }}
     # init pip-tools, upgrade pip and setuptools
-    yarn pip-init-upgrade
+    npm run pip-init-upgrade
     # calculates and pins and installls deps
-    yarn pip-compile  
+    npm run pip-compile  
     # not first time users can install deps directly
     pip install -r requirements/dev.txt
     # django works?
