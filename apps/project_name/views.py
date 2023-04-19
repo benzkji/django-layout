@@ -35,6 +35,7 @@ class PublishedViewMixin():
                 return self.model.objects.all()
         return self.model.objects.published()
 
+
 class RobotsView(TemplateView):
     """
     flexible robots.txt, from within your base templates folder

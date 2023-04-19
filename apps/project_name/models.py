@@ -1,4 +1,3 @@
-from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from ckeditor_link.link_model.models import CMSFilerLinkBase
 

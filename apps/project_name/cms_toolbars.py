@@ -35,4 +35,3 @@ class CustomToolbar(AlternateBasicToolbar):
         #     _('Texte'),
         #     url=admin_reverse('textblocks_textblock_changelist')
         # )
-

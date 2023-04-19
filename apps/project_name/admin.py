@@ -53,7 +53,7 @@ class LinkAdmin(FormFieldStashMixin, DjangoLinkAdmin):
 @admin.register(LogEntry)
 class LogEntryAdmin(admin.ModelAdmin):
     list_display = ('get_title', 'edited_object', 'action_time', 'user', )
-    list_filter =  ('user', 'content_type', )
+    list_filter = ('user', 'content_type', )
 
     def get_title(self, log_entry):
         return truncatechars(str(log_entry), 130)
@@ -61,7 +61,11 @@ class LogEntryAdmin(admin.ModelAdmin):
     def edited_object(self, log_entry):
         obj = log_entry.get_edited_object()
         if obj:
-            return format_html('<a href="{}">{}</a>', log_entry.get_admin_url(), truncatechars(str(obj), 70))
+            return format_html(
+                '<a href="{}">{}</a>',
+                log_entry.get_admin_url(),
+                truncatechars(str(obj), 70),
+            )
         else:
             return '-'
 
