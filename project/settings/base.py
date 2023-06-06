@@ -44,7 +44,7 @@ MANAGERS = ADMINS
 DEFAULT_FROM_EMAIL = env.str('DEFAULT_FROM_EMAIL')
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 EMAIL_CONFIG = env.email_url(
-    default='consolemail://'
+    default=''  # intended fail if env var not present!
 )
 vars().update(EMAIL_CONFIG)
 
