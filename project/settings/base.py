@@ -30,6 +30,7 @@ DEBUG = env('DEBUG')
 # from deploy import *
 
 ALLOWED_HOSTS = env('ALLOWED_HOSTS')
+CSRF_TRUSTED_ORIGINS = [f'https://{host}' for host in ALLOWED_HOSTS]
 
 DATABASES = {
     'default': env.db_url(),
