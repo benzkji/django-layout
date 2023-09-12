@@ -10,13 +10,11 @@ To use ``django-layout`` run the following command::
 
 Things to adapt right after:
 
-- ``chmod u+x manage.py run-local.sh``
-- check db settings
+- create .env file, from project/env-dev-example
 - check fabfile deployment settings
 - check nginx site config: server_listen port
-- if your project name is not equal to your system user, like /home/project_name/... does not work, further adapt nginx site config
 
-When making changes to this repository, make sure at least to check the following:
+When making changes to this (django-layout) repository, make sure at least to check the following:
 
 - startproject with above command line
 - `manage.py check`, `manage.py migrate`, `./run-local.sh` and open the /admin
@@ -40,13 +38,12 @@ Python [version], PostgreSQL [version]
 To bootstrap the project on your machine::
 
     cd {{ project_name }}
-    # check fabconf.py if env.is_python3 is true, if yes, add --python=python3
     mkvirtualenv {{ project_name }}
-    # init pip-tools, upgrade pip and setuptools
-    npm run pip-init-upgrade
-    # calculates and pins and installls deps
-    npm run pip-compile  
-    # not first time users can install deps directly
+    # upgrade pip, setuptools and wheel, and installl basic basics, like pip-tools and pre-commit
+    npm run init-dev
+    # calculates and pins dependencies
+    npm run pip-compile  # initial build and install dependencies  
+    # not first time users can install deps directly:
     pip install -r requirements/dev.txt
     # django works?
     manage.py check
@@ -60,7 +57,7 @@ To bootstrap/deploy on remote server::
     git add .
     git commit -a -m'initial'
     git add remote origin ssh://git@yourgitprovider.com/org/{{project_name}}.git
-    git push --set-upstream origin master
+    git push --set-upstream origin main
 
     fab bootstrap
 
