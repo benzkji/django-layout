@@ -20,7 +20,9 @@ repos:
       # formatters
       - id: mixed-line-ending
       - id: trailing-whitespace
+        exclude: "(.*\\.html|.*\\.md)$"
       - id: end-of-file-fixer
+        exclude: "(.*\\.xml|.*\\.svg)$"
       # python
       - id: check-ast # abstract syntax tree
       - id: check-builtin-literals # no {} and [], but dict() and list()
@@ -50,7 +52,7 @@ repos:
     hooks:
       - id: prettier
         args: [--list-different]
-        exclude: ".*\\.html$"
+        exclude: "(.*\\.html|.*\\.md)$"
   # eslinth, shall we? urrfff
   - repo: https://github.com/pre-commit/mirrors-eslint
     rev: v8.47.0

@@ -20,7 +20,7 @@ env = environ.Env(
     SITE_ID=(int, 1),
     SENTRY_DSN=(str, None),
 )
-environ.Env.read_env(os.path.join(PROJECT_PATH, '.env'))
+environ.Env.read_env(os.path.join(PROJECT_PATH, ".env"))
 
 
 DEBUG = env('DEBUG')
