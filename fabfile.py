@@ -13,6 +13,7 @@ env.is_supervisord = True
 env.is_nginx_gunicorn = True
 env.is_uwsgi = False
 env.is_apache = False
+env.is_webpack = True
 env.remote_ref = 'origin/main'
 # these will be checked for changes
 env.requirements_files = [

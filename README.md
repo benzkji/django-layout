@@ -33,6 +33,7 @@ When making changes to this repository, make sure at least to check the followin
 {% endcomment %}
 # {{ project_name }}
 
+Python [version], PostgreSQL [version]
 
 ## Quickstart
 

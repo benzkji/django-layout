@@ -30,6 +30,7 @@ DEBUG = env('DEBUG')
 # from deploy import *
 
 ALLOWED_HOSTS = env('ALLOWED_HOSTS')
+CSRF_TRUSTED_ORIGINS = [f'https://{host}' for host in ALLOWED_HOSTS]
 
 DATABASES = {
     'default': env.db_url(),
@@ -38,11 +39,17 @@ DATABASES = {
 
 # some django things
 ADMINS = [
-    # no more! raven FTW. ('BNZK', 'support@bnzk.ch'),
+    # no more! sentry FTW. ('BNZK', 'support@bnzk.ch'),
 ]
 MANAGERS = ADMINS
 DEFAULT_FROM_EMAIL = env.str('DEFAULT_FROM_EMAIL')
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
+EMAIL_CONFIG = env.email_url(
+    default=''  # intended fail if env var not present!
+)
+vars().update(EMAIL_CONFIG)
+
+
 # enable when behind nginx proxy
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTOCOL', 'https')
 # SECURE_PROXY_SSL_HEADER = env.tuple('SECURE_PROXY_SSL_HEADER', None)
