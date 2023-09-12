@@ -1,4 +1,4 @@
-from .base import ugettext
+from .base import gettext
 
 
 CMS_PLACEHOLDER_CONF = {
@@ -11,7 +11,7 @@ CMS_PLACEHOLDER_CONF = {
             'ColumnImageTeaserPlugin',
         ],
         'extra_context': {"size": "600x420"},
-        'name': ugettext("Home Inhalt"),
+        'name': gettext("Home Inhalt"),
         'language_fallback': False,
     },
     'header_image': {
@@ -19,7 +19,7 @@ CMS_PLACEHOLDER_CONF = {
             'ImagePlugin',
         ],
         # 'extra_context': {"size": "600x420"},
-        'name': ugettext("Headerbild"),
+        'name': gettext("Headerbild"),
         'language_fallback': True,
     },
     'content': {
@@ -30,7 +30,7 @@ CMS_PLACEHOLDER_CONF = {
         ],
         # 'extra_context': {"size": "600x420"},
         # default_plugins: []
-        'name': ugettext("Inhalt"),
+        'name': gettext("Inhalt"),
         'language_fallback': False,
     },
 }

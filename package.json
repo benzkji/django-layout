@@ -23,6 +23,7 @@
   "scripts": {
     "watch": "webpack --watch --mode=development --progress",
     "build": "webpack build --mode=production --progress",
+    "init-dev": "pip install -U pip setuptools pip-tools fab-classic; pip install -e 'git+https://github.com/benzkji/fabric-bnzk.git@main#egg=fabric-bnzk'",
     "pip-init-upgrade": "pip install -U pip setuptools pip-tools",
     "pip-compile": "pip-compile requirements/dev.in && pip-sync requirements/dev.txt && pip-compile requirements/deploy.in && pip-audit",
     "pip-compile-upgrade": "pip-compile requirements/dev.in --upgrade && pip-sync requirements/dev.txt && pip-compile requirements/deploy.in --upgrade && pip-audit"

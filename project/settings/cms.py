@@ -1,12 +1,13 @@
-from .base import ugettext
+from .base import gettext
 
 
 # just in case...
 DJANGOCMS_MISC_UNTRANSLATED_PLACEHOLDERS = False
+CMS_CONFIRM_VERSION4 = True
 
 CMS_TEMPLATES = (
-    ('{{project_name}}/standard.html', ugettext('Standard')),
-    ('{{project_name}}/home.html', ugettext('Homepage')),
+    ('{{project_name}}/standard.html', gettext('Standard')),
+    ('{{project_name}}/home.html', gettext('Homepage')),
 )
 
 CMS_CACHE_DURATIONS = {
@@ -25,9 +26,9 @@ CMS_PLUGIN_CACHE = True
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'de'
 LANGUAGES = (
-    ('de', ugettext(u"Deutsch")),
-    ('en', ugettext(u"English")),
-    ('it', ugettext(u"Italiano")),
+    ('de', gettext(u"Deutsch")),
+    ('en', gettext(u"English")),
+    ('it', gettext(u"Italiano")),
 )
 
 CMS_LANGUAGES = {

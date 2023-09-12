@@ -9,7 +9,6 @@ include(
     'placeholders.py',
     'plugins.py',
     'ckeditor.py',
-    '_{{ project_name }}.py',
     'security.py',
     optional('local.py'),
     scope=globals()

@@ -10,7 +10,7 @@ import environ
 # helpers and such
 PROJECT_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../../')
 sys.path.append(os.path.join(PROJECT_PATH, 'apps/'))
-ugettext = lambda s: s  # noqa
+gettext = lambda s: s  # noqa
 
 env = environ.Env(
     # set casting, default value
