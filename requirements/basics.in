@@ -4,11 +4,11 @@
 
 # base
 # mysqlclient
-psycopg2-binary<2.8
+psycopg2
 sentry-sdk
 
 # django + tools
-django<4
+django<5
 django-split-settings
 django-environ
 django-compressor
@@ -31,5 +31,5 @@ djangocms-misc
 django-filer
 
 # cms
-django-cms
+django-cms<4
 # django-treebeard

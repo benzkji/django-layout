@@ -39,6 +39,17 @@ module.exports = (env, argv) => {
         module: {
             rules: [
                 {
+                    // the direct css job
+                    test: /\.css$/i,
+                    use: [
+                        // Creates `style` nodes from JS strings
+                        // "style-loader",
+                        // creates files!
+                        MiniCssExtractPlugin.loader, // Translates CSS into CommonJS
+                        "css-loader",
+                    ],
+                },
+                {
                     // the sass job
                     test: /\.s[ac]ss$/i,
                     use: [
@@ -53,14 +64,10 @@ module.exports = (env, argv) => {
                     ],
                 },
                 {
-                    // otherwise throws errors when loading fonts in sass/css!
-                    test: /\.(eot|woff|woff2|ttf|svg|png|jpg|gif)$/,
-                    use: {
-                        loader: 'url-loader', // requires url-loader packages
-                        options: {
-                            limit: 100000,
-                            name: '[name].[ext]'
-                        }
+                    test: /\.(eot|woff|woff2|ttf|png|svg|jpg|jpeg|gif)$/i,
+                    type: "asset/resource",
+                    generator : {
+                      filename : 'assets/[name][ext][query]',
                     }
                 },
                 {
