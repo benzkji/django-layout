@@ -1,6 +1,7 @@
 -r basics.in
 
 # fabric
+pip-tools
 fab-classic
 ansible
 flake8
