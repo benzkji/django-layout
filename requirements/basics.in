@@ -6,6 +6,8 @@
 # mysqlclient
 psycopg2
 sentry-sdk
+cssselect
+lxml
 
 # django + tools
 django<5
