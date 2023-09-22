@@ -4,10 +4,11 @@
 pip-tools
 fab-classic
 ansible
-flake8
-pip-audit
 -e 'git+https://github.com/benzkji/fabric-bnzk.git@main#egg=fabric-bnzk'
-
+pip-audit
+black
+isort
+pre-commit
 
 # safety
 # flake8-respect-noqa

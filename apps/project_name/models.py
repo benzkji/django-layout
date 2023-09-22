@@ -2,7 +2,20 @@ from django.db import models
 from ckeditor_link.link_model.models import CMSFilerLinkBase
 
 
-class Link(CMSFilerLinkBase):
+class LinkBase(CMSFilerLinkBase):
+    # news = models.ForeignKey(
+    #     'news.News',
+    #     on_delete=models.SET_NULL,
+    #     null=True,
+    #     default=None,
+    #     blank=True,
+    # )
+
+    class Meta:
+        abstract = True
+
+
+class CKLink(LinkBase):
     pass
 
 

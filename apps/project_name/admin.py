@@ -8,12 +8,13 @@ from django.utils.html import format_html
 from django.template.defaultfilters import truncatechars
 from formfieldstash.helpers import get_advanced_stash_attrs
 
-from .models import Link
+from .models import CKLink
 
 
 MY_CKEDITOR_LINK_TYPE_CHOICES = list(CKEDITOR_LINK_TYPE_CHOICES)
-# MY_CKEDITOR_LINK_TYPE_CHOICES.append(
-#     ('project', 'Project', )
+# MY_CKEDITOR_LINK_TYPE_CHOICES += (
+#     ('case_study', 'Case Study', ),
+#     ('note', 'Notiz', ),
 # )
 
 MY_CKEDITOR_LINK_STYLE_CHOICES = list(CKEDITOR_LINK_STYLE_CHOICES)
@@ -34,20 +35,15 @@ class LinkAdminForm(forms.ModelForm):
             attrs=get_advanced_stash_attrs('link_type', LINK_TYPE_STASH)
         )
     )
-    link_style = forms.ChoiceField(
-        required=False,
-        choices=CKEDITOR_LINK_STYLE_CHOICES,
-    )
+    # link_style = forms.ChoiceField(
+    #     required=False,
+    #     choices=CKEDITOR_LINK_STYLE_CHOICES,
+    # )
 
 
-@admin.register(Link)
+@admin.register(CKLink)
 class LinkAdmin(FormFieldStashMixin, DjangoLinkAdmin):
     form = LinkAdminForm
-
-    # OLD TIMES!
-    # fix for page widget error! use with cms 3.3.1
-    # class Media:
-    #     js = ('cms/js/dist/bundle.admin.base.min.js',)
 
 
 @admin.register(LogEntry)
