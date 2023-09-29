@@ -62,15 +62,15 @@ FILER_STORAGES = {
             "UPLOAD_TO_PREFIX": "files",
         },
         "thumbnails": {
-            "THUMBNAIL_OPTIONS": {
-                "base_dir": "thumbs",
-            },
+            "THUMBNAIL_OPTIONS": {"base_dir": "thumbs"},
         },
     },
     "private": {
         "main": {
-            "UPLOAD_TO": "filer_addons.filer_utils.generate_folder_and_filename.very_short_uuid4",
-        },
+            "UPLOAD_TO": (
+                "filer_addons.filer_utils.generate_folder_and_filename.very_short_uuid4"
+            ),
+        }
     },
 }
 
