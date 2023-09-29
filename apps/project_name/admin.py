@@ -3,7 +3,10 @@ from django import forms
 from django.contrib.admin.models import LogEntry
 from formfieldstash.admin import FormFieldStashMixin
 from ckeditor_link.admin import DjangoLinkAdmin
-from ckeditor_link.link_model.conf import CKEDITOR_LINK_TYPE_CHOICES, CKEDITOR_LINK_STYLE_CHOICES
+from ckeditor_link.link_model.conf import (
+    CKEDITOR_LINK_TYPE_CHOICES,
+    CKEDITOR_LINK_STYLE_CHOICES,
+)
 from django.utils.html import format_html
 from django.template.defaultfilters import truncatechars
 from formfieldstash.helpers import get_advanced_stash_attrs
@@ -23,7 +26,10 @@ MY_CKEDITOR_LINK_STYLE_CHOICES = list(CKEDITOR_LINK_STYLE_CHOICES)
 # )
 
 LINK_TYPE_STASH = {
-    'cms_page': ['cms_page', 'html_anchor', ],
+    "cms_page": [
+        "cms_page",
+        "html_anchor",
+    ],
 }
 
 
@@ -32,8 +38,8 @@ class LinkAdminForm(forms.ModelForm):
         required=False,
         choices=MY_CKEDITOR_LINK_TYPE_CHOICES,
         widget=forms.Select(
-            attrs=get_advanced_stash_attrs('link_type', LINK_TYPE_STASH)
-        )
+            attrs=get_advanced_stash_attrs("link_type", LINK_TYPE_STASH)
+        ),
     )
     # link_style = forms.ChoiceField(
     #     required=False,
@@ -48,8 +54,16 @@ class LinkAdmin(FormFieldStashMixin, DjangoLinkAdmin):
 
 @admin.register(LogEntry)
 class LogEntryAdmin(admin.ModelAdmin):
-    list_display = ('get_title', 'edited_object', 'action_time', 'user', )
-    list_filter = ('user', 'content_type', )
+    list_display = (
+        "get_title",
+        "edited_object",
+        "action_time",
+        "user",
+    )
+    list_filter = (
+        "user",
+        "content_type",
+    )
 
     def get_title(self, log_entry):
         return truncatechars(str(log_entry), 130)
@@ -63,7 +77,7 @@ class LogEntryAdmin(admin.ModelAdmin):
                 truncatechars(str(obj), 70),
             )
         else:
-            return '-'
+            return "-"
 
-    edited_object.short_description = 'Edited Object'
+    edited_object.short_description = "Edited Object"
     edited_object.allow_tags = True

@@ -17,8 +17,8 @@ urlpatterns = [
 ]
 
 urlpatterns = urlpatterns + i18n_patterns(
-    path('admin/', admin.site.urls),
-    path('', include('cms.urls')),
+    path("admin/", admin.site.urls),
+    path("", include("cms.urls")),
 )
 
 if settings.DEBUG and settings.MEDIA_ROOT:

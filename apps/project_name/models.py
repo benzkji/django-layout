@@ -37,12 +37,12 @@ class ModifiedBase(models.Model):
 class SEOBase(models.Model):
     seo_title = models.CharField(
         max_length=255,
-        default='',
+        default="",
         blank=True,
     )
     meta_description = models.CharField(
         max_length=255,
-        default='',
+        default="",
         blank=True,
     )
 
@@ -50,17 +50,17 @@ class SEOBase(models.Model):
         abstract = True
 
     def get_seo_title(self):
-        if getattr(self, 'seo_title', None):
+        if getattr(self, "seo_title", None):
             return self.seo_title
-        if getattr(self, 'name', None):
+        if getattr(self, "name", None):
             return self.name
-        if getattr(self, 'title', None):
+        if getattr(self, "title", None):
             return self.title
-        return ''
+        return ""
 
     def get_seo_description(self):
-        if getattr(self, 'meta_description', None):
+        if getattr(self, "meta_description", None):
             return self.meta_description
-        if getattr(self, 'description', None):
+        if getattr(self, "description", None):
             return self.description
-        return ''
+        return ""

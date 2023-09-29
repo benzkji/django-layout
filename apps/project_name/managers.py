@@ -26,12 +26,16 @@ class NearbyQuerySet(PublishedQuerySet):
               )
               """
         gcd_lt = "{} < %s".format(gcd)
-        return self.exclude(lat=None)\
-                   .exclude(lng=None)\
-                   .extra(
-                       select={'distance': gcd},
-                       select_params=[lat, lng, lat],
-                       where=[gcd_lt],
-                       params=[lat, lng, lat, proximity],
-                       order_by=['distance', ]
-                   )  # noqa
+        return (
+            self.exclude(lat=None)
+            .exclude(lng=None)
+            .extra(
+                select={"distance": gcd},
+                select_params=[lat, lng, lat],
+                where=[gcd_lt],
+                params=[lat, lng, lat, proximity],
+                order_by=[
+                    "distance",
+                ],
+            )
+        )  # noqa
