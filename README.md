@@ -39,10 +39,11 @@ To bootstrap the project on your machine::
 
     cd {{ project_name }}
     mkvirtualenv {{ project_name }}
-    # upgrade pip, setuptools and wheel, and installl basic basics, like pip-tools and pre-commit
-    npm run init-dev
-    # calculates and pins dependencies
-    npm run pip-compile  # initial build and install dependencies  
+    # install node things, install basics like pip-tools and pre-commit
+    npm install
+    npm run init-dev 
+    # run fabric for local dependency resolution/calculation
+    fab pip_compile  # fab pip_compile:true  # for upgrade mode 
     # not first time users can install deps directly:
     pip install -r requirements/dev.txt
     # django works?
