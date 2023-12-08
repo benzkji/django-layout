@@ -74,6 +74,9 @@ FILER_STORAGES = {
     },
 }
 
+THUMBNAIL_CACHE_DIMENSIONS = True
+THUMBNAIL_EXTENSION = "webp"
+THUMBNAIL_TRANSPARENCY_EXTENSION = "webp"
 THUMBNAIL_PROCESSORS = (
     "easy_thumbnails.processors.colorspace",
     "easy_thumbnails.processors.autocrop",
