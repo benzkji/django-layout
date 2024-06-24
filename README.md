@@ -33,15 +33,35 @@ When making changes to this (django-layout) repository, make sure at least to ch
 
 Python [version], PostgreSQL [version]
 
-## Quickstart
+## TOC
+
+- [Changelog](#changelog)
+- [General Docs](#docs)
+- [Quickstart / Bootstrap](#quick)
+- [Tests](#tests)
+
+
+## Changelog <a name="changelog"></a>
+
+### 2025-01-09
+- project initiated
+
+
+## Docs & Specials <a name="docs"></a>
+
+Uses API XY.
+
+
+## Quickstart <a name="quick"></a>
 
 To bootstrap the project on your machine::
 
+    git clone
     cd {{ project_name }}
     mkvirtualenv {{ project_name }}
     # install node things, install basics like pip-tools and pre-commit
     npm install
-    npm run init-dev 
+    npm run init-dev  # installs/upgrades pip wheel setuptools pip-tools fab-classic fabric-bnzk
     # run fabric for local dependency resolution/calculation
     fab pip_compile  # fab pip_compile:true  # for upgrade mode 
     # not first time users can install deps directly:
@@ -54,17 +74,11 @@ To bootstrap the project on your machine::
 
 To bootstrap/deploy on remote server::
 
-    git init
-    git add .
-    git commit -a -m'initial'
-    git add remote origin ssh://git@yourgitprovider.com/org/{{project_name}}.git
-    git push --set-upstream origin main
-
     fab bootstrap
+    fab deploy
 
 have a look at fabfile.py
 
-Tests
------
+## Tests <a name="tests"></a>
 
 If available: run `tox` command, or `./manage.py test`.

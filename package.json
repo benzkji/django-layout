@@ -22,7 +22,7 @@
   "scripts": {
     "watch": "webpack --watch --mode=development --progress",
     "build": "webpack build --mode=production --progress",
-    "init-dev": "pip install -U pip setuptools pip-tools fab-classic; pip install -e 'git+https://github.com/benzkji/fabric-bnzk.git@main#egg=fabric-bnzk'"
+    "init-dev": "pip install -U pip wheel setuptools pip-tools fab-classic; pip install -e 'git+https://github.com/benzkji/fabric-bnzk.git@main#egg=fabric-bnzk'"
   },
   "browserslist": "> 0.1%, not dead",
   "prettier": {"editorconfig": true },
