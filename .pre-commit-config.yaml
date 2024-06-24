@@ -1,6 +1,6 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
-exclude: "^package.json|^package-lock.json|^z_legacy\/.*|__zzz\/.*"
+exclude: "^package.json|^package-lock.json|^z_legacy\/.*|__zzz\/.*|.*\/static.*\/libs\/.*"
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
