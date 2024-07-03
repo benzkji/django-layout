@@ -2,8 +2,9 @@
 
 # deployment
 fab-classic
--e 'git+https://github.com/benzkji/fabric-bnzk.git@main#egg=fabric-bnzk'
+paramiko
 pynacl
+-e 'git+https://github.com/benzkji/fabric-bnzk.git@main#egg=fabric-bnzk'
 ansible
 
 # dependencies
