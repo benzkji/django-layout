@@ -1,11 +1,16 @@
 -r basics.in
 
-# fabric
-pip-tools
+# deployment
 fab-classic
-ansible
 -e 'git+https://github.com/benzkji/fabric-bnzk.git@main#egg=fabric-bnzk'
+pynacl
+ansible
+
+# dependencies
+pip-tools
 pip-audit
+
+# pre-commit & co
 black
 isort
 pre-commit
