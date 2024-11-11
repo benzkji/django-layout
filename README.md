@@ -31,30 +31,55 @@ When making changes to this (django-layout) repository, make sure at least to ch
 {% endcomment %}
 # {{ project_name }}
 
-Python [version], PostgreSQL [version]
+
 
 ## TOC
 
-- [Changelog](#changelog)
+- [Changelog](CHANGELOG.md)
+- [Versions](#versions)
+- [Checklist](#checklist)
 - [General Docs](#docs)
 - [Quickstart / Bootstrap](#quick)
 - [Tests](#tests)
 
+## Versions <a name="versions"></a>
 
-## Changelog <a name="changelog"></a>
+- Python PYTHON_VERSION 
+- PostgreSQL PG_VERSION
+- NODE NODE_VERSION
 
-#### 2025-01-09
-- project initiated
+## Checklist <a name="checklist"></a>
+
+### Administrative
+
+- [ ] customer has access with own account, in panel.djangoeurope.com
+- [ ] if bnzk pays hosting, it's in the support invoice, of not, it's not
+
+### Technical
+
+- [ ] spf / email sending checked
+- [ ] project uptime monitoring setup in glitchtip.bnzk.ch
+- [ ] project setup and tested in glitchtip.bnzk.ch (or sentry)
+- [ ] pre-commit is setup
+- [ ] project log rotation working, including complete removal of old logs
+- [ ] dependencies up to date, no pip-audit complaints
+- [ ] npm run watch (preferred) or gulp watch still working with current node version
+- [ ] project runs with fabric_bnzk 
+- [ ] project runs with supervisord
+- [ ] project runs with .env files and ansible-vault (legacy projects may ignore)
+- [ ] easy thumbnails with cached dimensions setup (THUMBNAIL_CACHE_DIMENSIONS = True)
 
 
 ## Docs & Specials <a name="docs"></a>
 
-Uses API XY.
+### XY Integration
+
+Uses API XY. Has SDK, is a mess.
 
 
 ## Quickstart <a name="quick"></a>
 
-To bootstrap the project on your machine::
+To bootstrap the project on your machine:
 
     git clone
     cd {{ project_name }}
