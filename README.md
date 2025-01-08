@@ -50,12 +50,12 @@ When making changes to this (django-layout) repository, make sure at least to ch
 
 ## Checklist <a name="checklist"></a>
 
-### Administrative
+### Administrative checks
 
 - [ ] customer has access with own account, in panel.djangoeurope.com
 - [ ] if bnzk pays hosting, it's in the support invoice, of not, it's not
 
-### Technical
+### Technical checks
 
 - [ ] spf / email sending checked
 - [ ] project uptime monitoring setup in glitchtip.bnzk.ch
