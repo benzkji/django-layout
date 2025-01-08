@@ -53,6 +53,7 @@ When making changes to this (django-layout) repository, make sure at least to ch
 ### Administrative checks
 
 - [ ] customer has access with own account, in panel.djangoeurope.com
+- [ ] customer has it's login to panel.djangoeurope.com in the support invoice, including the link
 - [ ] if bnzk pays hosting, it's in the support invoice, of not, it's not
 
 ### Technical checks
