@@ -44,7 +44,8 @@ When making changes to this (django-layout) repository, make sure at least to ch
 
 ## Versions <a name="versions"></a>
 
-- Python PYTHON_VERSION 
+- Python PYTHON_VERSION
+- Django DJANGO_VERSION
 - PostgreSQL PG_VERSION
 - NODE NODE_VERSION
 
