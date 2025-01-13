@@ -1,4 +1,4 @@
-# Changelog
+# CHANGELOG
 
 [<< back to README.md](README.md)
 
