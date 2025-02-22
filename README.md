@@ -65,7 +65,7 @@ When making changes to this (django-layout) repository, make sure at least to ch
 - [ ] pre-commit is setup
 - [ ] project log rotation working, including complete removal of old logs
 - [ ] dependencies up to date, no pip-audit complaints
-- [ ] npm run watch (preferred) or gulp watch still working with current node version
+- [ ] npm install ; npm run watch (preferred) or gulp watch still working with current node version
 - [ ] project runs with fabric_bnzk 
 - [ ] project runs with supervisord
 - [ ] project runs with .env files and ansible-vault (legacy projects may ignore)
