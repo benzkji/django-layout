@@ -67,8 +67,8 @@ When making changes to this (django-layout) repository, make sure at least to ch
 - [ ] dependencies up to date, no pip-audit complaints
 - [ ] npm install ; npm run watch (preferred) or gulp watch still working with current node version
 - [ ] project runs with fabric_bnzk 
-- [ ] project runs with supervisord
-- [ ] project runs with .env files and ansible-vault (legacy projects may ignore)
+- [ ] project runs with supervisord (optional, legacy projects may ignore)
+- [ ] project runs with .env files and ansible-vault (optional, legacy projects may ignore)
 - [ ] easy thumbnails with cached dimensions setup (THUMBNAIL_CACHE_DIMENSIONS = True)
 - [ ] stage server is protected or not running
 
