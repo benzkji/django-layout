@@ -7,6 +7,10 @@ server {
         # {{ project_name }}.live.bnzk.ch
         ;
     rewrite ^/(.*) http://{{ project_name }}.ch/$1 permanent;
+
+    error_log logs/{{ project_name }}-live-error.log;
+    access_log logs/{{ project_name }}-live-access.log;
+
 }
 
 upstream {{ project_name }}_live_server {
