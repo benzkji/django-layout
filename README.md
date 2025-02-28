@@ -63,7 +63,7 @@ When making changes to this (django-layout) repository, make sure at least to ch
 - [ ] project uptime monitoring setup in glitchtip.bnzk.ch
 - [ ] project setup and tested in glitchtip.bnzk.ch (or sentry)
 - [ ] pre-commit is setup
-- [ ] project log rotation working, including complete removal of old logs
+- [ ] project log rotation working, including complete removal of old logs, for supervisor, nginx and potential others
 - [ ] dependencies up to date, no pip-audit complaints
 - [ ] npm install ; npm run watch (preferred) or gulp watch still working with current node version
 - [ ] project runs with fabric_bnzk 
