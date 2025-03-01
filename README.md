@@ -70,7 +70,7 @@ When making changes to this (django-layout) repository, make sure at least to ch
 - [ ] project runs with supervisord (optional, legacy projects may ignore)
 - [ ] project runs with .env files and ansible-vault (optional, legacy projects may ignore)
 - [ ] easy thumbnails with cached dimensions setup (THUMBNAIL_CACHE_DIMENSIONS = True)
-- [ ] stage server is protected or not running
+- [ ] stage server is protected/redirected/gone or not running
 
 
 ## Docs & Specials <a name="docs"></a>
